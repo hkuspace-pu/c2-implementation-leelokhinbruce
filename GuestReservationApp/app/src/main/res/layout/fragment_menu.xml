@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    android:orientation="vertical"
+    tools:context=".mainpage.MenuFragment">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="32dp"
+        android:paddingBottom="24dp"
+        android:text="@string/menu"
+        android:textAppearance="@style/screen_title_text" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewBtnBreakfast"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/orange"
+            app:strokeColor="@android:color/transparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/photo_icon"
+                    android:tint="@color/pure_orange" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="24dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/breakfast"
+                    android:textAppearance="@style/btn_text" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewBtnLunch"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/orange"
+            app:strokeColor="@android:color/transparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/photo_icon"
+                    android:tint="@color/pure_orange" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="24dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/lunch"
+                    android:textAppearance="@style/btn_text" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewBtnTeaTime"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/orange"
+            app:strokeColor="@android:color/transparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/photo_icon"
+                    android:tint="@color/pure_orange" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="24dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/tea_time"
+                    android:textAppearance="@style/btn_text" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardViewBtnDinner"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/orange"
+            app:strokeColor="@android:color/transparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="130dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/photo_icon"
+                    android:tint="@color/pure_orange" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="24dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/dinner"
+                    android:textAppearance="@style/btn_text" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</LinearLayout>

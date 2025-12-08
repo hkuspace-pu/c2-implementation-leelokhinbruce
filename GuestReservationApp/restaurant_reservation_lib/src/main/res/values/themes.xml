@@ -1,0 +1,118 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.GuestReservationApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/black</item>
+<!--        <item name="colorPrimaryDark">@color/grey</item>-->
+<!--        <item name="colorAccent">@color/orange</item>-->
+    </style>
+
+    <style name="Theme.GuestReservationApp" parent="Base.Theme.GuestReservationApp" />
+
+<!--    Text Style -->
+    <style name="screen_title_text">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="screen_subtitle_text">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="btn_text">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="section_text">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="regular_text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="input_field_text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="grey_text">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <style name="small_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="link_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/link</item>
+    </style>
+
+    <style name="orange_link_text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/orange</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="small_btn_text">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="small_grey_text">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+<!--    Custom Card Corner -->
+    <style name="CustomCardCorners" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance_top_cardview_custom_corners</item>
+    </style>
+
+    <style name="TopRightButtonCorners" parent="@style/Widget.MaterialComponents.Button">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance_top_right_botton_corners</item>
+    </style>
+
+    <style name="ShapeAppearance_top_cardview_custom_corners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomLeft">32dp</item>
+        <item name="cornerSizeBottomRight">32dp</item>
+    </style>
+
+    <style name="ShapeAppearance_top_right_botton_corners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomLeft">12dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+<!--   Chip Corner -->
+    <style name="ChipCorners" parent="">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance_chip_corners</item>
+    </style>
+
+    <style name="ShapeAppearance_chip_corners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+<!--   Custom Spinner -->
+    <style name="CustomSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="background">@drawable/spinner_dropdown</item>
+    </style>
+</resources>
