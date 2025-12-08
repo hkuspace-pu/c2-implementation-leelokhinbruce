@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:strokeColor="@android:color/transparent"
+    android:backgroundTint="@color/white"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="168dp">
+
+    <LinearLayout
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<!--       Reservation Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+<!--           Booking No. -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/booking_no"
+                    android:textAppearance="@style/small_text"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textBookingNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="247"
+                    android:textAppearance="@style/screen_title_text" />
+            </LinearLayout>
+
+<!--           Time, Guest, Date -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/time_icon" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="18:30"
+                        android:textAppearance="@style/small_text" />
+
+                    <ImageView
+                        android:layout_width="4dp"
+                        android:layout_height="4dp"
+                        android:layout_marginHorizontal="12dp"
+                        android:src="@drawable/circle" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/guest_icon" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textGuest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="2"
+                        android:textAppearance="@style/small_text" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@string/guest"
+                        android:textAppearance="@style/small_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/calender_icon" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="Nov 6 Fri"
+                        android:textAppearance="@style/small_text" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--           Buttons -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:text="@string/unattended"
+                android:textSize="16sp"
+                android:textAppearance="@style/small_btn_text"
+                android:background="@drawable/btn_bg"
+                android:backgroundTint="@color/pure_orange"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="@string/attended"
+                android:textSize="16sp"
+                android:textAppearance="@style/small_btn_text"
+                android:background="@drawable/btn_bg" />
+        </RelativeLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

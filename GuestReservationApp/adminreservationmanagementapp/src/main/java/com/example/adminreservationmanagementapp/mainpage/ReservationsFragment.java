@@ -35,21 +35,21 @@ public class ReservationsFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Setup ViewPager2
-        pagerAdapter = new ReservationPagerAdapter(this);
-        binding.viewPagerReservationList.setAdapter(pagerAdapter);
-
-        // Connect TabLayout with ViewPager2
-        new TabLayoutMediator(binding.tabLayout, binding.viewPagerReservationList, (tab, position) -> {
-            if (position == 0) {
-                tab.setText("Pending");
-            } else {
-                tab.setText("Confirmed");
-            }
-        }).attach();
-    }
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//
+//        // Setup ViewPager2
+//        pagerAdapter = new ReservationPagerAdapter(this);
+//        binding.viewPagerReservationList.setAdapter(pagerAdapter);
+//
+//        // Connect TabLayout with ViewPager2
+//        new TabLayoutMediator(binding.tabLayout, binding.viewPagerReservationList, (tab, position) -> {
+//            if (position == 0) {
+//                tab.setText("Pending");
+//            } else {
+//                tab.setText("Confirmed");
+//            }
+//        }).attach();
+//    }
 }
