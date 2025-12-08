@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#252525</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="orange">#F47523</color>
+    <color name="pure_orange">#FEA56B</color>
+    <color name="red">#D71900</color>
+    <color name="green">#37F53F</color>
+    <color name="deep_green">#39CC3F</color>
+    <color name="grey">#666666</color>
+    <color name="hint_and_stroke">#BABABA</color>
+    <color name="disable">#EBEBEB</color>
+    <color name="link">#07A9E4</color>
+    <color name="line">#F1F1F1</color>
+
+<!--    disable color for switch button-->
+    <color name="unchecked_thumb">#8c8c8c</color>
+    <color name="unchecked_track">#cdcdcd</color>
+</resources>

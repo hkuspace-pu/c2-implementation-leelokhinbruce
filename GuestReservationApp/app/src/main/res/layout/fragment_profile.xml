@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".mainpage.ProfileFragment">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="32dp"
+        android:text="@string/profile"
+        android:textAppearance="@style/screen_title_text" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="137dp"
+        android:layout_height="137dp"
+        android:layout_margin="24dp"
+        android:src="@drawable/profile_icon"
+        android:tint="@color/orange" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="48dp"
+        android:text="Peter Parker"
+        android:textAppearance="@style/screen_subtitle_text" />
+
+    <FrameLayout
+        android:id="@+id/frameBtnMyProfile"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/user_linear_icon" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="8dp"
+                android:text="@string/my_profile"
+                android:textAppearance="@style/section_text" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:rotation="180"
+                android:src="@drawable/left_arrow_icon"
+                android:tint="@color/orange" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:background="@color/line" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameBtnHistory"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/history_icon"
+                android:tint="@color/orange" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="8dp"
+                android:text="@string/reservation_history"
+                android:textAppearance="@style/section_text" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:rotation="180"
+                android:src="@drawable/left_arrow_icon"
+                android:tint="@color/orange" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:background="@color/line" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameBtnSettings"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/setting_linear_icon" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="8dp"
+                android:text="@string/settings"
+                android:textAppearance="@style/section_text" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:rotation="180"
+                android:src="@drawable/left_arrow_icon"
+                android:tint="@color/orange" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:background="@color/line" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameBtnMyPoint"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/money_icon"
+                android:tint="@color/orange" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="8dp"
+                android:text="My Points: "
+                android:textAppearance="@style/section_text" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textScore"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/zero"
+                android:textAppearance="@style/section_text"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text=" pts"
+                android:textAppearance="@style/section_text" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:rotation="180"
+                android:src="@drawable/left_arrow_icon"
+                android:tint="@color/orange" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:background="@color/line" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/reservations"
+        android:title="@string/reservations"
+        android:icon="@drawable/bell_icon" />
+    <item
+        android:id="@+id/menu"
+        android:title="@string/menu"
+        android:icon="@drawable/menu_book_icon" />
+    <item
+        android:id="@+id/scan"
+        android:enabled="false"
+        android:title="" />
+    <item
+        android:id="@+id/notifications"
+        android:title="@string/notifications"
+        android:icon="@drawable/notification_icon" />
+    <item
+        android:id="@+id/more"
+        android:title="@string/more"
+        android:icon="@drawable/more_icon" />
+</menu>

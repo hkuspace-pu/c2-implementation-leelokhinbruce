@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".reservation.BookSuccessActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="112dp"
+            android:layout_height="112dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/check_icon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
+            android:text="Successfully\nBook Your Reservation!"
+            android:textAlignment="center"
+            android:textAppearance="@style/screen_title_text" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reference_no"
+                android:textAppearance="@style/small_text" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textReferenceNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" UIF7838"
+                android:textAppearance="@style/small_text"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!--            Name -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="@string/name"
+                    android:textAppearance="@style/grey_text" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:maxLength="20"
+                    android:paddingBottom="12dp"
+                    android:text="Peter Parker"
+                    android:textAppearance="@style/small_text" />
+
+                <!--           Email -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="@string/email"
+                    android:textAppearance="@style/grey_text" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:maxLength="20"
+                    android:paddingBottom="12dp"
+                    android:text="peter@gmail.com"
+                    android:textAppearance="@style/small_text" />
+
+                <!--           Phone Number -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="@string/phone_number"
+                    android:textAppearance="@style/grey_text" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textPhoneNum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="12dp"
+                    android:text="(+852) 2671 9153"
+                    android:textAppearance="@style/small_text" />
+
+                <!--           Occasion -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="@string/occasion"
+                    android:textAppearance="@style/grey_text" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textOccasion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="Optional"
+                    android:textAppearance="@style/small_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:orientation="vertical">
+
+                <!--            Date -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="@string/date"
+                    android:textAppearance="@style/grey_text" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="12dp"
+                    android:text="Nov 6 Fri"
+                    android:textAppearance="@style/small_text" />
+
+                <!--           Time -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="@string/Time"
+                    android:textAppearance="@style/grey_text" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="12dp"
+                    android:text="18:30"
+                    android:textAppearance="@style/small_text" />
+
+                <!--           Party Size -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="@string/party_size"
+                    android:textAppearance="@style/grey_text" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="12dp">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/textGuestNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2"
+                        android:textAppearance="@style/small_text" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="4dp"
+                        android:text="guest(s)"
+                        android:textAppearance="@style/small_text" />
+                </LinearLayout>
+
+                <!--           Location -->
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:text="@string/location"
+                    android:textAppearance="@style/grey_text" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:text="@string/location"
+                    android:textAppearance="@style/small_text" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnViewTicket"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_bg"
+        android:padding="12dp"
+        android:layout_marginBottom="82dp"
+        android:text="@string/view_e_ticket"
+        android:textAppearance="@style/btn_text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/btnViewReservations"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/view_reservations"
+        android:textAppearance="@style/btn_text"
+        android:textColor="@color/orange" />
+</RelativeLayout>

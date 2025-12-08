@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".AddMenuItemActivity">
+
+    <FrameLayout
+        android:id="@+id/frameHeading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="32dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Menu Item"
+            android:textAlignment="center"
+            android:textAppearance="@style/screen_subtitle_text" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/imgBtnClose"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/close_icon" />
+    </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frameHeading">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!--   Food Name -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputFoodName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/food_name"
+                android:paddingBottom="24dp"
+                android:textColorHint="@color/hint_and_stroke"
+                app:boxStrokeColor="@color/orange"
+                app:endIconMode="clear_text"
+                app:endIconTint="@color/grey"
+                app:placeholderText="Cheese Burger"
+                app:placeholderTextColor="@color/hint_and_stroke">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editFoodName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="30"
+                    android:inputType="text"
+                    android:lines="1"
+                    android:maxLength="30"
+                    android:textAppearance="@style/input_field_text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--   Price -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputPrice"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/price"
+                android:paddingBottom="24dp"
+                android:textColorHint="@color/hint_and_stroke"
+                app:boxStrokeColor="@color/orange"
+                app:endIconMode="clear_text"
+                app:endIconTint="@color/grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="5"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:maxLength="5"
+                    android:textAppearance="@style/input_field_text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--   Meal Time -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:text="@string/meal_time"
+                android:textAppearance="@style/regular_text" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:fillViewport="true"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupMealTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipBreakfast"
+                            style="@style/ChipCorners"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/breakfast"
+                            android:textAppearance="@style/small_text"
+                            app:chipEndPadding="12dp"
+                            app:chipStartPadding="12dp"
+                            app:chipStrokeColor="@color/hint_and_stroke" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipLunch"
+                            style="@style/ChipCorners"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lunch"
+                            android:textAppearance="@style/small_text"
+                            app:chipEndPadding="12dp"
+                            app:chipStartPadding="12dp"
+                            app:chipStrokeColor="@color/hint_and_stroke" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipTeaTime"
+                            style="@style/ChipCorners"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tea_time"
+                            android:textAppearance="@style/small_text"
+                            app:chipEndPadding="12dp"
+                            app:chipStartPadding="12dp"
+                            app:chipStrokeColor="@color/hint_and_stroke" />
+
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipDinner"
+                            style="@style/ChipCorners"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/dinner"
+                            android:textAppearance="@style/small_text"
+                            app:chipEndPadding="12dp"
+                            app:chipStartPadding="12dp"
+                            app:chipStrokeColor="@color/hint_and_stroke" />
+                    </com.google.android.material.chip.ChipGroup>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!--   Meals -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:text="@string/meals"
+                android:textAppearance="@style/regular_text" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupMeals"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipNormalMeal"
+                        style="@style/ChipCorners"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/normal_meal"
+                        android:textAppearance="@style/small_text"
+                        app:chipEndPadding="12dp"
+                        app:chipStartPadding="12dp"
+                        app:chipStrokeColor="@color/hint_and_stroke" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipLarge"
+                        style="@style/ChipCorners"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/large_meal"
+                        android:textAppearance="@style/small_text"
+                        app:chipEndPadding="12dp"
+                        app:chipStartPadding="12dp"
+                        app:chipStrokeColor="@color/hint_and_stroke" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chipSpecialLarge"
+                        style="@style/ChipCorners"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/special_large_meal"
+                        android:textAppearance="@style/small_text"
+                        app:chipEndPadding="12dp"
+                        app:chipStartPadding="12dp"
+                        app:chipStrokeColor="@color/hint_and_stroke" />
+                </com.google.android.material.chip.ChipGroup>
+            </LinearLayout>
+
+            <!--   Category -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:text="@string/category"
+                android:textAppearance="@style/regular_text" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerCategory"
+                style="@style/CustomSpinner"
+                android:layout_marginBottom="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:entries="@array/category"
+                android:spinnerMode="dropdown" />
+
+            <!--   Is Promotion -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:text="@string/is_promotion"
+                android:textAppearance="@style/regular_text" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinnerIsPromotion"
+                style="@style/CustomSpinner"
+                android:layout_marginBottom="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:entries="@array/yes_or_no"
+                android:spinnerMode="dropdown" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/submit_btn"
+                android:padding="12dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/btn_bg"
+                android:textAppearance="@style/btn_text" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

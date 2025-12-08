@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".settings.DeleteAccountActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="32dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="48dp"
+                android:text="@string/delete_account"
+                android:textAlignment="center"
+                android:textAppearance="@style/screen_subtitle_text" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/imgBtnBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/left_arrow_icon" />
+        </FrameLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete your account will permanently delete its data. All your rewards, reservation records, and personal data will be lost, and cannot be recovered."
+            android:textAppearance="@style/regular_text" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/btn_bg"
+        android:layout_alignParentBottom="true"
+        android:textAppearance="@style/btn_text" />
+</RelativeLayout>
