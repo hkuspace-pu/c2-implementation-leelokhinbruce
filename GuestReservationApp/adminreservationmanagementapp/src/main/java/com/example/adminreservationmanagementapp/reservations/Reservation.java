@@ -3,6 +3,7 @@ package com.example.adminreservationmanagementapp.reservations;
 public class Reservation {
     private final String date, time, specialOffer, status, reason, bookingNo;
     private final int guestCount;
+    private final int viewType;  // Pending list or Confirmed list
 
     // Private Constructor - forces use of Builder
     public Reservation(Builder builder) {
@@ -13,6 +14,7 @@ public class Reservation {
         this.status = builder.status != null ? builder.status : "Pending";
         this.reason = builder.reason != null ? builder.reason : "";
         this.bookingNo = builder.bookingNo;
+        this.viewType = builder.viewType;
     }
 
     // Getters
@@ -44,10 +46,15 @@ public class Reservation {
         return guestCount;
     }
 
+    public int getViewType() {
+        return viewType;
+    }
+
     // Builder Class
     public static class Builder {
         private String date, time, specialOffer, status, reason, bookingNo;
         private int guestCount;
+        private int viewType = 0;
 
         // Builder Constructor (mandatory)
         public Builder(String date, String time, int guestCount, String bookingNo) {
@@ -70,6 +77,11 @@ public class Reservation {
 
         public Builder setReason(String reason) {
             this.reason = reason;
+            return this;
+        }
+
+        public Builder setViewType(int viewType) {
+            this.viewType = viewType;
             return this;
         }
 

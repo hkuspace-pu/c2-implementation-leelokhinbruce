@@ -1,5 +1,6 @@
 package com.example.adminreservationmanagementapp.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -23,5 +24,11 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());  // make it the active view on the screen
 
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
+
+        binding.frameBtnNotificationSettings.setOnClickListener(viewNotificationSettings ->
+                startActivity(new Intent(SettingsActivity.this, NotificationSettingsActivity.class)));
+
+        binding.frameBtnChangeBranchStatus.setOnClickListener(viewChangeBranchStatus ->
+                startActivity(new Intent(SettingsActivity.this, ChangeBranchStatusActivity.class)));
     }
 }

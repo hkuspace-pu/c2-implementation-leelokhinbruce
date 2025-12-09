@@ -9,6 +9,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GuestReservationApp">
         <activity
+            android:name=".settings.ChangeBranchStatusActivity"
+            android:exported="false" />
+        <activity
+            android:name=".settings.NotificationSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddMenuItemActivity"
             android:exported="false" />
         <activity

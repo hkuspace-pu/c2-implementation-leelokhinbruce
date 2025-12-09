@@ -127,6 +127,7 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnUnattended"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:text="@string/unattended"
@@ -136,6 +137,7 @@
                 android:backgroundTint="@color/pure_orange"/>
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnAttended"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
