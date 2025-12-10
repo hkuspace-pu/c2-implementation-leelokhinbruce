@@ -6,18 +6,25 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.adminreservationmanagementapp.databinding.FragmentReservationsBinding;
+import com.example.adminreservationmanagementapp.reservations.ConfirmedListFragment;
+import com.example.adminreservationmanagementapp.reservations.PendingListFragment;
 import com.example.adminreservationmanagementapp.reservations.ReservationHistoryActivity;
 import com.example.adminreservationmanagementapp.reservations.ReservationPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ReservationsFragment extends Fragment {
     private FragmentReservationsBinding binding;
-    private ReservationPagerAdapter pagerAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,21 +42,22 @@ public class ReservationsFragment extends Fragment {
         return view;
     }
 
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        // Setup ViewPager2
-//        pagerAdapter = new ReservationPagerAdapter(this);
-//        binding.viewPagerReservationList.setAdapter(pagerAdapter);
-//
-//        // Connect TabLayout with ViewPager2
-//        new TabLayoutMediator(binding.tabLayout, binding.viewPagerReservationList, (tab, position) -> {
-//            if (position == 0) {
-//                tab.setText("Pending");
-//            } else {
-//                tab.setText("Confirmed");
-//            }
-//        }).attach();
-//    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Setup ViewPager2
+        ReservationPagerAdapter pagerAdapter = new ReservationPagerAdapter(this);
+        binding.viewPagerReservationList.setAdapter(pagerAdapter);
+
+        // Connect TabLayout with ViewPager2
+        new TabLayoutMediator(binding.tabLayout, binding.viewPagerReservationList,
+                (tab, position) -> {
+                    if (position == 0) {
+                        tab.setText("Pending");
+                    } else {
+                        tab.setText("Confirmed");
+                    }
+                }).attach();
+    }
 }

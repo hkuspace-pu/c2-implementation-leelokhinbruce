@@ -1,15 +1,12 @@
 package com.example.adminreservationmanagementapp.mainpage;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.adminreservationmanagementapp.R;
 import com.example.adminreservationmanagementapp.databinding.ActivityMainBinding;
-import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
