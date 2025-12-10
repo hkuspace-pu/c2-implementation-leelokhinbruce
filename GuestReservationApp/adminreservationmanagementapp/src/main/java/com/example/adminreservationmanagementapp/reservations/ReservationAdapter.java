@@ -11,17 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.adminreservationmanagementapp.databinding.ConfirmedReservationItemBinding;
 import com.example.adminreservationmanagementapp.databinding.PendingReservationItemBinding;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ReservationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_PENDING = 0, VIEW_TYPE_CONFIRMED = 1;
-    private List<Reservation> reservationList;
+    private List<Reservation> reservationList = new ArrayList<>();
     private OnItemClickListener listener;
-
-    // Constructor
-    public ReservationAdapter(List<Reservation> reservationList) {
-        this.reservationList = reservationList;
-    }
 
     // On Click Listeners
     public interface OnItemClickListener {
@@ -32,11 +29,6 @@ public class ReservationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return reservationList.get(position).getViewType();
     }
 
     // Creation - Create a new ViewHolder
@@ -61,11 +53,17 @@ public class ReservationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Reservation item = reservationList.get(position);
+
         if (holder instanceof PendingViewHolder) {
             ((PendingViewHolder) holder).bind(item);
-        } else {
+        } else if (holder instanceof ConfirmedViewHolder) {
             ((ConfirmedViewHolder) holder).bind(item);
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return reservationList.get(position).isPending() ? VIEW_TYPE_PENDING : VIEW_TYPE_CONFIRMED;
     }
 
     @Override
@@ -73,9 +71,15 @@ public class ReservationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return reservationList.size();  // List  the length of the RecycleView
     }
 
+    public void submitList(List<Reservation> newList) {
+        reservationList.clear();
+        reservationList.addAll(newList);
+        notifyDataSetChanged();
+    }
+
     // ViewHolder for Pending
     class PendingViewHolder extends RecyclerView.ViewHolder {
-        private PendingReservationItemBinding binding;
+        private final PendingReservationItemBinding binding;
 
         // ViewHolder Constructor
         PendingViewHolder(PendingReservationItemBinding binding) {
@@ -83,17 +87,22 @@ public class ReservationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.binding = binding;
         }
 
-        void bind(Reservation reservation) {
-            binding.textDate.setText(reservation.getDate());
-            binding.textTime.setText(reservation.getTime());
-            binding.textGuest.setText(reservation.getGuestCount());
-            binding.textBookingNo.setText(reservation.getBookingNo());
+        void bind(Reservation item) {
+            binding.textDate.setText(item.getDate());
+            binding.textTime.setText(item.getTime());
+            binding.textGuest.setText(item.getGuestCount());
+            binding.textBookingNo.setText(item.getBookingNo());
+
+            binding.imgBtnOption.setOnClickListener(view -> {
+                if (listener != null)
+                    listener.onOptionClick(item);
+            });
         }
     }
 
     // ViewHolder for Confirmed
     class ConfirmedViewHolder extends RecyclerView.ViewHolder {
-        private ConfirmedReservationItemBinding binding;
+        private final ConfirmedReservationItemBinding binding;
 
         // ViewHolder Constructor
         public ConfirmedViewHolder(ConfirmedReservationItemBinding binding) {
@@ -101,11 +110,19 @@ public class ReservationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.binding = binding;
         }
 
-        void bind(Reservation reservation) {
-            binding.textDate.setText(reservation.getDate());
-            binding.textTime.setText(reservation.getTime());
-            binding.textGuest.setText(reservation.getGuestCount());
-            binding.textBookingNo.setText(reservation.getBookingNo());
+        void bind(Reservation item) {
+            binding.textDate.setText(item.getDate());
+            binding.textTime.setText(item.getTime());
+            binding.textGuest.setText(item.getGuestCount());
+            binding.textBookingNo.setText(item.getBookingNo());
+
+            binding.btnUnattended.setOnClickListener(view -> {
+                if (listener != null) listener.onUnattendedClick(item);
+            });
+
+            binding.btnAttended.setOnClickListener(view -> {
+                if (listener != null) listener.onAttendedClick(item);
+            });
         }
     }
 }

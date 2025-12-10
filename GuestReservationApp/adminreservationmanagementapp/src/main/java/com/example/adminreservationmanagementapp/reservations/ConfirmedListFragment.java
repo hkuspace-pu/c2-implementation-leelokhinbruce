@@ -21,29 +21,24 @@ import java.util.List;
 
 public class ConfirmedListFragment extends Fragment {
     private FragmentConfirmedListBinding binding;
-    private ReservationAdapter adapter;
-    private List<Reservation> reservationList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentConfirmedListBinding.inflate(inflater, container, false);
+
+        ReservationAdapter adapter = new ReservationAdapter();
+        binding.recycleConfirmed.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recycleConfirmed.setAdapter(adapter);
+
+        List<Reservation> reservationList = new ArrayList<>();
+        reservationList.add(new Reservation.Builder("Today", "18:30", 2, "247")
+                .setStatus("Pending")
+                .build());
+
+        adapter.submitList(reservationList);
+
         return binding.getRoot();
     }
-
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        // Sample data
-//        reservationList.add(new Reservation.Builder("Today", "18:30", 2, "247").build());
-//
-//        // Set LayoutManager
-//        binding.recycleConfirmed.setLayoutManager(new LinearLayoutManager(requireContext()));
-//
-//        // Set Adapter
-//        adapter = new ReservationAdapter(reservationList);
-//        binding.recycleConfirmed.setAdapter(adapter);
-//    }
 }

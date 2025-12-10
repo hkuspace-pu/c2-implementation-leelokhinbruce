@@ -15,7 +15,6 @@ import java.util.List;
 
 public class PendingListFragment extends Fragment {
     private FragmentPendingListBinding binding;
-    private ReservationAdapter adapter;
     private List<Reservation> reservationList = new ArrayList<>();
 
     @Override
@@ -23,24 +22,9 @@ public class PendingListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentPendingListBinding.inflate(inflater, container, false);
+
+        ReservationAdapter adapter = new ReservationAdapter();
+
         return binding.getRoot();
     }
-
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        setupRecycleView();  // Initialize RecycleView
-//
-//        // Sample - load pending data
-//        reservationList.add(new Reservation.Builder("Today", "18:30", 2, "247").build());
-//
-//        adapter.notifyDataSetChanged();  // Notify RecycleView to conduct entire updating
-//    }
-//
-//    private void setupRecycleView() {
-//        adapter = new PendingReservationAdapter(reservationList);
-//        binding.recyclePending.setLayoutManager(new LinearLayoutManager(requireContext()));
-//        binding.recyclePending.setAdapter(adapter);
-//    }
 }

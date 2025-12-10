@@ -49,7 +49,6 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:tabMode="fixed"
-        app:tabGravity="fill"
         app:tabTextAppearance="@style/small_text"
         app:tabTextColor="@color/grey"
         app:tabSelectedTextColor="@color/orange"
@@ -58,6 +57,7 @@
 <!--   Reservation List -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerReservationList"
+        android:saveEnabled="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -7,26 +7,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.adminreservationmanagementapp.mainpage.ReservationsFragment;
+
 import java.util.List;
 
 public class ReservationPagerAdapter extends FragmentStateAdapter {
 
 
-    public ReservationPagerAdapter(@NonNull Fragment fragment) {
-        super(fragment);
+    public ReservationPagerAdapter(@NonNull ReservationsFragment fragment) {
+        super(fragment.getChildFragmentManager(), fragment.getViewLifecycleOwner().getLifecycle());
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position) {
-            case 0:
-                new PendingListFragment();
-            case 1:
-                new ConfirmedListFragment();
-            default:
-                new PendingListFragment();
-        }
+        return position == 0 ? new PendingListFragment() : new ConfirmedListFragment();
     }
 
     @Override

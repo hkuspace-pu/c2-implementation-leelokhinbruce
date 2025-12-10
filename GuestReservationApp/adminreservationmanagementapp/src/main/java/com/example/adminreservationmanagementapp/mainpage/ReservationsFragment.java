@@ -25,6 +25,7 @@ import java.util.List;
 
 public class ReservationsFragment extends Fragment {
     private FragmentReservationsBinding binding;
+    private ReservationPagerAdapter pagerAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,16 +40,10 @@ public class ReservationsFragment extends Fragment {
             startActivity(intent);
         });
 
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
         // Setup ViewPager2
-        ReservationPagerAdapter pagerAdapter = new ReservationPagerAdapter(this);
+        pagerAdapter = new ReservationPagerAdapter(this);
         binding.viewPagerReservationList.setAdapter(pagerAdapter);
+        binding.viewPagerReservationList.setUserInputEnabled(false);  // Disable swipe by dragging
 
         // Connect TabLayout with ViewPager2
         new TabLayoutMediator(binding.tabLayout, binding.viewPagerReservationList,
@@ -59,5 +54,13 @@ public class ReservationsFragment extends Fragment {
                         tab.setText("Confirmed");
                     }
                 }).attach();
+
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding.viewPagerReservationList.setAdapter(null);
     }
 }
