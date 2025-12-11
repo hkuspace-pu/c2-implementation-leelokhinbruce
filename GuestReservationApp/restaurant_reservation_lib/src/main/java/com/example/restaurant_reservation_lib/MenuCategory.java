@@ -1,3 +1,5 @@
+package com.example.restaurant_reservation_lib;
+
 import java.util.List;
 
 public class MenuCategory {

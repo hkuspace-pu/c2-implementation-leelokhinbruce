@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.adminreservationmanagementapp.databinding.FragmentPendingListBinding;
+import com.example.restaurant_reservation_lib.Reservation;
 
 import java.util.ArrayList;
 import java.util.List;

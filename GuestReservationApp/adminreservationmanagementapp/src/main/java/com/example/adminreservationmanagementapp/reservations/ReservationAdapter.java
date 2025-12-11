@@ -1,21 +1,16 @@
 package com.example.adminreservationmanagementapp.reservations;
 
-import android.text.Layout;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.adminreservationmanagementapp.R;
 import com.example.adminreservationmanagementapp.databinding.ConfirmedReservationItemBinding;
 import com.example.adminreservationmanagementapp.databinding.PendingReservationItemBinding;
+import com.example.restaurant_reservation_lib.Reservation;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ReservationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_PENDING = 0, TYPE_CONFIRMED = 1;

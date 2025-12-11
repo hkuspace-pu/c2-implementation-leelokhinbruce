@@ -1,4 +1,4 @@
-import com.example.restaurant_reservation_lib.R;
+package com.example.restaurant_reservation_lib;
 
 public class MenuItem {
     private String name;
