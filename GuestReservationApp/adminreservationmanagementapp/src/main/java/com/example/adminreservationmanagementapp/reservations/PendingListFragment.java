@@ -23,8 +23,6 @@ public class PendingListFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentPendingListBinding.inflate(inflater, container, false);
 
-        ReservationAdapter adapter = new ReservationAdapter();
-
         return binding.getRoot();
     }
 }

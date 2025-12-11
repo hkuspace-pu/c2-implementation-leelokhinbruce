@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +29,19 @@ public class ConfirmedListFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentConfirmedListBinding.inflate(inflater, container, false);
 
-        ReservationAdapter adapter = new ReservationAdapter();
-        binding.recycleConfirmed.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.recycleConfirmed.setAdapter(adapter);
-
         List<Reservation> reservationList = new ArrayList<>();
-        reservationList.add(new Reservation.Builder("Today", "18:30", 2, "247")
-                .setStatus("Pending")
-                .build());
+        // Sample Data
+        reservationList.add(new Reservation.Builder(
+                "Today", "18:30", 3, "367").build());
+        reservationList.add(new Reservation.Builder(
+                "Nov 8 Thu", "18:00", 2, "823").build());
 
-        adapter.submitList(reservationList);
+        // Assign the reservation list to the adapter
+        ReservationAdapter adapter = new ReservationAdapter(reservationList);
+        // Set the LayoutManager that the RecycleView will use
+        binding.recycleConfirmed.setLayoutManager(new LinearLayoutManager(getContext()));
+        // Set the adapter instance to the RecycleView to inflate the items
+        binding.recycleConfirmed.setAdapter(adapter);
 
         return binding.getRoot();
     }

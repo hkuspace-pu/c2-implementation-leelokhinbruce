@@ -1,7 +1,9 @@
 package com.example.adminreservationmanagementapp.reservations;
 
-public class Reservation {
-    private final String date, time, specialOffer, status, reason, bookingNo;
+import java.io.Serializable;
+
+public class Reservation implements Serializable {
+    private final String date, time, status, bookingNo;
     private final int guestCount;
 
     // Private Constructor - forces use of Builder
@@ -9,9 +11,7 @@ public class Reservation {
         this.date = builder.date;
         this.time = builder.time;
         this.guestCount = builder.guestCount;
-        this.specialOffer = builder.specialOffer != null ? builder.specialOffer : "";
         this.status = builder.status != null ? builder.status : "Pending";
-        this.reason = builder.reason != null ? builder.reason : "";
         this.bookingNo = builder.bookingNo;
     }
 
@@ -24,35 +24,21 @@ public class Reservation {
         return time;
     }
 
-    public String getSpecialOffer() {
-        return specialOffer;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public String getReason() {
-        return reason;
+    public int getGuestCount() {
+        return guestCount;
     }
 
     public String getBookingNo() {
         return bookingNo;
     }
 
-    public int getGuestCount() {
-        return guestCount;
-    }
-    public boolean isPending() {
-        return "Pending".equals(status);
-    }
-    public boolean isConfirmed() {
-        return "Confirmed".equals(status);
+    public String getStatus() {
+        return status;
     }
 
     // Builder Class
     public static class Builder {
-        private String date, time, specialOffer, status, reason, bookingNo;
+        private String date, time, status, bookingNo;
         private int guestCount;
 
         // Builder Constructor (mandatory)
@@ -64,18 +50,9 @@ public class Reservation {
         }
 
         // Setter methods (optional call)
-        public Builder setSpecialOffer(String specialOffer) {
-            this.specialOffer = specialOffer;
-            return this;
-        }
 
         public Builder setStatus(String status) {
             this.status = status;
-            return this;
-        }
-
-        public Builder setReason(String reason) {
-            this.reason = reason;
             return this;
         }
 
