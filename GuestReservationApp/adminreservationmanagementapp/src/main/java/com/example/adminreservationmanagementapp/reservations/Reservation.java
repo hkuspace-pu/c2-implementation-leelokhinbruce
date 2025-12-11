@@ -1,4 +1,4 @@
-package com.example.adminreservationmanagementapp.reservations;
+package com.example.restaurant_reservation_lib;
 
 import java.io.Serializable;
 
