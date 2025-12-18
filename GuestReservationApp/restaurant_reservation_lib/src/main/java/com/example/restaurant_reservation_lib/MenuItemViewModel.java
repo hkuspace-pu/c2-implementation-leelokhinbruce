@@ -13,7 +13,23 @@ public class MenuItemViewModel extends AndroidViewModel {
 
     public MenuItemViewModel(Application app) {
         super(app);
-        repository = new MenuItemRepository(app);
+        repository = new MenuItemRepository(app);  // New an instance of the repository for calling its methods
         allMenuItems = repository.getAllMenuItems();
+    }
+
+    public void insertMenuItem(MenuItem menuItem) {
+        repository.insertMenuItem(menuItem);
+    }
+
+    public void updateMenuItem(MenuItem menuItem) {
+        repository.updateMenuItem(menuItem);
+    }
+
+    public void deleteMenuItem(MenuItem menuItem) {
+        repository.deleteMenuItem(menuItem);
+    }
+
+    public LiveData<List<MenuItem>> getAllMenuItems() {
+        return allMenuItems;
     }
 }

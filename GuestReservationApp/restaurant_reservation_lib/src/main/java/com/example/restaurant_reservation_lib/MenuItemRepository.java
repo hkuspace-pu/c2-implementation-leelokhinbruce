@@ -17,7 +17,7 @@ public class MenuItemRepository {
     private ExecutorService executorService;
 
     public MenuItemRepository(Application app) {
-        AppDatabase db = AppDatabase.getDatabase(app);
+        AppDatabase db = AppDatabase.getDatabase(app);  // Get an instance of the database
         menuItemDao = db.menuItemDao();  // Get an instance of the DAO
         allMenuItems = menuItemDao.getAllMenuItems();  // Use DAO's method to interact with the database - QUERY all menu item data
         executorService = Executors.newSingleThreadExecutor();

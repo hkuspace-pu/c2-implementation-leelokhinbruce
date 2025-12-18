@@ -14,5 +14,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
         setContentView(binding.getRoot());  // make it the active view on the screen
 
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
+
+
     }
 }
