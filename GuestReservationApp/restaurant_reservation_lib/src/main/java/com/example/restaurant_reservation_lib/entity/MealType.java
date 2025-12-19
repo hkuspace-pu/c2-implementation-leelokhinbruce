@@ -9,9 +9,4 @@ public class MealType {
     public long id;
 
     public String type;
-
-    public MealType(String type, long id) {
-        this.type = type;
-        this.id = id;
-    }
 }

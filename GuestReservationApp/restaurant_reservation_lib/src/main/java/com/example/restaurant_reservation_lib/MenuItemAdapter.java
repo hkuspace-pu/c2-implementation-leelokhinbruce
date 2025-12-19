@@ -69,7 +69,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         }
 
         void bind(MenuItem menuItem) {
-            binding.imgItemPhoto.setImageLevel(menuItem.getImageRes());
+            binding.imgItemPhoto.setImageBitmap(menuItem.getImage());
             binding.textFoodName.setText(menuItem.getFoodName());
             binding.textPrice.setText(String.valueOf(menuItem.getPrice()));
         }

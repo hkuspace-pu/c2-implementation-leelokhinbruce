@@ -9,9 +9,4 @@ public class MealTime {
     public long id;
 
     public String timeOfMenu;
-
-    public MealTime(long id, String timeOfMenu) {
-        this.id = id;
-        this.timeOfMenu = timeOfMenu;
-    }
 }
