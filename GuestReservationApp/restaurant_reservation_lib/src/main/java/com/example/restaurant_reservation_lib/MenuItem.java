@@ -18,7 +18,7 @@ public class MenuItem {
     private List<String> menuTime;
     private List<String> mealType;
     private String category;
-    private boolean isAvaiable;
+    private boolean isAvailable;
     private boolean isPromotion;
 
     @TypeConverters(DateConverter.class)
@@ -27,14 +27,14 @@ public class MenuItem {
     private Date updatedAt;
 
     // Constructor
-    public MenuItem(String foodName, double price, List<String> menuTime, List<String> mealType, String category, boolean isAvaiable, boolean isPromotion) {
+    public MenuItem(String foodName, double price, List<String> menuTime, List<String> mealType, String category, boolean isAvailable, boolean isPromotion) {
         this.foodName = foodName;
         this.price = price;
         this.imageRes = R.drawable.photo_icon;
         this.menuTime = menuTime;
         this.mealType = mealType;
         this.category = category;
-        this.isAvaiable = isAvaiable;
+        this.isAvailable = isAvailable;
         this.isPromotion = isPromotion;
     }
 

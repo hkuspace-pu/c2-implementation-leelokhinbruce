@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="90dp"
     android:padding="12dp"
+    android:gravity="center_vertical"
     android:background="@color/white"
     android:layout_marginBottom="1dp"
     android:orientation="horizontal">
@@ -14,17 +15,18 @@
         android:src="@drawable/photo_icon" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_weight="2"
         android:layout_marginStart="12dp"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textItemName"
+            android:id="@+id/textFoodName"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="Item Name"
+            android:text="Food Name"
             android:lines="1"
             android:maxLength="20"
             android:ellipsize="end"
@@ -46,8 +48,17 @@
                 android:id="@+id/textPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="price"
+                android:text="@string/price"
                 android:textAppearance="@style/regular_text" />
         </LinearLayout>
     </LinearLayout>
+    
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/imgBtnOption"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ming_cute_more_icon"
+        android:scaleType="fitXY"
+        android:background="@android:color/transparent"
+        android:visibility="gone"/>
 </LinearLayout>

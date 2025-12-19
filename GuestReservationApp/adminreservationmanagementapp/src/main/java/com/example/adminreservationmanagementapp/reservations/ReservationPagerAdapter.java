@@ -2,11 +2,7 @@ package com.example.adminreservationmanagementapp.reservations;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-
 import com.example.adminreservationmanagementapp.mainpage.ReservationsFragment;
 
 import java.util.List;

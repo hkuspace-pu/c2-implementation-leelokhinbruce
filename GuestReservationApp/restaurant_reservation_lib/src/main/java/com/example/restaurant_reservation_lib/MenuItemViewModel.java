@@ -14,7 +14,7 @@ public class MenuItemViewModel extends AndroidViewModel {
     public MenuItemViewModel(Application app) {
         super(app);
         repository = new MenuItemRepository(app);  // New an instance of the repository for calling its methods
-        allMenuItems = repository.getAllMenuItems();
+        allMenuItems = repository.getAllMenuItems();  // Get all menu items from the repository
     }
 
     public void insertMenuItem(MenuItem menuItem) {

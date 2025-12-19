@@ -2,10 +2,8 @@ package com.example.adminreservationmanagementapp.settings;
 
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.adminreservationmanagementapp.R;
 import com.example.adminreservationmanagementapp.databinding.ActivityAccountDetailsBinding;
 
 public class AccountDetailsActivity extends AppCompatActivity {
