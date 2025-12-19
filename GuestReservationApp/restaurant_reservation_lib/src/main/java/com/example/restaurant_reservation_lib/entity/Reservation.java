@@ -1,4 +1,4 @@
-package com.example.restaurant_reservation_lib;
+package com.example.restaurant_reservation_lib.entity;
 
 import java.io.Serializable;
 

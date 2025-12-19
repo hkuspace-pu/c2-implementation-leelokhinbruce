@@ -1,10 +1,10 @@
 package com.example.restaurant_reservation_lib;
 
 import android.app.Application;
-import android.view.Menu;
 
 import androidx.lifecycle.LiveData;
 import com.example.restaurant_reservation_lib.accessing_data.MenuItemDao;
+import com.example.restaurant_reservation_lib.entity.MenuItem;
 
 import java.util.Date;
 import java.util.List;

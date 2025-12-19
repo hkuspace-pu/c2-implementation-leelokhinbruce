@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.restaurant_reservation_lib.entity.MenuItem;
+
 import java.util.List;
 
 public class MenuItemViewModel extends AndroidViewModel {

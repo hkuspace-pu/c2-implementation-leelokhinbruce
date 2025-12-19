@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restaurant_reservation_lib.databinding.MenuItemBinding;
+import com.example.restaurant_reservation_lib.entity.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;

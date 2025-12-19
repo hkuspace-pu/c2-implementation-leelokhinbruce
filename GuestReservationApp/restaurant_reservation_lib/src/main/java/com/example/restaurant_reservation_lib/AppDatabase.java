@@ -8,9 +8,16 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.example.restaurant_reservation_lib.accessing_data.MenuItemDao;
+import com.example.restaurant_reservation_lib.entity.MealTime;
+import com.example.restaurant_reservation_lib.entity.MealType;
+import com.example.restaurant_reservation_lib.entity.MenuItem;
+import com.example.restaurant_reservation_lib.entity.MenuMealTime;
+import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
-// Create Database
-@Database(entities = {MenuItem.class}, version = 1, exportSchema = false)  // Annotated with a @Database annotation
+// Build Database
+@Database(entities = {MenuItem.class, MealType.class, MealTime.class,
+        MenuMealType.class, MenuMealTime.class},
+        version = 1, exportSchema = false)  // Annotated with a @Database annotation
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract MenuItemDao menuItemDao();  // Returns an instance of the DAO class (MenuItemDao)
@@ -23,7 +30,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     // Create an instance of the database
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "menuItem_and_reservation_database")
+                                    AppDatabase.class, "menuItem_and_reservation_database")
                             .build();
                 }
             }

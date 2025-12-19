@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.adminreservationmanagementapp.databinding.FragmentConfirmedListBinding;
-import com.example.restaurant_reservation_lib.Reservation;
+import com.example.restaurant_reservation_lib.entity.Reservation;
 
 import java.util.ArrayList;
 import java.util.List;

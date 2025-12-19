@@ -1,11 +1,13 @@
-package com.example.restaurant_reservation_lib;
+package com.example.restaurant_reservation_lib.entity;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.example.restaurant_reservation_lib.DateConverter;
+import com.example.restaurant_reservation_lib.R;
+
 import java.util.Date;
-import java.util.List;
 
 @Entity(tableName = "menuItem")
 public class MenuItem {
@@ -15,8 +17,6 @@ public class MenuItem {
     private String foodName;
     private double price;
     private int imageRes;  // dummy
-    private List<String> menuTime;
-    private List<String> mealType;
     private String category;
     private boolean isAvailable;
     private boolean isPromotion;
@@ -27,12 +27,10 @@ public class MenuItem {
     private Date updatedAt;
 
     // Constructor
-    public MenuItem(String foodName, double price, List<String> menuTime, List<String> mealType, String category, boolean isAvailable, boolean isPromotion) {
+    public MenuItem(String foodName, double price, String category, boolean isAvailable, boolean isPromotion) {
         this.foodName = foodName;
         this.price = price;
         this.imageRes = R.drawable.photo_icon;
-        this.menuTime = menuTime;
-        this.mealType = mealType;
         this.category = category;
         this.isAvailable = isAvailable;
         this.isPromotion = isPromotion;
@@ -53,14 +51,6 @@ public class MenuItem {
 
     public int getImageRes() {
         return imageRes;
-    }
-
-    public List<String> getMenuTime() {
-        return menuTime;
-    }
-
-    public List<String> getMealType() {
-        return mealType;
     }
 
     public String getCategory() {

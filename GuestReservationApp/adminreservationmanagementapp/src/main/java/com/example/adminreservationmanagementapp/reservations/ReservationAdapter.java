@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adminreservationmanagementapp.databinding.ConfirmedReservationItemBinding;
 import com.example.adminreservationmanagementapp.databinding.PendingReservationItemBinding;
-import com.example.restaurant_reservation_lib.Reservation;
+import com.example.restaurant_reservation_lib.entity.Reservation;
 
 import java.util.List;
 
