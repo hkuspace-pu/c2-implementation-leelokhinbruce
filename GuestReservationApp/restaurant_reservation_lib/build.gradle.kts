@@ -46,7 +46,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata:2.10.0")
 
     // ImagePicker (image loading)
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.jaikydota.imagespickers:imagespickers:1.0.6")
+    implementation("com.github.bumptech.glide:glide:4.16.0")  // Glide image upload structure
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

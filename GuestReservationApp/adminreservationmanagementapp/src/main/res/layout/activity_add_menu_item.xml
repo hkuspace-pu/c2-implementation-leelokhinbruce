@@ -41,16 +41,110 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-<!--           Photo Image -->
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/imgBtnUploadImage"
+            <!--           Photo Image -->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_marginBottom="24dp"
-                android:src="@drawable/photo_icon"
-                android:scaleType="centerCrop"
-                android:background="@android:color/transparent"
-                android:contentDescription="Menu Item Photo" />
+                android:layout_marginBottom="12dp"
+                android:contentDescription="Menu Item Photo"
+                android:src="@drawable/photo_icon" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:weightSum="2">
+
+<!--               Camera -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewCamera"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:strokeColor="@color/hint_and_stroke">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/camera_icon"
+                            android:tint="@color/orange" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/hint_and_stroke" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/camera"
+                            android:textColor="@color/orange"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--               Photo -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardViewPhoto"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:strokeColor="@color/hint_and_stroke">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:src="@drawable/upload_icon"
+                            android:tint="@color/orange" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/hint_and_stroke" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/photo"
+                            android:textColor="@color/orange"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!--            <androidx.appcompat.widget.AppCompatButton-->
+            <!--                android:id="@+id/btnChooseImg"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:text="@string/choose_img"-->
+            <!--                android:padding="12dp"-->
+            <!--                android:layout_marginBottom="24dp"-->
+            <!--                android:background="@drawable/btn2_bg"-->
+            <!--                android:textSize="18dp"-->
+            <!--                android:textAppearance="@style/small_btn_text"/>-->
+
 
             <!--   Food Name -->
             <com.google.android.material.textfield.TextInputLayout
@@ -240,9 +334,9 @@
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spinnerCategory"
                 style="@style/CustomSpinner"
-                android:layout_marginBottom="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
+                android:layout_marginBottom="24dp"
                 android:entries="@array/category"
                 android:spinnerMode="dropdown" />
 
@@ -257,9 +351,9 @@
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spinnerIsPromotion"
                 style="@style/CustomSpinner"
-                android:layout_marginBottom="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
+                android:layout_marginBottom="24dp"
                 android:entries="@array/yes_or_no"
                 android:spinnerMode="dropdown" />
 
@@ -267,11 +361,11 @@
                 android:id="@+id/btnSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/submit_btn"
-                android:padding="12dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/btn_bg"
-                android:textAppearance="@style/btn_text" />
+                android:padding="12dp"
+                android:text="@string/submit_btn"
+                android:textAppearance="@style/btn_text"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

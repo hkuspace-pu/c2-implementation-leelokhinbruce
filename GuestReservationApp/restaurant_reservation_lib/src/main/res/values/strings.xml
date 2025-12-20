@@ -30,6 +30,7 @@
     <string name="scan">Scan</string>
     <string name="add_item">Add Item</string>
     <string name="submit_btn">Submit</string>
+    <string name="choose_img">Choose Image</string>
 
     <!--    Screen Title -->
     <string name="home">Home</string>
@@ -116,6 +117,8 @@
     <string name="special_large_meal">Special Large</string>
     <string name="category">Category</string>
     <string name="is_promotion">Is Promotion</string>
+    <string name="camera">Camera</string>
+    <string name="photo">Photo</string>
 
 <!--    Other Regular Text-->
     <string name="zero">0</string>
