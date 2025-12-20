@@ -41,6 +41,17 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+<!--           Photo Image -->
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/imgBtnUploadImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/photo_icon"
+                android:scaleType="centerCrop"
+                android:background="@android:color/transparent"
+                android:contentDescription="Menu Item Photo" />
+
             <!--   Food Name -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputFoodName"

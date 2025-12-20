@@ -44,6 +44,6 @@ public interface MenuItemDao {
     void deleteItem(MenuItem menuItem);
 
     // Get all menu item data
-    @Query("SELECT * FROM menuItem ORDER BY updatedAt DESC")
+    @Query("SELECT * FROM menuItem ORDER BY updated_at DESC")
     LiveData<List<MenuItem>> getAllMenuItems();
 }
