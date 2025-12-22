@@ -11,12 +11,14 @@ import android.util.Log;
 import android.view.View;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.adminreservationmanagementapp.databinding.ActivityAddMenuItemBinding;
-import com.github.drjacky.imagepicker.ImagePicker;
-import com.github.drjacky.imagepicker.constant.ImageProvider;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.chip.ChipGroup;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,58 +41,27 @@ public class AddMenuItemActivity extends AppCompatActivity {
 
         binding.imgBtnClose.setOnClickListener(viewClose -> finish());
 
-        binding.btnChooseImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                
-//                ImagePicker.Companion.with(AddMenuItemActivity.this)
-////                        .crop()
-//                        .maxResultSize(200,200,true)
-//                        .provider(ImageProvider.BOTH) //Or bothCameraGallery()
-//                        .createIntentFromDialog(new Function1(){
-//                            public Object invoke(Object var1){
-//                                this.invoke((Intent)var1);
-//                                return Unit.INSTANCE;
-//                            }
-//
-//                            public void invoke(@NotNull Intent it){
-//                                Intrinsics.checkNotNullParameter(it,"it");
-//                                launcher.launch(it);
-//                            }
-//                        });
-            }
-        });
+        // Choose image button click
+        binding.btnChooseImg.setOnClickListener(viewUploadImg ->
+                ImagePicker.with(AddMenuItemActivity.this)
+//                        .crop()
+                .compress(1024)
+                .maxResultSize(200, 200)
+                .start());
+
+        // Meal Time selection changes
     }
 
-//    ActivityResultLauncher<Intent> launcher
-//            = registerForActivityResult(
-//            new ActivityResultContracts.StartActivityForResult(),
-//            result -> {
-//                if (result.getResultCode() == Activity.RESULT_OK) {
-//                    Intent data = result.getData();
-//                    if (data != null && data.getData() != null) {
-//                        // Load image via URL
-//                        Uri selectedImgUri = data.getData();
-//                        Glide.with(AddMenuItemActivity.this)
-//                                .load(selectedImgUri)
-//                                .placeholder(com.example.restaurant_reservation_lib.R.drawable.photo_icon)
-//                                .override(200, 200)
-//                                .into(binding.imgPhoto);
-////                        Bitmap selectedImgBitmap = null;
-////                        try {
-////                            // Use InputStream for safe loading to handle virtual URLs, without file path resolution
-////                            InputStream inputStream = getContentResolver().openInputStream(selectedImgUri);
-////                            selectedImgBitmap = BitmapFactory.decodeStream(inputStream);
-////                            if (inputStream != null)
-////                                inputStream.close();
-////                        }
-////                        catch (IOException e) {
-////                            e.printStackTrace();
-////                            Log.e("AddMenuItemActivity", "Error loading bitmap: " + e.getMessage());
-////                        }
-////                        binding.imgPhoto.setImageBitmap(selectedImgBitmap);
-//                    }
-//                }
-//            }
-//    );
+    // Upload photo via URL
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            binding.imgPhoto.setImageURI(imageUri);
+        } else {
+            binding.imgPhoto.setImageDrawable(getResources().getDrawable(com.example.restaurant_reservation_lib.R.drawable.photo_icon));
+        }
+    }
 }
