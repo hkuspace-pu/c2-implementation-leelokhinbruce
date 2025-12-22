@@ -44,6 +44,12 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(project(":restaurant_reservation_lib"))
+
+    // ImagePicker (image loading)
+//    implementation("com.github.Drjacky:ImagePicker:2.3.22")
+    implementation("com.github.dhaval2404:imagepicker:2.1")
+    implementation("com.github.bumptech.glide:glide:4.16.0")  // Glide image upload structure
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
