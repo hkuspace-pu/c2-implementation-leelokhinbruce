@@ -21,6 +21,8 @@ public class SpecificMenuActivity extends AppCompatActivity {
         binding = ActivitySpecificMenuBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         setContentView(binding.getRoot());  // make it the active view on the screen
 
+        // Get the string from MenuFragment
+        binding.textMenuTitle.setText(getIntent().getStringExtra("screen_title"));
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
 
         // Initialize ViewModel

@@ -99,7 +99,6 @@
             app:boxStrokeColor="@color/orange">
 
             <androidx.appcompat.widget.AppCompatSpinner
-                style="@style/CustomSpinner"
                 android:id="@+id/spinnerGender"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "mealType")
 public class MealType {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "meal_type_id")
+//    @ColumnInfo(name = "meal_type_id")
     public long id;
 
-    @ColumnInfo(name = "meal_type")
+//    @ColumnInfo(name = "meal_type")
     public String type;
 }

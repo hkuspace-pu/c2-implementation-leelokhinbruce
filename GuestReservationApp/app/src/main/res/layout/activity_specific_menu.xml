@@ -17,10 +17,11 @@
         android:paddingBottom="32dp">
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textMenuTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:text="Lunch"
+            android:text="@string/menu"
             android:textAppearance="@style/screen_subtitle_text" />
 
         <androidx.appcompat.widget.AppCompatImageButton

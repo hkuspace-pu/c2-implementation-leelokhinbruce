@@ -16,26 +16,26 @@ import java.util.Date;
 @Entity(tableName = "menuItem")
 public class MenuItem {
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "menu_item_id")
+//    @ColumnInfo(name = "menu_item_id")
     private long id;
 
-    @ColumnInfo(name = "food_name")
+//    @ColumnInfo(name = "food_name")
     private String foodName;
     private double price;
     private String category;
-    @ColumnInfo(name = "is_available")
+//    @ColumnInfo(name = "is_available")
     private boolean isAvailable;
-    @ColumnInfo(name = "is_promotion")
+//    @ColumnInfo(name = "is_promotion")
     private boolean isPromotion;
 
     @TypeConverters(PhotoConverter.class)
     private Bitmap image;  // Stored as BLOB in SQLite
 
-    @ColumnInfo(name = "created_at")
+//    @ColumnInfo(name = "created_at")
     @TypeConverters(DateConverter.class)
     private Date createdAt;
 
-    @ColumnInfo(name = "updated_at")
+//    @ColumnInfo(name = "updated_at")
     @TypeConverters(DateConverter.class)
     private Date updatedAt;
 

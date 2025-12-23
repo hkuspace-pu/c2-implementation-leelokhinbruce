@@ -144,7 +144,7 @@
                 android:padding="12dp"
                 android:text="@string/choose_img"
                 android:textAppearance="@style/small_btn_text"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
 
 
             <!--   Food Name -->
@@ -213,7 +213,7 @@
                 android:scrollbars="none">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -221,59 +221,54 @@
                         android:id="@+id/chipGroupMealTime"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:singleSelection="true"
                         app:selectionRequired="true"
                         app:checkedChip="@id/chipBreakfast">
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipBreakfast"
-                            style="@style/ChipCorners"
+                            style="@style/ChipSelectorStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/breakfast"
                             android:textAppearance="@style/small_text"
                             app:chipEndPadding="12dp"
-                            app:chipStartPadding="12dp"
-                            app:chipStrokeColor="@color/hint_and_stroke" />
+                            app:chipStartPadding="12dp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipLunch"
-                            style="@style/ChipCorners"
+                            style="@style/ChipSelectorStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/lunch"
                             android:textAppearance="@style/small_text"
                             app:chipEndPadding="12dp"
-                            app:chipStartPadding="12dp"
-                            app:chipStrokeColor="@color/hint_and_stroke" />
+                            app:chipStartPadding="12dp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipTeaTime"
-                            style="@style/ChipCorners"
+                            style="@style/ChipSelectorStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/tea_time"
                             android:textAppearance="@style/small_text"
                             app:chipEndPadding="12dp"
-                            app:chipStartPadding="12dp"
-                            app:chipStrokeColor="@color/hint_and_stroke" />
+                            app:chipStartPadding="12dp" />
 
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipDinner"
-                            style="@style/ChipCorners"
+                            style="@style/ChipSelectorStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/dinner"
                             android:textAppearance="@style/small_text"
                             app:chipEndPadding="12dp"
-                            app:chipStartPadding="12dp"
-                            app:chipStrokeColor="@color/hint_and_stroke" />
+                            app:chipStartPadding="12dp" />
                     </com.google.android.material.chip.ChipGroup>
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <!--   Meals -->
+            <!--  Meal Types -->
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -294,36 +289,33 @@
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipNormalMeal"
-                        style="@style/ChipCorners"
+                        style="@style/ChipSelectorStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/normal_meal"
                         android:textAppearance="@style/small_text"
                         app:chipEndPadding="12dp"
-                        app:chipStartPadding="12dp"
-                        app:chipStrokeColor="@color/hint_and_stroke" />
+                        app:chipStartPadding="12dp" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipLarge"
-                        style="@style/ChipCorners"
+                        style="@style/ChipSelectorStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/large_meal"
                         android:textAppearance="@style/small_text"
                         app:chipEndPadding="12dp"
-                        app:chipStartPadding="12dp"
-                        app:chipStrokeColor="@color/hint_and_stroke" />
+                        app:chipStartPadding="12dp" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipSpecialLarge"
-                        style="@style/ChipCorners"
+                        style="@style/ChipSelectorStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/special_large_meal"
                         android:textAppearance="@style/small_text"
                         app:chipEndPadding="12dp"
-                        app:chipStartPadding="12dp"
-                        app:chipStrokeColor="@color/hint_and_stroke" />
+                        app:chipStartPadding="12dp" />
                 </com.google.android.material.chip.ChipGroup>
             </LinearLayout>
 
@@ -331,15 +323,15 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="4dp"
+                android:paddingBottom="8dp"
                 android:text="@string/category"
                 android:textAppearance="@style/regular_text" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spinnerCategory"
-                style="@style/CustomSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
+                android:background="@drawable/custom_spinner"
                 android:layout_marginBottom="24dp"
                 android:entries="@array/category"
                 android:spinnerMode="dropdown" />
@@ -348,15 +340,15 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="4dp"
+                android:paddingBottom="8dp"
                 android:text="@string/is_promotion"
                 android:textAppearance="@style/regular_text" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spinnerIsPromotion"
-                style="@style/CustomSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
+                android:background="@drawable/custom_spinner"
                 android:layout_marginBottom="24dp"
                 android:entries="@array/yes_or_no"
                 android:spinnerMode="dropdown" />

@@ -48,8 +48,6 @@ public class AddMenuItemActivity extends AppCompatActivity {
                 .compress(1024)
                 .maxResultSize(200, 200)
                 .start());
-
-        // Meal Time selection changes
     }
 
     // Upload photo via URL

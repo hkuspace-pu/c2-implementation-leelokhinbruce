@@ -5,14 +5,14 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
 @Entity(tableName = "menuMealType",
-        primaryKeys = {"menu_item_id", "meal_type_id"},
+        primaryKeys = {"menuItemId", "mealTypeId"},
         foreignKeys = {
-                @ForeignKey(entity = MenuItem.class, parentColumns = "menu_item_id", childColumns = "menu_item_id", onDelete = ForeignKey.CASCADE),
-                @ForeignKey(entity = MealType.class, parentColumns = "meal_type_id", childColumns = "meal_type_id", onDelete = ForeignKey.CASCADE)
+                @ForeignKey(entity = MenuItem.class, parentColumns = "id", childColumns = "menuItemId", onDelete = ForeignKey.CASCADE),
+                @ForeignKey(entity = MealType.class, parentColumns = "id", childColumns = "mealTypeId", onDelete = ForeignKey.CASCADE)
         })
 public class MenuMealType {
-    @ColumnInfo(name = "menu_item_id")
+//    @ColumnInfo(name = "menu_item_id")
     public long menuItemId;
-    @ColumnInfo(name = "meal_type_id")
+//    @ColumnInfo(name = "meal_type_id")
     public long mealTypeId;
 }
