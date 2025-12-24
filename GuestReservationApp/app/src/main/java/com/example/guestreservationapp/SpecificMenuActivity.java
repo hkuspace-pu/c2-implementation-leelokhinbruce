@@ -4,10 +4,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.guestreservationapp.databinding.ActivitySpecificMenuBinding;
-import com.example.restaurant_reservation_lib.MenuItemAdapter;
+import com.example.restaurant_reservation_lib.adapter.MenuItemAdapter;
 import com.example.restaurant_reservation_lib.MenuItemViewModel;
 
 public class SpecificMenuActivity extends AppCompatActivity {

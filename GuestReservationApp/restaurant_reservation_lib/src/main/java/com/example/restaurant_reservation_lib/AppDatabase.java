@@ -2,15 +2,13 @@ package com.example.restaurant_reservation_lib;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-import androidx.room.migration.Migration;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.restaurant_reservation_lib.accessing_data.MenuItemDao;
+import com.example.restaurant_reservation_lib.converter.DateConverter;
 import com.example.restaurant_reservation_lib.entity.MealTime;
 import com.example.restaurant_reservation_lib.entity.MealType;
 import com.example.restaurant_reservation_lib.entity.MenuItem;

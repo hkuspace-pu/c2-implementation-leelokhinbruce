@@ -24,9 +24,4 @@
         <item>Dessert</item>
         <item>Twisty Pasta</item>
     </string-array>
-
-    <string-array name="yes_or_no">
-        <item>Yes</item>
-        <item>No</item>
-    </string-array>
 </resources>

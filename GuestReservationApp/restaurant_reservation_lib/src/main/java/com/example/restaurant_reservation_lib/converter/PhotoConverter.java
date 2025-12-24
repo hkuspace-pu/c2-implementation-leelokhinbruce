@@ -1,4 +1,4 @@
-package com.example.restaurant_reservation_lib;
+package com.example.restaurant_reservation_lib.converter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

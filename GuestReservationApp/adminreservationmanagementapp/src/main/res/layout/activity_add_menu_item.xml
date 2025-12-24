@@ -337,21 +337,28 @@
                 android:spinnerMode="dropdown" />
 
             <!--   Is Promotion -->
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:text="@string/is_promotion"
-                android:textAppearance="@style/regular_text" />
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinnerIsPromotion"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:background="@drawable/custom_spinner"
-                android:layout_marginBottom="24dp"
-                android:entries="@array/yes_or_no"
-                android:spinnerMode="dropdown" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingBottom="24dp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/is_promotion"
+                    android:textAppearance="@style/regular_text" />
+
+                <Switch
+                    android:id="@+id/switchIsPromotion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:thumb="@drawable/thumb"
+                    android:track="@drawable/track"
+                    android:layout_margin="2dp" />
+            </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSubmit"
@@ -361,6 +368,7 @@
                 android:background="@drawable/btn_bg"
                 android:padding="12dp"
                 android:text="@string/submit_btn"
+                android:textColor="@drawable/btn_bg"
                 android:textAppearance="@style/btn_text" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
