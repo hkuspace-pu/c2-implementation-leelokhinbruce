@@ -21,7 +21,7 @@ import java.util.List;
 public interface MenuItemDao {
     // Add new menu item
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertItem(MenuItem menuItem);
+    long insertItem(MenuItem menuItem);
 
     @Insert
     void insertMealType(MealType type);
@@ -30,10 +30,10 @@ public interface MenuItemDao {
     void insertMealTime(MealTime timeOfMenu);
 
     @Insert
-    void insertMenuMealType(MenuMealType junction);
+    void insertMenuMealTime(MenuMealTime junction);
 
     @Insert
-    void insertMenuMealTime(MenuMealTime junction);
+    void insertMenuMealType(MenuMealType junction);
 
     // Edit a menu item
     @Update

@@ -66,10 +66,6 @@ public class MenuItem {
         return price;
     }
 
-//    public int getImageRes() {
-//        return imageRes;
-//    }
-
     public Bitmap getImage() {
         return image;
     }
@@ -145,7 +141,7 @@ public class MenuItem {
         private Date updateAt;
 
         // Builder constructor (mandatory)
-        public Builder(String foodName, double price, Bitmap image, String category, boolean isAvailable, boolean isPromotion, Date createAt) {
+        public Builder(String foodName, double price, String category, boolean isAvailable, boolean isPromotion, Date createAt) {
             this.footName = foodName;
             this.price = price;
             this.category = category;

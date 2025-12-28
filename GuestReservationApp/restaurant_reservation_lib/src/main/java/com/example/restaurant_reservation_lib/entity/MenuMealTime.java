@@ -14,7 +14,20 @@ import androidx.room.ForeignKey;
         })
 public class MenuMealTime {
 //    @ColumnInfo(name = "menu_item_id")
-    public long menuItemId;
+    private long menuItemId;
 //    @ColumnInfo(name = "meal_time_id")
-    public long mealTimeId;
+    private long mealTimeId;
+
+    public MenuMealTime(long menuItemId, long mealTimeId) {
+        this.menuItemId = menuItemId;
+        this.mealTimeId = mealTimeId;
+    }
+
+    public long getMenuItemId() {
+        return menuItemId;
+    }
+
+    public long getMealTimeId() {
+        return mealTimeId;
+    }
 }

@@ -1,22 +1,17 @@
 package com.example.adminreservationmanagementapp;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -24,15 +19,21 @@ import com.example.adminreservationmanagementapp.databinding.ActivityAddMenuItem
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
 import com.example.restaurant_reservation_lib.MenuItemViewModel;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
+import com.example.restaurant_reservation_lib.entity.MenuMealTime;
+import com.example.restaurant_reservation_lib.entity.MenuMealType;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -41,7 +42,7 @@ import kotlin.jvm.internal.Intrinsics;
 public class AddMenuItemActivity extends BaseValidatedActivity {
     private ActivityAddMenuItemBinding binding;
     private MenuItemViewModel menuItemViewModel;
-    private String foodNameStr, priceStr;
+    private String foodName, priceStr;
     private ExecutorService executorService;
     private Handler mainHandler;
 
@@ -53,6 +54,8 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 
         // Initialize ViewModel
         menuItemViewModel = new ViewModelProvider(this).get(MenuItemViewModel.class);
+        // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
+        executorService = Executors.newSingleThreadExecutor();
 
         binding.imgBtnClose.setOnClickListener(viewClose -> finish());
 
@@ -60,9 +63,9 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         binding.btnChooseImg.setOnClickListener(viewUploadImg ->
                 ImagePicker.with(AddMenuItemActivity.this)
 //                        .crop()
-                .compress(1024)
-                .maxResultSize(200, 200)
-                .start());
+                        .compress(1024)
+                        .maxResultSize(200, 200)
+                        .start());
 
         // Submit button is disable if food name and price is empty
         binding.btnSubmit.setEnabled(false);
@@ -70,7 +73,20 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         binding.editPrice.addTextChangedListener(inputFieldWatcher);
 
         // Submit button click
-        binding.btnSubmit.setOnClickListener(viewSubmit -> submitMenuItem());
+        binding.btnSubmit.setOnClickListener(viewSubmit -> {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("Add Menu Item")
+                    .setMessage("Are you sure to add the menu item?")
+                    // setCancelable(false): the Dialog Box will remain show even clicks on the outside
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        isLoading(true);  // Loading progress bar
+                        executorService.execute(this::submitMenuItem);
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        dialog.cancel();
+                    }).show();  // Show the Alert Dialog Box
+        });
     }
 
     // Upload photo via URL
@@ -91,8 +107,66 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         double price = Double.parseDouble(priceStr);
         String category = binding.spinnerCategory.getSelectedItem().toString();
         boolean isPromotion = binding.switchIsPromotion.isChecked();
+        Date createDate = new Date();
 
         // Build MenuItem obj
+        MenuItem menuItem = new MenuItem.Builder(
+                foodName,
+                price,
+                category,
+                true,
+                isPromotion,
+                createDate
+        ).build();
+
+        // Get selected Meal Time
+        long mealTimeId = getMealTimeIdFromChip(binding.chipGroupMealTime.getCheckedChipId());
+
+        // Get selected Meal Types
+        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
+        List<Long> mealTypeIdList = new ArrayList<>();  // Store each selected chip id
+        for (int chipId : checkedMealTypeChipIds) {
+            long mealTypeId = getMealTypeIdFromChip(chipId);
+            if (mealTypeId != -1)
+                mealTypeIdList.add(mealTypeId);
+        }
+
+        // Interact with local database
+        // Insert MenuItem and get its ID
+        long menuItemId = menuItemViewModel.insertMenuItemAndReturnId(menuItem);  // Insert menu item data
+
+        // Insert Meal Time junction
+        MenuMealTime menuMealTime = new MenuMealTime(menuItemId, mealTimeId);
+        menuItemViewModel.insertMenuMealTime(menuMealTime);
+
+        // Insert Meal Type junction
+        for (long mealTypeId : mealTypeIdList) {
+            MenuMealType menuMealType = new MenuMealType(menuItemId, mealTypeId);
+            menuItemViewModel.insertMenuMealType(menuMealType);
+        }
+
+        // Success feedback on UI thread
+        mainHandler.post(() -> {
+            Toast.makeText(AddMenuItemActivity.this, "Menu item added successfully!", Toast.LENGTH_SHORT).show();
+            isLoading(false);
+            finish();
+        });
+    }
+
+    // Helper: Map chip ID to MealTime database ID
+    private long getMealTimeIdFromChip(int chipId) {
+        if (chipId == binding.chipBreakfast.getId()) return 1L;
+        if (chipId == binding.chipLunch.getId()) return 2L;
+        if (chipId == binding.chipDinner.getId()) return 3L;
+        return -1L;
+    }
+
+    // Helper: Map chip ID to MealType database ID
+    private long getMealTypeIdFromChip(int chipId) {
+        if (chipId == binding.chipNormalMeal.getId()) return 1L;
+        if (chipId == binding.chipLarge.getId()) return 2L;
+        if (chipId == binding.chipSpecialLarge.getId()) return 3L;
+        return -1L;
     }
 
     // TextWatchers for each field to monitor textEditLayout
@@ -109,13 +183,24 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            foodNameStr = binding.textInputFoodName.getEditText().getText().toString().trim();
+            foodName = binding.textInputFoodName.getEditText().getText().toString().trim();
             priceStr = binding.textInputPrice.getEditText().getText().toString().trim();
 
-            boolean isFoodNameValid = isNotFieldEmpty(foodNameStr, binding.textInputFoodName, "Please enter food name");
+            boolean isFoodNameValid = isNotFieldEmpty(foodName, binding.textInputFoodName, "Please enter food name");
             boolean isPriceValid = isNotFieldEmpty(priceStr, binding.textInputPrice, "Please enter price");
 
             binding.btnSubmit.setEnabled(isFoodNameValid && isPriceValid);
         }
     };
+
+    // Disable anything during loading data
+    private void isLoading(boolean status) {
+        if (status) {
+            binding.progressBar.setVisibility(View.VISIBLE);
+            binding.btnSubmit.setClickable(false);
+        } else {
+            binding.progressBar.setVisibility(View.GONE);
+            binding.btnSubmit.setClickable(true);
+        }
+    }
 }
