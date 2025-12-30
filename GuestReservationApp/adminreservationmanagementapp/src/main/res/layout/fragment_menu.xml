@@ -69,6 +69,7 @@
                     android:layout_marginStart="24dp"
                     android:gravity="center_vertical"
                     android:text="@string/breakfast"
+                    android:textColor="@color/white"
                     android:textAppearance="@style/btn_text" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -99,6 +100,7 @@
                     android:layout_marginStart="24dp"
                     android:gravity="center_vertical"
                     android:text="@string/lunch"
+                    android:textColor="@color/white"
                     android:textAppearance="@style/btn_text" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -129,6 +131,7 @@
                     android:layout_marginStart="24dp"
                     android:gravity="center_vertical"
                     android:text="@string/tea_time"
+                    android:textColor="@color/white"
                     android:textAppearance="@style/btn_text" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -159,6 +162,7 @@
                     android:layout_marginStart="24dp"
                     android:gravity="center_vertical"
                     android:text="@string/dinner"
+                    android:textColor="@color/white"
                     android:textAppearance="@style/btn_text" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

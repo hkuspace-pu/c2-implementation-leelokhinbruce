@@ -15,18 +15,15 @@ public class MenuItemViewModel extends AndroidViewModel {
     private MenuItemRepository repository;
     private LiveData<List<MenuItem>> allMenuItems;
 
+    // Constructor
     public MenuItemViewModel(Application app) {
         super(app);
         repository = new MenuItemRepository(app);  // New an instance of the repository for calling its methods
         allMenuItems = repository.getAllMenuItems();  // Get all menu items from the repository
     }
 
-    public long insertMenuItemAndReturnId(MenuItem menuItem) {
-        return repository.insertMenuItem(menuItem);
-    }
-
-    public void insertMenuMealTime(MenuMealTime menuMealTime) {
-        repository.insertMenuMealTime(menuMealTime);
+    public void insertMenuItem(MenuItem menuItem) {
+        repository.insertMenuItem(menuItem);
     }
 
     public void insertMenuMealType(MenuMealType menuMealType) {

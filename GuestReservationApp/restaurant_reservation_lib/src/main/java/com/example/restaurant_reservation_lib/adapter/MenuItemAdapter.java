@@ -44,8 +44,10 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         holder.bind(currentMenuItem);
 
         if (isStaffSide) {
+            // Show option icon button
             holder.binding.imgBtnOption.setVisibility(View.VISIBLE);
         } else {
+            // Option icon button disappears
             holder.binding.imgBtnOption.setVisibility(View.GONE);
         }
     }
@@ -69,7 +71,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         }
 
         void bind(MenuItem menuItem) {
-            binding.imgItemPhoto.setImageBitmap(menuItem.getImage());
+//            binding.imgItemPhoto.setImageBitmap(menuItem.getImage());
             binding.textFoodName.setText(menuItem.getFoodName());
             binding.textPrice.setText(String.valueOf(menuItem.getPrice()));
         }

@@ -3,14 +3,17 @@ package com.example.adminreservationmanagementapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,6 +25,7 @@ import com.example.restaurant_reservation_lib.entity.MenuItem;
 import com.example.restaurant_reservation_lib.entity.MenuMealTime;
 import com.example.restaurant_reservation_lib.entity.MenuMealType;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -42,7 +46,8 @@ import kotlin.jvm.internal.Intrinsics;
 public class AddMenuItemActivity extends BaseValidatedActivity {
     private ActivityAddMenuItemBinding binding;
     private MenuItemViewModel menuItemViewModel;
-    private String foodName, priceStr;
+    private String foodName, priceStr, mealTime;
+    private Bitmap imageBitmap;
     private ExecutorService executorService;
     private Handler mainHandler;
 
@@ -66,6 +71,14 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
                         .compress(1024)
                         .maxResultSize(200, 200)
                         .start());
+
+        // Get a selected chip (MealTime) text
+        binding.chipGroupMealTime.setOnCheckedChangeListener((chipGroup, checkedId) -> {
+            if (checkedId != View.NO_ID) {
+                Chip chip = findViewById(checkedId);
+                mealTime = chip.getText().toString();
+            }
+        });
 
         // Submit button is disable if food name and price is empty
         binding.btnSubmit.setEnabled(false);
@@ -97,6 +110,13 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         if (data != null && data.getData() != null) {
             Uri imageUri = data.getData();
             binding.imgPhoto.setImageURI(imageUri);
+
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Failed to load photo", Toast.LENGTH_SHORT).show();
+            }
         } else {
             binding.imgPhoto.setImageDrawable(getResources().getDrawable(com.example.restaurant_reservation_lib.R.drawable.photo_icon));
         }
@@ -109,18 +129,22 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         boolean isPromotion = binding.switchIsPromotion.isChecked();
         Date createDate = new Date();
 
+        // Not allow no photo
+        if (imageBitmap == null) {
+            Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         // Build MenuItem obj
         MenuItem menuItem = new MenuItem.Builder(
                 foodName,
                 price,
                 category,
+                mealTime,
                 true,
                 isPromotion,
                 createDate
-        ).build();
-
-        // Get selected Meal Time
-        long mealTimeId = getMealTimeIdFromChip(binding.chipGroupMealTime.getCheckedChipId());
+        ).setImage(imageBitmap).build();
 
         // Get selected Meal Types
         List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
@@ -132,18 +156,14 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         }
 
         // Interact with local database
-        // Insert MenuItem and get its ID
-        long menuItemId = menuItemViewModel.insertMenuItemAndReturnId(menuItem);  // Insert menu item data
-
-        // Insert Meal Time junction
-        MenuMealTime menuMealTime = new MenuMealTime(menuItemId, mealTimeId);
-        menuItemViewModel.insertMenuMealTime(menuMealTime);
+        // Insert MenuItem
+        menuItemViewModel.insertMenuItem(menuItem);  // Insert menu item data
 
         // Insert Meal Type junction
-        for (long mealTypeId : mealTypeIdList) {
-            MenuMealType menuMealType = new MenuMealType(menuItemId, mealTypeId);
-            menuItemViewModel.insertMenuMealType(menuMealType);
-        }
+//        for (long mealTypeId : mealTypeIdList) {
+//            MenuMealType menuMealType = new MenuMealType(menuItemId, mealTypeId);
+//            menuItemViewModel.insertMenuMealType(menuMealType);
+//        }
 
         // Success feedback on UI thread
         mainHandler.post(() -> {

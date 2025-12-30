@@ -17,20 +17,12 @@ import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 import java.util.List;
 
-@Dao
+//@Dao
+@androidx.room.Dao
 public interface MenuItemDao {
     // Add new menu item
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertItem(MenuItem menuItem);
-
-    @Insert
-    void insertMealType(MealType type);
-
-    @Insert
-    void insertMealTime(MealTime timeOfMenu);
-
-    @Insert
-    void insertMenuMealTime(MenuMealTime junction);
+    void insertItem(MenuItem menuItem);
 
     @Insert
     void insertMenuMealType(MenuMealType junction);
@@ -44,6 +36,6 @@ public interface MenuItemDao {
     void deleteItem(MenuItem menuItem);
 
     // Get all menu item data
-    @Query("SELECT * FROM menuItem ORDER BY updatedAt DESC")
+    @Query("SELECT * FROM menuItem ORDER BY category ASC")
     LiveData<List<MenuItem>> getAllMenuItems();
 }

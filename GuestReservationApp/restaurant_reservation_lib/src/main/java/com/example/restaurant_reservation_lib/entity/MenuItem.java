@@ -18,7 +18,7 @@ public class MenuItem {
 //    @ColumnInfo(name = "menu_item_id")
     private long id;
 //    @ColumnInfo(name = "food_name")
-    private String foodName, category;
+    private String foodName, category, mealTime;
     private double price;
 //    @ColumnInfo(name = "is_available")
     private boolean isAvailable, isPromotion;
@@ -46,6 +46,7 @@ public class MenuItem {
         this.foodName = builder.footName;
         this.price = builder.price;
         this.category = builder.category;
+        this.mealTime = builder.mealTime;
         this.isAvailable = builder.isAvailable;
         this.isPromotion = builder.isPromotion;
         this.image = builder.image;
@@ -131,7 +132,7 @@ public class MenuItem {
     public static class Builder {
         // instance fields
         // Mandatory fields
-        private final String footName, category;
+        private final String footName, category, mealTime;
         private final double price;
         private final boolean isAvailable, isPromotion;
         private final Date createAt;
@@ -141,10 +142,11 @@ public class MenuItem {
         private Date updateAt;
 
         // Builder constructor (mandatory)
-        public Builder(String foodName, double price, String category, boolean isAvailable, boolean isPromotion, Date createAt) {
+        public Builder(String foodName, double price, String category, String mealTime, boolean isAvailable, boolean isPromotion, Date createAt) {
             this.footName = foodName;
             this.price = price;
             this.category = category;
+            this.mealTime = mealTime;
             this.isAvailable = isAvailable;
             this.isPromotion = isPromotion;
             this.createAt = createAt;

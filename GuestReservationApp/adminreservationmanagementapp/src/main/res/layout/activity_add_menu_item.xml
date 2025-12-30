@@ -138,6 +138,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:selectionRequired="true"
+                        app:singleSelection="true"
                         app:checkedChip="@id/chipBreakfast">
 
                         <com.google.android.material.chip.Chip
