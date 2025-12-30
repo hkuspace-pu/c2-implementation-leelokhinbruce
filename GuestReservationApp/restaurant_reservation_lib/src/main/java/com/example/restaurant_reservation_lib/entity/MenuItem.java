@@ -47,11 +47,11 @@ public class MenuItem {
         this.price = builder.price;
         this.category = builder.category;
         this.mealTime = builder.mealTime;
-        this.isAvailable = builder.isAvailable;
         this.isPromotion = builder.isPromotion;
         this.image = builder.image;
         this.createdAt = builder.createAt;
         this.updatedAt = builder.updateAt;
+        this.isAvailable = builder.isAvailable;
     }
 
     // Getter
@@ -67,20 +67,20 @@ public class MenuItem {
         return price;
     }
 
-    public Bitmap getImage() {
-        return image;
-    }
-
     public String getCategory() {
         return category;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public String getMealTime() {
+        return mealTime;
     }
 
     public boolean isPromotion() {
         return isPromotion;
+    }
+
+    public Bitmap getImage() {
+        return image;
     }
 
     public Date getCreatedAt() {
@@ -89,6 +89,10 @@ public class MenuItem {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
     }
 
     // Setter
@@ -100,16 +104,16 @@ public class MenuItem {
         this.foodName = foodName;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public void setPrice(double price) {
         this.price = price;
     }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setMealTime(String mealTime) {
+        this.mealTime = mealTime;
     }
 
     public void setPromotion(boolean promotion) {
@@ -128,6 +132,10 @@ public class MenuItem {
         this.updatedAt = updatedAt;
     }
 
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
     // Static class Builder (manufacturer)
     public static class Builder {
         // instance fields
@@ -142,14 +150,14 @@ public class MenuItem {
         private Date updateAt;
 
         // Builder constructor (mandatory)
-        public Builder(String foodName, double price, String category, String mealTime, boolean isAvailable, boolean isPromotion, Date createAt) {
+        public Builder(String foodName, double price, String category, String mealTime, boolean isPromotion, Date createAt, boolean isAvailable) {
             this.footName = foodName;
             this.price = price;
             this.category = category;
             this.mealTime = mealTime;
-            this.isAvailable = isAvailable;
             this.isPromotion = isPromotion;
             this.createAt = createAt;
+            this.isAvailable = isAvailable;
         }
 
         // Setter methods (optional)

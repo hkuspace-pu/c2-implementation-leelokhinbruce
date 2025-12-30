@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.adminreservationmanagementapp.AddMenuItemActivity;
+import com.example.adminreservationmanagementapp.SpecificMenuActivity;
 import com.example.adminreservationmanagementapp.databinding.FragmentMenuBinding;
 
 public class MenuFragment extends Fragment {
@@ -26,6 +27,18 @@ public class MenuFragment extends Fragment {
             startActivity(intent);
         });
 
+        binding.cardViewBtnBreakfast.setOnClickListener(viewBreakfast -> browseMenu("Breakfast"));
+        binding.cardViewBtnLunch.setOnClickListener(viewBreakfast -> browseMenu("Lunch"));
+        binding.cardViewBtnTeaTime.setOnClickListener(viewBreakfast -> browseMenu("Tea Time"));
+        binding.cardViewBtnDinner.setOnClickListener(viewBreakfast -> browseMenu("Dinner"));
+
         return view;
+    }
+
+    private void browseMenu(String menuType) {
+        Intent intent = new Intent(getContext(), SpecificMenuActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("screen_title", menuType);
+        startActivity(intent);
     }
 }

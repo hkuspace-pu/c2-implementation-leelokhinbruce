@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -50,6 +51,15 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     private Bitmap imageBitmap;
     private ExecutorService executorService;
     private Handler mainHandler;
+
+    public static final String EXTRA_ID = "com.example.adminreservationmanagementapp.EXTRA_ID";
+    public static final String EXTRA_FOOD_NAME = "com.example.adminreservationmanagementapp.EXTRA_FOOD_NAME";
+    public static final String EXTRA_PRICE = "com.example.adminreservationmanagementapp.EXTRA_PRICE";
+    public static final String EXTRA_CATEGORY = "com.example.adminreservationmanagementapp.EXTRA_CATEGORY";
+    public static final String EXTRA_MEAL_TIME = "com.example.adminreservationmanagementapp.EXTRA_MEAL_TIME";
+    public static final String EXTRA_IS_PROMOTION = "com.example.adminreservationmanagementapp.EXTRA_IS_PROMOTION";
+    public static final String EXTRA_CREATED_DATE = "com.example.adminreservationmanagementapp.EXTRA_CREATED_DATE";
+    public static final String EXTRA_PHOTO = "com.example.adminreservationmanagementapp.EXTRA_PHOTO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +103,21 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
                     // setCancelable(false): the Dialog Box will remain show even clicks on the outside
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, which) -> {
+                        double price = Double.parseDouble(priceStr);
+                        String category = binding.spinnerCategory.getSelectedItem().toString();
+                        boolean isPromotion = binding.switchIsPromotion.isChecked();
+                        Date createDate = new Date();
+
+                        // Not allow no photo
+//                        if (imageBitmap == null) {
+//                            Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
+
                         isLoading(true);  // Loading progress bar
-                        executorService.execute(this::submitMenuItem);
+                        Log.d("AddMenuItemActivity", "Ready to save menu item");
+                        // save menu item data
+                        executorService.execute(() -> saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate));
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         dialog.cancel();
@@ -102,67 +125,54 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         });
     }
 
-    // Upload photo via URL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data != null && data.getData() != null) {
+        if (data != null && data.getData() != null && resultCode == RESULT_OK) {
+            // Upload photo via URL
             Uri imageUri = data.getData();
             binding.imgPhoto.setImageURI(imageUri);
-
-            try {
-                imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Failed to load photo", Toast.LENGTH_SHORT).show();
-            }
+//            try {
+//                imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                Toast.makeText(this, "Failed to load photo", Toast.LENGTH_SHORT).show();
+//            }
         } else {
             binding.imgPhoto.setImageDrawable(getResources().getDrawable(com.example.restaurant_reservation_lib.R.drawable.photo_icon));
         }
     }
 
     // Submit menu item
-    private void submitMenuItem() {
-        double price = Double.parseDouble(priceStr);
-        String category = binding.spinnerCategory.getSelectedItem().toString();
-        boolean isPromotion = binding.switchIsPromotion.isChecked();
-        Date createDate = new Date();
+    private void saveMenuItem(String foodName, double price, String category, String mealTime, boolean isPromotion, Date nowDate) {
+        Intent data = new Intent();
 
-        // Not allow no photo
-        if (imageBitmap == null) {
-            Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT).show();
-            return;
+        // Pass all menu item details via an intent
+        data.putExtra(EXTRA_FOOD_NAME, foodName);
+        data.putExtra(EXTRA_PRICE, price);
+        data.putExtra(EXTRA_CATEGORY, category);
+        data.putExtra(EXTRA_MEAL_TIME, mealTime);
+        data.putExtra(EXTRA_IS_PROMOTION, isPromotion);
+        data.putExtra(EXTRA_CREATED_DATE, nowDate.getTime());
+//        data.putExtra(EXTRA_PHOTO, photoBitmap);
+        int id = getIntent().getIntExtra(EXTRA_ID, -1);
+        if (id != -1) {
+            // Passing id
+            data.putExtra(EXTRA_ID, id);
         }
 
-        // Build MenuItem obj
-        MenuItem menuItem = new MenuItem.Builder(
-                foodName,
-                price,
-                category,
-                mealTime,
-                true,
-                isPromotion,
-                createDate
-        ).setImage(imageBitmap).build();
+        // Setting result as data
+        setResult(RESULT_OK, data);
+        Log.d("AddMenuItemActivity", "Menu Item details pass via Intent");
 
         // Get selected Meal Types
-        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
-        List<Long> mealTypeIdList = new ArrayList<>();  // Store each selected chip id
-        for (int chipId : checkedMealTypeChipIds) {
-            long mealTypeId = getMealTypeIdFromChip(chipId);
-            if (mealTypeId != -1)
-                mealTypeIdList.add(mealTypeId);
-        }
-
-        // Interact with local database
-        // Insert MenuItem
-        menuItemViewModel.insertMenuItem(menuItem);  // Insert menu item data
-
-        // Insert Meal Type junction
-//        for (long mealTypeId : mealTypeIdList) {
-//            MenuMealType menuMealType = new MenuMealType(menuItemId, mealTypeId);
-//            menuItemViewModel.insertMenuMealType(menuMealType);
+//        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
+//        List<Long> mealTypeIdList = new ArrayList<>();  // Store each selected chip id
+//        for (int chipId : checkedMealTypeChipIds) {
+//            long mealTypeId = getMealTypeIdFromChip(chipId);
+//            if (mealTypeId != -1)
+//                mealTypeIdList.add(mealTypeId);
 //        }
 
         // Success feedback on UI thread
@@ -171,14 +181,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
             isLoading(false);
             finish();
         });
-    }
-
-    // Helper: Map chip ID to MealTime database ID
-    private long getMealTimeIdFromChip(int chipId) {
-        if (chipId == binding.chipBreakfast.getId()) return 1L;
-        if (chipId == binding.chipLunch.getId()) return 2L;
-        if (chipId == binding.chipDinner.getId()) return 3L;
-        return -1L;
     }
 
     // Helper: Map chip ID to MealType database ID
