@@ -1,13 +1,13 @@
-package com.example.restaurant_reservation_lib;
+package com.example.adminreservationmanagementapp.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.restaurant_reservation_lib.accessing_data.MenuItemDao;
+import com.example.adminreservationmanagementapp.AppDatabase;
+import com.example.adminreservationmanagementapp.accessing_data.MenuItemDao;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealTime;
 import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 import java.util.Date;

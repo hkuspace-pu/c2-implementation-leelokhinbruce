@@ -3,18 +3,16 @@ package com.example.adminreservationmanagementapp;
 import static com.example.adminreservationmanagementapp.AddMenuItemActivity.*;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.viewmodel.internal.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.adminreservationmanagementapp.databinding.ActivitySpecificMenuBinding;
-import com.example.restaurant_reservation_lib.MenuItemViewModel;
+import com.example.adminreservationmanagementapp.viewmodel.MenuItemViewModel;
 import com.example.restaurant_reservation_lib.adapter.MenuItemAdapter;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
 
@@ -23,7 +21,6 @@ import java.util.Date;
 public class SpecificMenuActivity extends AppCompatActivity {
     private ActivitySpecificMenuBinding binding;
     private MenuItemViewModel menuItemViewModel;
-//    private MenuItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,4 +1,4 @@
-package com.example.restaurant_reservation_lib.accessing_data;
+package com.example.adminreservationmanagementapp.accessing_data;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -8,11 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.restaurant_reservation_lib.entity.MealTime;
-import com.example.restaurant_reservation_lib.entity.MealType;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuItemWithMealTypes;
-import com.example.restaurant_reservation_lib.entity.MenuMealTime;
 import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 import java.util.List;

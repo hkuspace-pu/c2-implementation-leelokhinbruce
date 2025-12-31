@@ -1,52 +1,31 @@
 package com.example.adminreservationmanagementapp;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
 import com.example.adminreservationmanagementapp.databinding.ActivityAddMenuItemBinding;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
-import com.example.restaurant_reservation_lib.MenuItemViewModel;
-import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealTime;
-import com.example.restaurant_reservation_lib.entity.MenuMealType;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
-import kotlin.jvm.internal.Intrinsics;
-
 public class AddMenuItemActivity extends BaseValidatedActivity {
     private ActivityAddMenuItemBinding binding;
-    private MenuItemViewModel menuItemViewModel;
     private String foodName, priceStr, mealTime;
     private Bitmap imageBitmap;
     private ExecutorService executorService;
@@ -67,10 +46,10 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         binding = ActivityAddMenuItemBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         setContentView(binding.getRoot());  // make it the active view on the screen
 
-        // Initialize ViewModel
-        menuItemViewModel = new ViewModelProvider(this).get(MenuItemViewModel.class);
         // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
         executorService = Executors.newSingleThreadExecutor();
+        // Main thread handler
+        mainHandler = new Handler(Looper.getMainLooper());
 
         binding.imgBtnClose.setOnClickListener(viewClose -> finish());
 
@@ -103,6 +82,8 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
                     // setCancelable(false): the Dialog Box will remain show even clicks on the outside
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, which) -> {
+//                        foodName = binding.editFoodName.getText().toString().trim();
+//                        priceStr = binding.editPrice.getText().toString().trim();
                         double price = Double.parseDouble(priceStr);
                         String category = binding.spinnerCategory.getSelectedItem().toString();
                         boolean isPromotion = binding.switchIsPromotion.isChecked();
@@ -164,7 +145,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 
         // Setting result as data
         setResult(RESULT_OK, data);
-        Log.d("AddMenuItemActivity", "Menu Item details pass via Intent");
+        Log.d("AddMenuItemActivity", "Menu item details pass via Intent: \nFood Name: " + foodName + "\nPrice: $" + price + "\nMeal Time: " + mealTime);
 
         // Get selected Meal Types
 //        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
@@ -179,7 +160,11 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         mainHandler.post(() -> {
             Toast.makeText(AddMenuItemActivity.this, "Menu item added successfully!", Toast.LENGTH_SHORT).show();
             isLoading(false);
+            Intent intent = new Intent(this, SpecificMenuActivity.class);
+            intent.putExtra("screen_title", mealTime);
+            startActivity(intent);
             finish();
+            Log.d("AddMenuItemActivity", "Redirect to Specific Menu: " + mealTime);
         });
     }
 
