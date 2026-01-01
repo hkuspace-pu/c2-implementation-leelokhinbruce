@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 
 public class AddMenuItemActivity extends BaseValidatedActivity {
     private ActivityAddMenuItemBinding binding;
-    private String foodName, priceStr, mealTime;
+    private String foodName, priceStr, mealTime = "Breakfast";
     private Bitmap imageBitmap;
     private ExecutorService executorService;
     private Handler mainHandler;
@@ -96,7 +96,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 //                        }
 
                         isLoading(true);  // Loading progress bar
-                        Log.d("AddMenuItemActivity", "Ready to save menu item");
                         // save menu item data
                         executorService.execute(() -> saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate));
                     })
@@ -145,7 +144,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 
         // Setting result as data
         setResult(RESULT_OK, data);
-        Log.d("AddMenuItemActivity", "Menu item details pass via Intent: \nFood Name: " + foodName + "\nPrice: $" + price + "\nMeal Time: " + mealTime);
 
         // Get selected Meal Types
 //        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
@@ -158,13 +156,10 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 
         // Success feedback on UI thread
         mainHandler.post(() -> {
+            Log.d("AddMenuItemActivity", "Pass menu item details: \nCategory: " + category + "\nMeal Time: " + mealTime);
             Toast.makeText(AddMenuItemActivity.this, "Menu item added successfully!", Toast.LENGTH_SHORT).show();
             isLoading(false);
-            Intent intent = new Intent(this, SpecificMenuActivity.class);
-            intent.putExtra("screen_title", mealTime);
-            startActivity(intent);
             finish();
-            Log.d("AddMenuItemActivity", "Redirect to Specific Menu: " + mealTime);
         });
     }
 

@@ -23,17 +23,17 @@
             android:text="@string/menu"
             android:textAppearance="@style/screen_title_text" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddItem"
-            style="@style/TopRightButtonCorners"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/orange"
-            android:paddingHorizontal="12dp"
-            android:text="@string/add_item"
-            android:textAppearance="@style/section_text"
-            app:icon="@drawable/add_icon"
-            app:iconSize="36dp" />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/btnAddItem"-->
+<!--            style="@style/TopRightButtonCorners"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:backgroundTint="@color/orange"-->
+<!--            android:paddingHorizontal="12dp"-->
+<!--            android:text="@string/add_item"-->
+<!--            android:textAppearance="@style/section_text"-->
+<!--            app:icon="@drawable/add_icon"-->
+<!--            app:iconSize="36dp" />-->
     </LinearLayout>
 
     <LinearLayout

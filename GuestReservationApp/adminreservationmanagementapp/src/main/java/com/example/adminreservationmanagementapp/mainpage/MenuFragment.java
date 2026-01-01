@@ -21,11 +21,11 @@ public class MenuFragment extends Fragment {
         binding = FragmentMenuBinding.inflate(getLayoutInflater(), container, false);
         View view = binding.getRoot();
 
-        binding.btnAddItem.setOnClickListener(viewAddItem -> {
-            Intent intent = new Intent(getContext(), AddMenuItemActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        });
+//        binding.btnAddItem.setOnClickListener(viewAddItem -> {
+//            Intent intent = new Intent(getContext(), AddMenuItemActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//        });
 
         binding.cardViewBtnBreakfast.setOnClickListener(viewBreakfast -> browseMenu("Breakfast"));
         binding.cardViewBtnLunch.setOnClickListener(viewBreakfast -> browseMenu("Lunch"));
