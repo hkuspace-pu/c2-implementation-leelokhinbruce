@@ -8,6 +8,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.adminreservationmanagementapp.accessing_data.MenuItemDao;
@@ -18,7 +19,7 @@ import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 // Build Database
 @Database(entities = {MenuItem.class, MealType.class, MenuMealType.class},
-        version = 2, exportSchema = false)  // Annotated with a @Database annotation
+        version = 4, exportSchema = false)  // Annotated with a @Database annotation
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
     // Returns an instance of the database class
@@ -38,7 +39,14 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "menuItem_and_reservation_database")
                             // Add fall back to destructive migration to the database
-                            .fallbackToDestructiveMigration()
+//                            .fallbackToDestructiveMigration()
+                            .addMigrations(new Migration(3, 4) {
+                                @Override
+                                public void migrate(@NonNull SupportSQLiteDatabase db) {
+//                                    super.migrate(db);
+                                    db.execSQL("DROP TABLE menuMealTime");
+                                }
+                            })
                             // Add call back to the database
                             .addCallback(roomCallback)
                             // Build the database
@@ -58,7 +66,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
             // Insert initial data on first creation
             // Insert data for mealTime table
-            db.execSQL("DROP TABLE IF EXISTS menuMealTime");
+            db.execSQL("DROP TABLE menuMealTime");
             // Insert data for mealType table
             db.execSQL("INSERT INTO mealType (id, type) VALUES (1, 'Normal Meal')");
             db.execSQL("INSERT INTO mealType (id, type) VALUES (2, 'Large Meal')");

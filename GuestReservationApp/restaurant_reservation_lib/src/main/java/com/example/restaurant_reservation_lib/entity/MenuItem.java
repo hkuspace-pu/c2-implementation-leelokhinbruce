@@ -15,23 +15,17 @@ import java.util.Date;
 @Entity(tableName = "menuItem")
 public class MenuItem {
     @PrimaryKey(autoGenerate = true)
-//    @ColumnInfo(name = "menu_item_id")
     private long id;
-//    @ColumnInfo(name = "food_name")
     private String foodName, category, mealTime;
     private double price;
-//    @ColumnInfo(name = "is_available")
     private boolean isAvailable, isPromotion;
-//    @ColumnInfo(name = "is_promotion")
 
     @TypeConverters(PhotoConverter.class)
     private Bitmap image;  // Stored as BLOB in SQLite
 
-//    @ColumnInfo(name = "created_at")
     @TypeConverters(DateConverter.class)
     private Date createdAt;
 
-//    @ColumnInfo(name = "updated_at")
     @TypeConverters(DateConverter.class)
     private Date updatedAt;
 
@@ -43,7 +37,7 @@ public class MenuItem {
 
     // Private Constructor - only access via Builder
     private MenuItem(Builder builder) {
-        this.foodName = builder.footName;
+        this.foodName = builder.foodName;
         this.price = builder.price;
         this.category = builder.category;
         this.mealTime = builder.mealTime;
@@ -140,7 +134,7 @@ public class MenuItem {
     public static class Builder {
         // instance fields
         // Mandatory fields
-        private final String footName, category, mealTime;
+        private final String foodName, category, mealTime;
         private final double price;
         private final boolean isAvailable, isPromotion;
         private final Date createAt;
@@ -151,7 +145,7 @@ public class MenuItem {
 
         // Builder constructor (mandatory)
         public Builder(String foodName, double price, String category, String mealTime, boolean isPromotion, Date createAt, boolean isAvailable) {
-            this.footName = foodName;
+            this.foodName = foodName;
             this.price = price;
             this.category = category;
             this.mealTime = mealTime;

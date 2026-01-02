@@ -91,7 +91,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
             ).build();
 
             menuItemViewModel.insertMenuItem(menuItem);
-            Log.d("SpecialMenuActivity", "Get menu item details: \nFood Name: " + foodName + "\nPrice: " + price + "\nMeal Time: " + mealTime);
+            Log.d("SpecialMenuActivity", "Get menu item details: \nFood Name: " + menuItem.getFoodName() + "\nPrice: " + menuItem.getPrice() + "\nMeal Time: " + menuItem.getMealTime());
             Toast.makeText(this, "Menu item saved", Toast.LENGTH_SHORT).show();
         } else {
             Log.d("SpecialMenuActivity", "Get menu item failed");

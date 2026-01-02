@@ -2,6 +2,7 @@ package com.example.adminreservationmanagementapp.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -62,7 +63,11 @@ public class MenuItemRepository {
         @Override
         protected Void doInBackground(MenuItem... menuItems) {
             // Insert the menu item in dao
-            dao.insertItem(menuItems[0]);
+            try{
+                dao.insertItem(menuItems[0]);
+            } catch (Exception e) {
+                Log.e("InsertItemAsyncTask", "Insertion failed: " + e.getMessage(), e);
+            }
             return null;
         }
     }
@@ -76,7 +81,12 @@ public class MenuItemRepository {
 
         @Override
         protected Void doInBackground(MenuMealType... menuMealTypes) {
-            dao.insertMenuMealType(menuMealTypes[0]);
+            try{
+                dao.insertMenuMealType(menuMealTypes[0]);
+            } catch (Exception e) {
+                Log.e("InsertMenuMealTypeAsyncTask", "Insertion meal time failed: " + e.getMessage(), e);
+            }
+
             return null;
         }
     }
@@ -90,7 +100,12 @@ public class MenuItemRepository {
 
         @Override
         protected Void doInBackground(MenuItem... menuItems) {
-            dao.updateItem(menuItems[0]);
+            try{
+                dao.updateItem(menuItems[0]);
+            } catch (Exception e) {
+                Log.e("UpdateItemAsyncTask", "Updating failed: " + e.getMessage(), e);
+            }
+
             return null;
         }
     }
@@ -104,7 +119,12 @@ public class MenuItemRepository {
 
         @Override
         protected Void doInBackground(MenuItem... menuItems) {
-            dao.deleteItem(menuItems[0]);
+            try{
+                dao.deleteItem(menuItems[0]);
+            } catch (Exception e) {
+                Log.e("DeleteItemAsyncTask", "Deletion failed: " + e.getMessage(), e);
+            }
+
             return null;
         }
     }
