@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,7 +21,10 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -39,6 +43,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     public static final String EXTRA_IS_PROMOTION = "com.example.adminreservationmanagementapp.EXTRA_IS_PROMOTION";
     public static final String EXTRA_CREATED_DATE = "com.example.adminreservationmanagementapp.EXTRA_CREATED_DATE";
     public static final String EXTRA_PHOTO = "com.example.adminreservationmanagementapp.EXTRA_PHOTO";
+    public static final String EXTRA_MEAL_TYPES = "com.example.adminreservationmanagementapp.EXTRA_MEAL_TYPES";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,22 +87,23 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
                     // setCancelable(false): the Dialog Box will remain show even clicks on the outside
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, which) -> {
-//                        foodName = binding.editFoodName.getText().toString().trim();
-//                        priceStr = binding.editPrice.getText().toString().trim();
                         double price = Double.parseDouble(priceStr);
                         String category = binding.spinnerCategory.getSelectedItem().toString();
                         boolean isPromotion = binding.switchIsPromotion.isChecked();
                         Date createDate = new Date();
 
-                        // Not allow no photo
-//                        if (imageBitmap == null) {
-//                            Toast.makeText(this, "Please select a photo", Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
+                        // Get selected Meal Types
+                        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
+                        ArrayList<Integer> mealTypeIdList = new ArrayList<>();  // Store each selected chip id
+                        for (int chipId : checkedMealTypeChipIds) {
+                            int mealTypeId = getMealTypeIdFromChip(chipId);  // Return Id from this method
+                            if (mealTypeId != -1)
+                                mealTypeIdList.add(mealTypeId);
+                        }
 
                         isLoading(true);  // Loading progress bar
                         // save menu item data
-                        executorService.execute(() -> saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate));
+                        executorService.execute(() -> saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate, mealTypeIdList));
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         dialog.cancel();
@@ -105,6 +111,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         });
     }
 
+    // Photo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -124,8 +131,8 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         }
     }
 
-    // Submit menu item
-    private void saveMenuItem(String foodName, double price, String category, String mealTime, boolean isPromotion, Date nowDate) {
+    // Save menu item data and pass them to SpecificMenuActivity
+    private void saveMenuItem(String foodName, double price, String category, String mealTime, boolean isPromotion, Date nowDate, ArrayList<Integer> mealTypeIds) {
         Intent data = new Intent();
 
         // Pass all menu item details via an intent
@@ -136,39 +143,32 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         data.putExtra(EXTRA_IS_PROMOTION, isPromotion);
         data.putExtra(EXTRA_CREATED_DATE, nowDate.getTime());
 //        data.putExtra(EXTRA_PHOTO, photoBitmap);
+        data.putIntegerArrayListExtra(EXTRA_MEAL_TYPES, mealTypeIds);
+
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
         if (id != -1) {
-            // Passing id
-            data.putExtra(EXTRA_ID, id);
+            data.putExtra(EXTRA_ID, id);  // Passing id
         }
 
         // Setting result as data
         setResult(RESULT_OK, data);
 
-        // Get selected Meal Types
-//        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
-//        List<Long> mealTypeIdList = new ArrayList<>();  // Store each selected chip id
-//        for (int chipId : checkedMealTypeChipIds) {
-//            long mealTypeId = getMealTypeIdFromChip(chipId);
-//            if (mealTypeId != -1)
-//                mealTypeIdList.add(mealTypeId);
-//        }
-
         // Success feedback on UI thread
         mainHandler.post(() -> {
-            Log.d("AddMenuItemActivity", "Pass menu item details: \nCategory: " + category + "\nMeal Time: " + mealTime);
             Toast.makeText(AddMenuItemActivity.this, "Menu item added successfully!", Toast.LENGTH_SHORT).show();
             isLoading(false);
+//            Intent intent = new Intent(AddMenuItemActivity.this, SpecificMenuActivity.class);
+//            intent.putExtra("screen_title", mealTime);
             finish();
         });
     }
 
     // Helper: Map chip ID to MealType database ID
-    private long getMealTypeIdFromChip(int chipId) {
-        if (chipId == binding.chipNormalMeal.getId()) return 1L;
-        if (chipId == binding.chipLarge.getId()) return 2L;
-        if (chipId == binding.chipSpecialLarge.getId()) return 3L;
-        return -1L;
+    private int getMealTypeIdFromChip(int chipId) {
+        if (chipId == binding.chipNormalMeal.getId()) return 1;
+        if (chipId == binding.chipLarge.getId()) return 2;
+        if (chipId == binding.chipSpecialLarge.getId()) return 3;
+        return -1;
     }
 
     // TextWatchers for each field to monitor textEditLayout

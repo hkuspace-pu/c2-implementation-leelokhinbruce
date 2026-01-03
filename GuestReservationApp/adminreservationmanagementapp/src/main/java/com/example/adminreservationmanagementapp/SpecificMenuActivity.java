@@ -15,8 +15,11 @@ import com.example.adminreservationmanagementapp.databinding.ActivitySpecificMen
 import com.example.adminreservationmanagementapp.viewmodel.MenuItemViewModel;
 import com.example.restaurant_reservation_lib.adapter.MenuItemAdapter;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
+import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,12 +44,9 @@ public class SpecificMenuActivity extends AppCompatActivity {
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
 
         // Click Add Item image button
-        binding.imgBtnAddItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(SpecificMenuActivity.this, AddMenuItemActivity.class);
-                startActivityForResult(intent, ADD_ITEM_REQUEST);
-            }
+        binding.imgBtnAddItem.setOnClickListener(viewAddItem -> {
+            Intent intent = new Intent(SpecificMenuActivity.this, AddMenuItemActivity.class);
+            startActivityForResult(intent, ADD_ITEM_REQUEST);
         });
 
         // Set RecycleView
@@ -91,7 +91,15 @@ public class SpecificMenuActivity extends AppCompatActivity {
             ).build();
 
             menuItemViewModel.insertMenuItem(menuItem);
-            Log.d("SpecialMenuActivity", "Get menu item details: \nFood Name: " + menuItem.getFoodName() + "\nPrice: " + menuItem.getPrice() + "\nMeal Time: " + menuItem.getMealTime());
+
+            // Get and insert mealType ids and the menuItem id into menuMealType table
+            List<Integer> selectedMealTypesIdList = data.getIntegerArrayListExtra(AddMenuItemActivity.EXTRA_MEAL_TYPES);
+            for (int mealTypeId : selectedMealTypesIdList) {
+                MenuMealType menuMealType = new MenuMealType(menuItem.getId(), mealTypeId);
+                menuItemViewModel.insertMenuMealType(menuMealType);
+            }
+
+            Log.d("SpecialMenuActivity", "Get menu item details: \nFood Name: " + menuItem.getFoodName() + "\nPrice: " + menuItem.getPrice() + "\nMeal Time: " + menuItem.getMealTime() + "\nCategory: " + menuItem.getCategory());
             Toast.makeText(this, "Menu item saved", Toast.LENGTH_SHORT).show();
         } else {
             Log.d("SpecialMenuActivity", "Get menu item failed");

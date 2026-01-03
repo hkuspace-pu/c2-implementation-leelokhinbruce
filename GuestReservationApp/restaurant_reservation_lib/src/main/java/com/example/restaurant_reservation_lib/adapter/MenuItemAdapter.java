@@ -68,6 +68,17 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         public MenuItemViewHolder(MenuItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            binding.imgBtnOption.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Pass position to the item of recycle view inside on click listener
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        
+                    }
+                }
+            });
         }
 
         void bind(MenuItem menuItem) {
