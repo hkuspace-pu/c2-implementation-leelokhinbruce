@@ -135,7 +135,35 @@ public class SpecificMenuActivity extends AppCompatActivity {
             Log.d("SpecialMenuActivity", "Get menu item details: \nFood Name: " + menuItem.getFoodName() + "\nPrice: " + menuItem.getPrice() + "\nMeal Time: " + menuItem.getMealTime() + "\nCategory: " + menuItem.getCategory());
             Toast.makeText(this, "Menu item saved", Toast.LENGTH_SHORT).show();
         } else if (requestCode == EDIT_ITEM_REQUEST && resultCode == RESULT_OK && data != null) {
+            int id = data.getIntExtra(AddMenuItemActivity.EXTRA_ID, -1);
+            if (id == -1) {
+                Toast.makeText(this, "Menu item can't be updated", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
+            String foodName = data.getStringExtra(AddMenuItemActivity.EXTRA_FOOD_NAME);
+            double price = data.getDoubleExtra(AddMenuItemActivity.EXTRA_PRICE, 0);
+            String category = data.getStringExtra(AddMenuItemActivity.EXTRA_CATEGORY);
+            String mealTime = data.getStringExtra(AddMenuItemActivity.EXTRA_MEAL_TIME);
+            boolean isPromotion = data.getBooleanExtra(AddMenuItemActivity.EXTRA_IS_PROMOTION, false);
+            Date createdDate = new Date();
+            createdDate.setTime(data.getLongExtra(AddMenuItemActivity.EXTRA_CREATED_DATE, -1));
+//            Bitmap photoBitmap = (Bitmap) data.getParcelableExtra(EXTRA_PHOTO);
+
+            // Build a menu item
+            MenuItem menuItem = new MenuItem.Builder(
+                    foodName,
+                    price,
+                    category,
+                    mealTime,
+                    isPromotion,
+                    createdDate,
+                    true
+            ).build();
+            menuItem.setId(id);
+
+            menuItemViewModel.updateMenuItem(menuItem);
+            Toast.makeText(this, "Menu item updated", Toast.LENGTH_SHORT).show();
         } else {
             Log.d("SpecialMenuActivity", "Get menu item failed");
             Toast.makeText(this, "Menu item not saved", Toast.LENGTH_SHORT).show();

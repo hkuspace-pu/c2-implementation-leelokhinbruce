@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -32,8 +33,16 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     private ActivityAddMenuItemBinding binding;
     private String foodName, priceStr, mealTime = "Breakfast";
     private Bitmap imageBitmap;
+    private boolean isEditMode = false;
+    private ArrayAdapter<CharSequence> adapter;
+    private Intent intent;
     private ExecutorService executorService;
     private Handler mainHandler;
+
+    private final String ADD_SCREEN_TITLE = "Add Menu Item",
+            EDIT_SCREEN_TITLE = "Edit Menu Item",
+            SUBMIT_TEXT_BUTTON = "Submit",
+            UPDATE_TEXT_BUTTON = "Update";
 
     public static final String EXTRA_ID = "com.example.adminreservationmanagementapp.EXTRA_ID";
     public static final String EXTRA_FOOD_NAME = "com.example.adminreservationmanagementapp.EXTRA_FOOD_NAME";
@@ -56,18 +65,21 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         // Main thread handler
         mainHandler = new Handler(Looper.getMainLooper());
 
+        // Setup Spinner
+        adapter = ArrayAdapter.createFromResource(this,
+                com.example.restaurant_reservation_lib.R.array.category,
+                com.example.restaurant_reservation_lib.R.layout.spinner_selected_item);
+        adapter.setDropDownViewResource(com.example.restaurant_reservation_lib.R.layout.spinner_dropdown_item);
+        binding.spinnerCategory.setAdapter(adapter);
+
         // Get data from SpecificMenuActivity
-        Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_ID) && intent.getBooleanExtra("EDIT_MODE", false)) {
+        intent = getIntent();
+        isEditMode = intent.getBooleanExtra("EDIT_MODE", false);
+        if (intent.hasExtra(EXTRA_ID) && isEditMode) {
             setupEditMode();
         } else {
             setupAddMode();
         }
-
-        binding.editFoodName.setText(intent.getStringExtra(EXTRA_FOOD_NAME));
-        binding.editPrice.setText(String.valueOf(intent.getDoubleExtra(EXTRA_PRICE, 0)));
-        // Hidden the meal type section
-        binding.chipGroupMealType.setVisibility(View.GONE);
 
         binding.imgBtnClose.setOnClickListener(viewClose -> finish());
 
@@ -94,12 +106,17 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 
         // Submit button click
         binding.btnSubmit.setOnClickListener(viewSubmit -> {
+            String title = isEditMode ? EDIT_SCREEN_TITLE : ADD_SCREEN_TITLE;
+            String message = isEditMode ? "Are you sure to update this item?" : "Are you sure to add the menu item?";
+            String positiveBtn = isEditMode ? UPDATE_TEXT_BUTTON : SUBMIT_TEXT_BUTTON;
+
+            // Show alert dialog before submit the item
             new MaterialAlertDialogBuilder(this)
-                    .setTitle("Add Menu Item")
-                    .setMessage("Are you sure to add the menu item?")
+                    .setTitle(title)
+                    .setMessage(message)
                     // setCancelable(false): the Dialog Box will remain show even clicks on the outside
                     .setCancelable(false)
-                    .setPositiveButton("Yes", (dialog, which) -> {
+                    .setPositiveButton(positiveBtn, (dialog, which) -> {
                         double price = Double.parseDouble(priceStr);
                         String category = binding.spinnerCategory.getSelectedItem().toString();
                         boolean isPromotion = binding.switchIsPromotion.isChecked();
@@ -126,13 +143,50 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     }
 
     private void setupAddMode() {
-        binding.textScreenTitle.setText("Add Menu Item");
-        binding.btnSubmit.setText("Submit");
+        binding.textScreenTitle.setText(ADD_SCREEN_TITLE);
+        binding.btnSubmit.setText(SUBMIT_TEXT_BUTTON);
+        binding.chipGroupMealType.setVisibility(View.VISIBLE);
     }
 
     private void setupEditMode() {
-        binding.textScreenTitle.setText("Edit Menu Item");
-        binding.btnSubmit.setText("Update");
+        binding.textScreenTitle.setText(EDIT_SCREEN_TITLE);
+        binding.btnSubmit.setText(UPDATE_TEXT_BUTTON);
+
+        // Set for input fields
+        binding.editFoodName.setText(intent.getStringExtra(EXTRA_FOOD_NAME));
+        double price = intent.getDoubleExtra(EXTRA_PRICE, 0);
+        binding.editPrice.setText(String.format("%.2f", price));
+
+        String category = intent.getStringExtra(EXTRA_CATEGORY);
+        // Set a category spinner
+        int spinnerPosition = adapter.getPosition(category);
+        binding.spinnerCategory.setSelection(spinnerPosition);
+
+        // Set a meal time chip
+        mealTime = intent.getStringExtra(EXTRA_MEAL_TIME);
+        if (mealTime != null) {
+            switch (mealTime) {
+                case "Breakfast":
+                    binding.chipBreakfast.setChecked(true);
+                    break;
+                case "Lunch":
+                    binding.chipLunch.setChecked(true);
+                    break;
+                case "Tea Time":
+                    binding.chipTeaTime.setChecked(true);
+                    break;
+                case "Dinner":
+                    binding.chipDinner.setChecked(true);
+                    break;
+            }
+        }
+
+        // Set isPromotion switch toggle
+        boolean isPromotion = intent.getBooleanExtra(EXTRA_IS_PROMOTION, false);
+        binding.switchIsPromotion.setChecked(isPromotion);
+
+        // Hidden the meal type section
+        binding.chipGroupMealType.setVisibility(View.GONE);
     }
 
     // Photo
@@ -170,7 +224,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         data.putIntegerArrayListExtra(EXTRA_MEAL_TYPES, mealTypeIds);
 
         int id = getIntent().getIntExtra(EXTRA_ID, -1);
-        if (id != -1) {
+        if (id != -1 && isEditMode) {
             data.putExtra(EXTRA_ID, id);  // Passing id
         }
 
@@ -179,7 +233,8 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 
         // Success feedback on UI thread
         mainHandler.post(() -> {
-            Toast.makeText(AddMenuItemActivity.this, "Menu item added successfully!", Toast.LENGTH_SHORT).show();
+            String successMsg = isEditMode ? "Menu item updated successfully!" : "Menu item added successfully!";
+            Toast.makeText(AddMenuItemActivity.this, successMsg, Toast.LENGTH_SHORT).show();
             isLoading(false);
 //            Intent intent = new Intent(AddMenuItemActivity.this, SpecificMenuActivity.class);
 //            intent.putExtra("screen_title", mealTime);

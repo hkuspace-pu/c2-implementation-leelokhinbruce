@@ -19,9 +19,11 @@
 
     <string-array name="category">
         <item>Burger</item>
-        <item>Beverage</item>
         <item>Crispy Thigh</item>
-        <item>Dessert</item>
         <item>Twisty Pasta</item>
+        <item>Ciabatta</item>
+        <item>Beverage</item>
+        <item>Dessert</item>
+        <item>Other</item>
     </string-array>
 </resources>
