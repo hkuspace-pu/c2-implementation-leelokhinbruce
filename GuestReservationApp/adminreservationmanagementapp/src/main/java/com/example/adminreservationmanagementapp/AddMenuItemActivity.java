@@ -20,7 +20,9 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -39,6 +41,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     public static final String EXTRA_IS_PROMOTION = "com.example.adminreservationmanagementapp.EXTRA_IS_PROMOTION";
     public static final String EXTRA_CREATED_DATE = "com.example.adminreservationmanagementapp.EXTRA_CREATED_DATE";
     public static final String EXTRA_PHOTO = "com.example.adminreservationmanagementapp.EXTRA_PHOTO";
+    public static final String EXTRA_MEAL_TYPES = "com.example.adminreservationmanagementapp.EXTRA_MEAL_TYPES";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +85,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
                     // setCancelable(false): the Dialog Box will remain show even clicks on the outside
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, which) -> {
-//                        foodName = binding.editFoodName.getText().toString().trim();
-//                        priceStr = binding.editPrice.getText().toString().trim();
                         double price = Double.parseDouble(priceStr);
                         String category = binding.spinnerCategory.getSelectedItem().toString();
                         boolean isPromotion = binding.switchIsPromotion.isChecked();
@@ -95,9 +96,18 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 //                            return;
 //                        }
 
+                        // Get selected Meal Types
+                        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
+                        List<Long> mealTypeIdList = new ArrayList<>();  // Store each selected chip id
+                        for (int chipId : checkedMealTypeChipIds) {
+                            long mealTypeId = getMealTypeIdFromChip(chipId);
+                            if (mealTypeId != -1)
+                                mealTypeIdList.add(mealTypeId);
+                        }
+
                         isLoading(true);  // Loading progress bar
                         // save menu item data
-                        executorService.execute(() -> saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate));
+                        executorService.execute(() -> saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate, mealTypeIdList));
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         dialog.cancel();
@@ -125,7 +135,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     }
 
     // Submit menu item
-    private void saveMenuItem(String foodName, double price, String category, String mealTime, boolean isPromotion, Date nowDate) {
+    private void saveMenuItem(String foodName, double price, String category, String mealTime, boolean isPromotion, Date nowDate, List<Long> mealTypesIds) {
         Intent data = new Intent();
 
         // Pass all menu item details via an intent
@@ -144,15 +154,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 
         // Setting result as data
         setResult(RESULT_OK, data);
-
-        // Get selected Meal Types
-//        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
-//        List<Long> mealTypeIdList = new ArrayList<>();  // Store each selected chip id
-//        for (int chipId : checkedMealTypeChipIds) {
-//            long mealTypeId = getMealTypeIdFromChip(chipId);
-//            if (mealTypeId != -1)
-//                mealTypeIdList.add(mealTypeId);
-//        }
 
         // Success feedback on UI thread
         mainHandler.post(() -> {
