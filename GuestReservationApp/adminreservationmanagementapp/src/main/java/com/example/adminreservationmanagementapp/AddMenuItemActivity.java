@@ -56,6 +56,19 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         // Main thread handler
         mainHandler = new Handler(Looper.getMainLooper());
 
+        // Get data from SpecificMenuActivity
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_ID) && intent.getBooleanExtra("EDIT_MODE", false)) {
+            setupEditMode();
+        } else {
+            setupAddMode();
+        }
+
+        binding.editFoodName.setText(intent.getStringExtra(EXTRA_FOOD_NAME));
+        binding.editPrice.setText(String.valueOf(intent.getDoubleExtra(EXTRA_PRICE, 0)));
+        // Hidden the meal type section
+        binding.chipGroupMealType.setVisibility(View.GONE);
+
         binding.imgBtnClose.setOnClickListener(viewClose -> finish());
 
         // Choose image button click
@@ -103,12 +116,23 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 
                         isLoading(true);  // Loading progress bar
                         // save menu item data
-                        executorService.execute(() -> saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate, mealTypeIdList));
+                        executorService.execute(() ->
+                                saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate, mealTypeIdList));
                     })
                     .setNegativeButton("No", (dialog, which) -> {
                         dialog.cancel();
                     }).show();  // Show the Alert Dialog Box
         });
+    }
+
+    private void setupAddMode() {
+        binding.textScreenTitle.setText("Add Menu Item");
+        binding.btnSubmit.setText("Submit");
+    }
+
+    private void setupEditMode() {
+        binding.textScreenTitle.setText("Edit Menu Item");
+        binding.btnSubmit.setText("Update");
     }
 
     // Photo
