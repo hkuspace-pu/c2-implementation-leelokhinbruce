@@ -1,64 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="90dp"
-    android:padding="12dp"
-    android:gravity="center_vertical"
-    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="1dp"
     android:orientation="horizontal">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imgItemPhoto"
-        android:layout_width="67dp"
-        android:layout_height="67dp"
-        android:src="@drawable/photo_icon" />
-
+    <!--   Hidden Buttons -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:id="@+id/hiddenButtons"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:layout_marginStart="12dp"
-        android:orientation="vertical">
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textFoodName"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="Food Name"
-            android:lines="1"
-            android:maxLength="20"
-            android:ellipsize="end"
-            android:textAppearance="@style/small_text" />
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardBtnEdit"
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/orange"
+            app:strokeWidth="0dp"
+            app:cardCornerRadius="0dp">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/edit_icon"
+                android:tint="@color/white" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardBtnDelete"
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/red"
+            app:strokeWidth="0dp"
+            app:cardCornerRadius="0dp">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/delete_icon"
+                android:tint="@color/white" />
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+<!--   Menu Item -->
+    <LinearLayout
+        android:id="@+id/menuItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgItemPhoto"
+            android:layout_width="67dp"
+            android:layout_height="67dp"
+            android:src="@drawable/photo_icon" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="$ "
-                android:textAppearance="@style/regular_text" />
+                android:id="@+id/textFoodName"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLength="20"
+                android:text="@string/food_name"
+                android:textAppearance="@style/small_text" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/price"
-                android:textAppearance="@style/regular_text" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="$ "
+                    android:textAppearance="@style/regular_text" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/price"
+                    android:textAppearance="@style/regular_text" />
+            </LinearLayout>
         </LinearLayout>
+
+        <!--   Item option icon button (Edit and Delete) -->
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/imgBtnOption"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:src="@drawable/ming_cute_more_icon"
+            android:visibility="gone" />
     </LinearLayout>
-    
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/imgBtnOption"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ming_cute_more_icon"
-        android:scaleType="fitXY"
-        android:background="@android:color/transparent"
-        android:visibility="gone"/>
-</LinearLayout>
+</RelativeLayout>

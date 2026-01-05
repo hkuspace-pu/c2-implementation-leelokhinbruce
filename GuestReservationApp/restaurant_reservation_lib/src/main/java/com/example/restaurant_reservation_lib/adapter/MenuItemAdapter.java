@@ -15,7 +15,11 @@ import java.util.List;
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuItemViewHolder>{
     private final boolean isStaffSide;
     private List<MenuItem> menuItems = new ArrayList<>();
-    private OnItemClickListener listener;  // only for staff-side
+    private OnItemActionListener listener;  // only for staff-side
+
+    // Track currently open item
+    private MenuItemViewHolder currentOpenHolder = null;
+    private static final float ACTION_REVEAL_WIDTH_DP = 130f;  // 65dp width x 2 buttons
 
     public MenuItemAdapter(boolean isStaffSide) {
         this.isStaffSide = isStaffSide;
@@ -39,16 +43,38 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
     @Override
     public void onBindViewHolder(@NonNull MenuItemViewHolder holder, int position) {
         MenuItem currentMenuItem = menuItems.get(position);
-
         // Bind the data to the ViewHolder obj for each item in the RecycleView (List data -> item layout)
         holder.bind(currentMenuItem);
 
         if (isStaffSide) {
             // Show option icon button
             holder.binding.imgBtnOption.setVisibility(View.VISIBLE);
+
+            // Click item option button
+            holder.binding.imgBtnOption.setOnClickListener(viewOption -> {
+                closeCurrentOpenItem();
+                holder.revealActions();
+                currentOpenHolder = holder;
+            });
+
+            // Edit button
+            holder.binding.cardBtnEdit.setOnClickListener(viewEdit -> {
+                listener.onEdit(currentMenuItem);
+                holder.resetActions();
+                currentOpenHolder = null;
+            });
+
+            // Delete button
+            holder.binding.cardBtnDelete.setOnClickListener(viewDelete -> {
+                listener.onDelete(currentMenuItem);
+                holder.resetActions();
+                currentOpenHolder = null;
+            });
         } else {
-            // Option icon button disappears
+            // All buttons disappears
             holder.binding.imgBtnOption.setVisibility(View.GONE);
+            holder.binding.cardBtnEdit.setVisibility(View.GONE);
+            holder.binding.cardBtnDelete.setVisibility(View.GONE);
         }
     }
 
@@ -62,6 +88,14 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         notifyDataSetChanged();
     }
 
+    // Close any other open item when another is opened currently
+    private void closeCurrentOpenItem() {
+        if (currentOpenHolder != null) {
+            currentOpenHolder.resetActions();
+            currentOpenHolder = null;
+        }
+    }
+
     class MenuItemViewHolder extends RecyclerView.ViewHolder {
         private MenuItemBinding binding;
 
@@ -70,18 +104,41 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
             this.binding = binding;
         }
 
+        // Bind data
         void bind(MenuItem menuItem) {
 //            binding.imgItemPhoto.setImageBitmap(menuItem.getImage());
             binding.textFoodName.setText(menuItem.getFoodName());
             binding.textPrice.setText(String.valueOf(menuItem.getPrice()));
         }
+
+        // Reveal hidden buttons
+        void revealActions() {
+            float revealWidth = -dpToPx(ACTION_REVEAL_WIDTH_DP);
+            binding.menuItem.animate()
+                    .translationX(revealWidth)
+                    .setDuration(200)
+                    .start();
+        }
+
+        // Close hidden buttons
+        void resetActions() {
+            binding.menuItem.animate()
+                    .translationX(0f)
+                    .setDuration(200)
+                    .start();
+        }
+
+        private float dpToPx(float dp) {
+            return dp * itemView.getContext().getResources().getDisplayMetrics().density;
+        }
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(MenuItem menuItem);
+    public interface OnItemActionListener {
+        void onEdit(MenuItem menuItem);
+        void onDelete(MenuItem menuItem);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemActionListener(OnItemActionListener listener) {
         this.listener = listener;
     }
 

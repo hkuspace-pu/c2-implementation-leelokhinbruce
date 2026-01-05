@@ -11,12 +11,10 @@ import androidx.room.ForeignKey;
                 @ForeignKey(entity = MealType.class, parentColumns = "id", childColumns = "mealTypeId", onDelete = ForeignKey.CASCADE)
         })
 public class MenuMealType {
-//    @ColumnInfo(name = "menu_item_id")
     private long menuItemId;
-//    @ColumnInfo(name = "meal_type_id")
-    private long mealTypeId;
+    private int mealTypeId;
 
-    public MenuMealType(long menuItemId, long mealTypeId) {
+    public MenuMealType(long menuItemId, int mealTypeId) {
         this.menuItemId = menuItemId;
         this.mealTypeId = mealTypeId;
     }
@@ -25,7 +23,7 @@ public class MenuMealType {
         return menuItemId;
     }
 
-    public long getMealTypeId() {
+    public int getMealTypeId() {
         return mealTypeId;
     }
 }
