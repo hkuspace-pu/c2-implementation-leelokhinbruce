@@ -100,6 +100,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // RESULT_OK = -1
 
         // Get data from AddMenuItemActivity after added
         if (requestCode == ADD_ITEM_REQUEST && resultCode == RESULT_OK && data != null) {
@@ -132,10 +133,10 @@ public class SpecificMenuActivity extends AppCompatActivity {
                 menuItemViewModel.insertMenuMealType(menuMealType);
             }
 
-            Log.d("SpecialMenuActivity", "Get menu item details: \nFood Name: " + menuItem.getFoodName() + "\nPrice: " + menuItem.getPrice() + "\nMeal Time: " + menuItem.getMealTime() + "\nCategory: " + menuItem.getCategory());
+            Log.d("SpecialMenuActivity onActivityResult()", "Result code: " + resultCode + "\nItem Id: " + menuItem.getId());
             Toast.makeText(this, "Menu item saved", Toast.LENGTH_SHORT).show();
         } else if (requestCode == EDIT_ITEM_REQUEST && resultCode == RESULT_OK && data != null) {
-            int id = data.getIntExtra(AddMenuItemActivity.EXTRA_ID, -1);
+            long id = data.getLongExtra(AddMenuItemActivity.EXTRA_ID, -1);
             if (id == -1) {
                 Toast.makeText(this, "Menu item can't be updated", Toast.LENGTH_SHORT).show();
                 return;
@@ -163,9 +164,10 @@ public class SpecificMenuActivity extends AppCompatActivity {
             menuItem.setId(id);
 
             menuItemViewModel.updateMenuItem(menuItem);
+            Log.d("SpecialMenuActivity onActivityResult()", "Result code: " + resultCode + "\nItem Id: " + menuItem.getId());
             Toast.makeText(this, "Menu item updated", Toast.LENGTH_SHORT).show();
         } else {
-            Log.d("SpecialMenuActivity", "Get menu item failed");
+            Log.d("SpecialMenuActivity", "Get menu item failed: " + resultCode);
             Toast.makeText(this, "Menu item not saved", Toast.LENGTH_SHORT).show();
         }
     }

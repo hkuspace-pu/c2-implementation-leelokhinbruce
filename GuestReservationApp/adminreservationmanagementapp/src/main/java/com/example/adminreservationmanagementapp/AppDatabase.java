@@ -19,7 +19,7 @@ import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 // Build Database
 @Database(entities = {MenuItem.class, MealType.class, MenuMealType.class},
-        version = 3, exportSchema = false)  // Annotated with a @Database annotation
+        version = 4, exportSchema = false)  // Annotated with a @Database annotation
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
     // Returns an instance of the database class
@@ -40,7 +40,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class, "menuItem_and_reservation_database")
                             // Add fall back to destructive migration to the database
 //                            .fallbackToDestructiveMigration()
-                            .addMigrations(new Migration(2, 3) {
+                            .addMigrations(new Migration(3, 4) {
                                 @Override
                                 public void migrate(@NonNull SupportSQLiteDatabase db) {
                                     db.execSQL("DROP TABLE IF EXISTS menuMealTime");

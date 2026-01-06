@@ -245,14 +245,13 @@
                 android:text="@string/category"
                 android:textAppearance="@style/regular_text" />
 
-            <androidx.appcompat.widget.AppCompatSpinner
+            <Spinner
                 android:id="@+id/spinnerCategory"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
                 android:background="@drawable/custom_spinner"
-                android:layout_marginBottom="24dp"
-                android:entries="@array/category"
-                android:spinnerMode="dropdown" />
+                android:spinnerMode="dropdown"
+                android:layout_marginBottom="24dp" />
 
             <!--   Is Promotion -->
             <LinearLayout
