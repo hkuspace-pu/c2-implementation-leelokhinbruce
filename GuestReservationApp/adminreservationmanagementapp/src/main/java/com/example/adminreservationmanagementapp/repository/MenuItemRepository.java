@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData;
 import com.example.adminreservationmanagementapp.AppDatabase;
 import com.example.adminreservationmanagementapp.accessing_data.MenuItemDao;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 import java.util.Date;
 import java.util.List;
@@ -34,11 +33,6 @@ public class MenuItemRepository {
 //        menuItem.setCreatedAt(new Date());
 //        return menuItemDao.insertItem(menuItem);
         new InsertItemAsyncTask(menuItemDao).execute(menuItem);
-    }
-
-    public void insertMenuMealType(MenuMealType menuMealType) {
-//        menuItemDao.insertMenuMealType(menuMealType);
-        new InsertMenuMealTypeAsyncTask(menuItemDao).execute(menuMealType);
     }
 
     public void updateMenuItem(MenuItem menuItem) {
@@ -68,25 +62,6 @@ public class MenuItemRepository {
             } catch (Exception e) {
                 Log.e("InsertItemAsyncTask", "Insertion failed: " + e.getMessage(), e);
             }
-            return null;
-        }
-    }
-
-    private static class InsertMenuMealTypeAsyncTask extends AsyncTask<MenuMealType, Void, Void> {
-        private MenuItemDao dao;
-
-        private InsertMenuMealTypeAsyncTask(MenuItemDao dao) {
-            this.dao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(MenuMealType... menuMealTypes) {
-            try{
-                dao.insertMenuMealType(menuMealTypes[0]);
-            } catch (Exception e) {
-                Log.e("InsertMenuMealTypeAsyncTask", "Insertion meal time failed: " + e.getMessage(), e);
-            }
-
             return null;
         }
     }

@@ -1,7 +1,6 @@
 package com.example.adminreservationmanagementapp.accessing_data;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -9,7 +8,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 import java.util.List;
 
@@ -19,9 +17,6 @@ public interface MenuItemDao {
     // Add new menu item
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertItem(MenuItem menuItem);
-
-    @Insert
-    void insertMenuMealType(MenuMealType junction);
 
     // Edit a menu item
     @Update

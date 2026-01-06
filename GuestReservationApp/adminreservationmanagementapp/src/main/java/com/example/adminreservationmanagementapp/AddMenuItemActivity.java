@@ -14,12 +14,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.adminreservationmanagementapp.databinding.ActivityAddMenuItemBinding;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.IOException;
@@ -31,7 +33,7 @@ import java.util.concurrent.Executors;
 
 public class AddMenuItemActivity extends BaseValidatedActivity {
     private ActivityAddMenuItemBinding binding;
-    private String foodName, priceStr, mealTime = "Breakfast";
+    private String foodName, priceStr, mealType, mealTime = "Breakfast";
     private Bitmap imageBitmap;
     private boolean isEditMode = false;
     private ArrayAdapter<CharSequence> adapter;
@@ -52,7 +54,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     public static final String EXTRA_IS_PROMOTION = "com.example.adminreservationmanagementapp.EXTRA_IS_PROMOTION";
     public static final String EXTRA_CREATED_DATE = "com.example.adminreservationmanagementapp.EXTRA_CREATED_DATE";
     public static final String EXTRA_PHOTO = "com.example.adminreservationmanagementapp.EXTRA_PHOTO";
-    public static final String EXTRA_MEAL_TYPES = "com.example.adminreservationmanagementapp.EXTRA_MEAL_TYPES";
+    public static final String EXTRA_MEAL_TYPE = "com.example.adminreservationmanagementapp.EXTRA_MEAL_TYPES";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
             setupAddMode();
         }
 
+        // Close the Activity
         binding.imgBtnClose.setOnClickListener(viewClose -> finish());
 
         // Choose image button click
@@ -97,6 +100,14 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
             if (checkedId != View.NO_ID) {
                 Chip chip = findViewById(checkedId);
                 mealTime = chip.getText().toString();
+            }
+        });
+
+        // Get a selected chip (MealType) text
+        binding.chipGroupMealType.setOnCheckedChangeListener((chipGroup, checkedId) -> {
+            if (checkedId != View.NO_ID) {
+                Chip chip = findViewById(checkedId);
+                mealType = chip.getText().toString();
             }
         });
 
@@ -121,19 +132,10 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
                         boolean isPromotion = binding.switchIsPromotion.isChecked();
                         Date createDate = new Date();
 
-                        // Get selected Meal Types
-                        List<Integer> checkedMealTypeChipIds = binding.chipGroupMealType.getCheckedChipIds();
-                        ArrayList<Integer> mealTypeIdList = new ArrayList<>();  // Store each selected chip id
-                        for (int chipId : checkedMealTypeChipIds) {
-                            int mealTypeId = getMealTypeIdFromChip(chipId);  // Return Id from this method
-                            if (mealTypeId != -1)
-                                mealTypeIdList.add(mealTypeId);
-                        }
-
                         isLoading(true);  // Loading progress bar
                         // save menu item data
                         executorService.execute(() ->
-                                saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate, mealTypeIdList));
+                                saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate, mealType));
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> {
                         dialog.cancel();
@@ -214,7 +216,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     }
 
     // Save menu item data and pass them to SpecificMenuActivity
-    private void saveMenuItem(String foodName, double price, String category, String mealTime, boolean isPromotion, Date nowDate, ArrayList<Integer> mealTypeIds) {
+    private void saveMenuItem(String foodName, double price, String category, String mealTime, boolean isPromotion, Date nowDate, String mealType) {
         Intent data = new Intent();
 
         // Pass all menu item details via an intent
@@ -225,7 +227,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         data.putExtra(EXTRA_IS_PROMOTION, isPromotion);
         data.putExtra(EXTRA_CREATED_DATE, nowDate.getTime());
 //        data.putExtra(EXTRA_PHOTO, photoBitmap);
-        data.putIntegerArrayListExtra(EXTRA_MEAL_TYPES, mealTypeIds);
+        data.putExtra(EXTRA_MEAL_TYPE, mealType);
 
         long id = intent.getLongExtra(EXTRA_ID, -1);
         if (id != -1 && isEditMode) {
@@ -244,14 +246,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
 //            intent.putExtra("screen_title", mealTime);
             finish();
         });
-    }
-
-    // Helper: Map chip ID to MealType database ID
-    private int getMealTypeIdFromChip(int chipId) {
-        if (chipId == binding.chipNormalMeal.getId()) return 1;
-        if (chipId == binding.chipLarge.getId()) return 2;
-        if (chipId == binding.chipSpecialLarge.getId()) return 3;
-        return -1;
     }
 
     // TextWatchers for each field to monitor textEditLayout

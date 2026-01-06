@@ -4,11 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -16,7 +18,6 @@ import com.example.adminreservationmanagementapp.databinding.ActivitySpecificMen
 import com.example.adminreservationmanagementapp.viewmodel.MenuItemViewModel;
 import com.example.restaurant_reservation_lib.adapter.MenuItemAdapter;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealType;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ import java.util.concurrent.Executors;
 public class SpecificMenuActivity extends AppCompatActivity {
     private ActivitySpecificMenuBinding binding;
     private MenuItemViewModel menuItemViewModel;
-    private ExecutorService executorService;
     private static final int ADD_ITEM_REQUEST = 1, EDIT_ITEM_REQUEST = 2;
 
     @Override
@@ -37,11 +37,11 @@ public class SpecificMenuActivity extends AppCompatActivity {
         binding = ActivitySpecificMenuBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         setContentView(binding.getRoot());  // make it the active view on the screen
 
-        // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
-        executorService = Executors.newSingleThreadExecutor();
-
         // Get the string from MenuFragment
-        binding.textMenuTitle.setText(getIntent().getStringExtra("screen_title"));
+        String mealTimeFilter = getIntent().getStringExtra("screen_title");
+        binding.textMenuTitle.setText(mealTimeFilter);
+
+        // Close the Activity
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
 
         // Click Add Item image button
@@ -78,13 +78,20 @@ public class SpecificMenuActivity extends AppCompatActivity {
             @Override
             public void onDelete(MenuItem menuItem) {
                 new MaterialAlertDialogBuilder(SpecificMenuActivity.this)
-                        .setTitle("Delete Item")
+                        .setTitle("Delete " + menuItem.getFoodName())
                         .setMessage("Are you sure to delete the menu item?")
                         .setPositiveButton("Delete", (dialog, which) ->
                                 menuItemViewModel.deleteMenuItem(menuItem))
                         .setNegativeButton("Cancel", (dialog, which) ->
                                 dialog.cancel()).show();
             }
+        });
+
+        // Close open actions when tapping outside any item
+        binding.getRoot().setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                adapter.closeCurrentOpenItem();
+            return false;  // Allow touch to pass through
         });
 
         // Set the adapter instance to the RecycleView to inflate the items
@@ -94,7 +101,19 @@ public class SpecificMenuActivity extends AppCompatActivity {
         menuItemViewModel = new ViewModelProvider(this).get(MenuItemViewModel.class);
         // Observe the change from the menu item list
         // Get all the menu items from view model
-        menuItemViewModel.getAllMenuItems().observe(this, adapter::setMenuItems);
+//        menuItemViewModel.getAllMenuItems().observe(this, menuItems
+//                -> adapter.setMenuItems(menuItems));
+        menuItemViewModel.getAllMenuItems().observe(this, allMenuItems -> {
+            // Filter by mealTime
+            List<MenuItem> filtered = new ArrayList<>();
+            for (MenuItem item : allMenuItems) {
+                if (mealTimeFilter.equals(item.getMealTime())) {
+                    filtered.add(item);
+                }
+            }
+            // List filtered items
+            adapter.setMenuItems(filtered);
+        });
     }
 
     @Override
@@ -113,6 +132,11 @@ public class SpecificMenuActivity extends AppCompatActivity {
             createdDate.setTime(data.getLongExtra(AddMenuItemActivity.EXTRA_CREATED_DATE, -1));
 //            Bitmap photoBitmap = (Bitmap) data.getParcelableExtra(EXTRA_PHOTO);
 
+            String mealType = data.getStringExtra(AddMenuItemActivity.EXTRA_MEAL_TYPE);
+            if (mealType != null) {
+                foodName = foodName + " " + mealType + " Meal";
+            }
+
             // Build a menu item
             MenuItem menuItem = new MenuItem.Builder(
                     foodName,
@@ -125,13 +149,6 @@ public class SpecificMenuActivity extends AppCompatActivity {
             ).build();
 
             menuItemViewModel.insertMenuItem(menuItem);
-
-            // Get and insert mealType ids and the menuItem id into menuMealType table
-            List<Integer> selectedMealTypesIdList = data.getIntegerArrayListExtra(AddMenuItemActivity.EXTRA_MEAL_TYPES);
-            for (int mealTypeId : selectedMealTypesIdList) {
-                MenuMealType menuMealType = new MenuMealType(menuItem.getId(), mealTypeId);
-                menuItemViewModel.insertMenuMealType(menuMealType);
-            }
 
             Log.d("SpecialMenuActivity onActivityResult()", "Result code: " + resultCode + "\nItem Id: " + menuItem.getId());
             Toast.makeText(this, "Menu item saved", Toast.LENGTH_SHORT).show();

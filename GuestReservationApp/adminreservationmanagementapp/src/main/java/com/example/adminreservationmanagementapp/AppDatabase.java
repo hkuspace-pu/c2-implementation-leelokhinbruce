@@ -13,13 +13,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.adminreservationmanagementapp.accessing_data.MenuItemDao;
 import com.example.restaurant_reservation_lib.converter.DateConverter;
-import com.example.restaurant_reservation_lib.entity.MealType;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 // Build Database
-@Database(entities = {MenuItem.class, MealType.class, MenuMealType.class},
-        version = 4, exportSchema = false)  // Annotated with a @Database annotation
+@Database(entities = {MenuItem.class},
+        version = 5, exportSchema = false)  // Annotated with a @Database annotation
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
     // Returns an instance of the database class
@@ -40,10 +38,11 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class, "menuItem_and_reservation_database")
                             // Add fall back to destructive migration to the database
 //                            .fallbackToDestructiveMigration()
-                            .addMigrations(new Migration(3, 4) {
+                            .addMigrations(new Migration(4, 5) {
                                 @Override
                                 public void migrate(@NonNull SupportSQLiteDatabase db) {
-                                    db.execSQL("DROP TABLE IF EXISTS menuMealTime");
+                                    db.execSQL("DROP TABLE IF EXISTS mealType");
+                                    db.execSQL("DROP TABLE IF EXISTS menuMealType");
                                 }
                             })
                             // Add call back to the database
@@ -64,10 +63,8 @@ public abstract class AppDatabase extends RoomDatabase {
             super.onCreate(db);
 
             // Insert initial data on first creation
-            // Insert data for mealType table
-            db.execSQL("INSERT INTO mealType (id, type) VALUES (1, 'Normal Meal')");
-            db.execSQL("INSERT INTO mealType (id, type) VALUES (2, 'Large Meal')");
-            db.execSQL("INSERT INTO mealType (id, type) VALUES (3, 'Special Large Meal')");
+            db.execSQL("DROP TABLE IF EXISTS mealType");
+            db.execSQL("DROP TABLE IF EXISTS menuMealType");
 
             new PopulateDbAsyncTask(INSTANCE).execute();
         }

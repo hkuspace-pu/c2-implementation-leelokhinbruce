@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 
 import com.example.guestreservationapp.repository.MenuItemRepository;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 import java.util.List;
 

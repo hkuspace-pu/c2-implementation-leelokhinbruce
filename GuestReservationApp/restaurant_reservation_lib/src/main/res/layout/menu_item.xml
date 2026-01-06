@@ -86,14 +86,8 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="$ "
-                    android:textAppearance="@style/regular_text" />
-
-                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textPrice"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/price"
                     android:textAppearance="@style/regular_text" />

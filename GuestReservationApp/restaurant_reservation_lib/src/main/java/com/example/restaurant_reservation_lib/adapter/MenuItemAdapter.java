@@ -1,6 +1,7 @@
 package com.example.restaurant_reservation_lib.adapter;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -46,13 +47,24 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         // Bind the data to the ViewHolder obj for each item in the RecycleView (List data -> item layout)
         holder.bind(currentMenuItem);
 
+        holder.resetActions();
+
         if (isStaffSide) {
             // Show option icon button
             holder.binding.imgBtnOption.setVisibility(View.VISIBLE);
 
             // Click item option button
             holder.binding.imgBtnOption.setOnClickListener(viewOption -> {
-                closeCurrentOpenItem();
+                if (currentOpenHolder == holder) {
+                    // Close currently open item by clicking its option button
+                    holder.resetActions();
+                    currentOpenHolder = null;
+                } else {
+                    // Close any other open items
+                    if (currentOpenHolder != null)
+                        currentOpenHolder.resetActions();
+                }
+                // Open item
                 holder.revealActions();
                 currentOpenHolder = holder;
             });
@@ -76,6 +88,12 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
             holder.binding.cardBtnEdit.setVisibility(View.GONE);
             holder.binding.cardBtnDelete.setVisibility(View.GONE);
         }
+
+        holder.binding.getRoot().setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN)
+                closeCurrentOpenItem();
+            return false;
+        });
     }
 
     @Override
@@ -89,15 +107,15 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
     }
 
     // Close any other open item when another is opened currently
-    private void closeCurrentOpenItem() {
+    public void closeCurrentOpenItem() {
         if (currentOpenHolder != null) {
             currentOpenHolder.resetActions();
             currentOpenHolder = null;
         }
     }
 
-    class MenuItemViewHolder extends RecyclerView.ViewHolder {
-        private MenuItemBinding binding;
+    static class MenuItemViewHolder extends RecyclerView.ViewHolder {
+        private final MenuItemBinding binding;
 
         public MenuItemViewHolder(MenuItemBinding binding) {
             super(binding.getRoot());
@@ -108,7 +126,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
         void bind(MenuItem menuItem) {
 //            binding.imgItemPhoto.setImageBitmap(menuItem.getImage());
             binding.textFoodName.setText(menuItem.getFoodName());
-            binding.textPrice.setText(String.valueOf(menuItem.getPrice()));
+            binding.textPrice.setText(String.format("$%.2f", menuItem.getPrice()));
         }
 
         // Reveal hidden buttons

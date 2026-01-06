@@ -1,16 +1,13 @@
 package com.example.guestreservationapp.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
 import com.example.guestreservationapp.AppDatabase;
 import com.example.guestreservationapp.accessing_data.MenuItemDao;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
-import java.util.Date;
 import java.util.List;
 
 public class MenuItemRepository {

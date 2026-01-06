@@ -10,13 +10,11 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.guestreservationapp.accessing_data.MenuItemDao;
-import com.example.restaurant_reservation_lib.entity.MealType;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 // Build Database
-@Database(entities = {MenuItem.class, MealType.class, MenuMealType.class},
-version = 2, exportSchema = false)  // Annotated with a @Database annotation
+@Database(entities = {MenuItem.class},
+version = 3, exportSchema = false)  // Annotated with a @Database annotation
 public abstract class AppDatabase extends RoomDatabase {
     // Returns an instance of the database class
     private static volatile AppDatabase INSTANCE;
@@ -50,10 +48,8 @@ public abstract class AppDatabase extends RoomDatabase {
             // Insert initial data on first creation
             db.execSQL("DROP TABLE IF EXISTS mealTime");
             db.execSQL("DROP TABLE IF EXISTS menuMealTime");
-            // Insert data for mealType
-            db.execSQL("INSERT INTO mealType (id, type) VALUES (1, 'Normal Meal')");
-            db.execSQL("INSERT INTO mealType (id, type) VALUES (2, 'Large Meal')");
-            db.execSQL("INSERT INTO mealType (id, type) VALUES (3, 'Special Large Meal')");
+            db.execSQL("DROP TABLE IF EXISTS mealType");
+            db.execSQL("DROP TABLE IF EXISTS menuMealType");
 
             new PopulateDbAsyncTask(INSTANCE).execute();
         }

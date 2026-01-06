@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData;
 
 import com.example.adminreservationmanagementapp.repository.MenuItemRepository;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.entity.MenuMealType;
 
 import java.util.List;
 
@@ -24,10 +23,6 @@ public class MenuItemViewModel extends AndroidViewModel {
 
     public void insertMenuItem(MenuItem menuItem) {
         repository.insertMenuItem(menuItem);
-    }
-
-    public void insertMenuMealType(MenuMealType menuMealType) {
-        repository.insertMenuMealType(menuMealType);
     }
 
     public void updateMenuItem(MenuItem menuItem) {
