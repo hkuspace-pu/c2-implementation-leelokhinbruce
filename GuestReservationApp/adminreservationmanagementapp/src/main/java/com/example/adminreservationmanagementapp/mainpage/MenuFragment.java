@@ -38,7 +38,7 @@ public class MenuFragment extends Fragment {
     private void browseMenu(String menuType) {
         Intent intent = new Intent(getContext(), SpecificMenuActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("screen_title", menuType);
+        intent.putExtra(SpecificMenuActivity.MENU_TITLE, menuType);
         startActivity(intent);
     }
 }

@@ -33,7 +33,7 @@ import java.util.concurrent.Executors;
 
 public class AddMenuItemActivity extends BaseValidatedActivity {
     private ActivityAddMenuItemBinding binding;
-    private String foodName, priceStr, mealType, mealTime = "Breakfast";
+    private String foodName, priceStr, mealType;
     private Bitmap imageBitmap;
     private boolean isEditMode = false;
     private ArrayAdapter<CharSequence> adapter;
@@ -50,7 +50,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     public static final String EXTRA_FOOD_NAME = "com.example.adminreservationmanagementapp.EXTRA_FOOD_NAME";
     public static final String EXTRA_PRICE = "com.example.adminreservationmanagementapp.EXTRA_PRICE";
     public static final String EXTRA_CATEGORY = "com.example.adminreservationmanagementapp.EXTRA_CATEGORY";
-    public static final String EXTRA_MEAL_TIME = "com.example.adminreservationmanagementapp.EXTRA_MEAL_TIME";
     public static final String EXTRA_IS_PROMOTION = "com.example.adminreservationmanagementapp.EXTRA_IS_PROMOTION";
     public static final String EXTRA_CREATED_DATE = "com.example.adminreservationmanagementapp.EXTRA_CREATED_DATE";
     public static final String EXTRA_PHOTO = "com.example.adminreservationmanagementapp.EXTRA_PHOTO";
@@ -95,14 +94,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
                         .maxResultSize(200, 200)
                         .start());
 
-        // Get a selected chip (MealTime) text
-        binding.chipGroupMealTime.setOnCheckedChangeListener((chipGroup, checkedId) -> {
-            if (checkedId != View.NO_ID) {
-                Chip chip = findViewById(checkedId);
-                mealTime = chip.getText().toString();
-            }
-        });
-
         // Get a selected chip (MealType) text
         binding.chipGroupMealType.setOnCheckedChangeListener((chipGroup, checkedId) -> {
             if (checkedId != View.NO_ID) {
@@ -135,7 +126,7 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
                         isLoading(true);  // Loading progress bar
                         // save menu item data
                         executorService.execute(() ->
-                                saveMenuItem(foodName, price, category, mealTime, isPromotion, createDate, mealType));
+                                saveMenuItem(foodName, price, category, isPromotion, createDate, mealType));
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> {
                         dialog.cancel();
@@ -167,25 +158,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         int spinnerPosition = adapter.getPosition(category);
         binding.spinnerCategory.setSelection(spinnerPosition);
 
-        // Set a meal time chip
-        mealTime = intent.getStringExtra(EXTRA_MEAL_TIME);
-        if (mealTime != null) {
-            switch (mealTime) {
-                case "Breakfast":
-                    binding.chipBreakfast.setChecked(true);
-                    break;
-                case "Lunch":
-                    binding.chipLunch.setChecked(true);
-                    break;
-                case "Tea Time":
-                    binding.chipTeaTime.setChecked(true);
-                    break;
-                case "Dinner":
-                    binding.chipDinner.setChecked(true);
-                    break;
-            }
-        }
-
         // Set isPromotion switch toggle
         boolean isPromotion = intent.getBooleanExtra(EXTRA_IS_PROMOTION, false);
         binding.switchIsPromotion.setChecked(isPromotion);
@@ -216,14 +188,13 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     }
 
     // Save menu item data and pass them to SpecificMenuActivity
-    private void saveMenuItem(String foodName, double price, String category, String mealTime, boolean isPromotion, Date nowDate, String mealType) {
+    private void saveMenuItem(String foodName, double price, String category, boolean isPromotion, Date nowDate, String mealType) {
         Intent data = new Intent();
 
         // Pass all menu item details via an intent
         data.putExtra(EXTRA_FOOD_NAME, foodName);
         data.putExtra(EXTRA_PRICE, price);
         data.putExtra(EXTRA_CATEGORY, category);
-        data.putExtra(EXTRA_MEAL_TIME, mealTime);
         data.putExtra(EXTRA_IS_PROMOTION, isPromotion);
         data.putExtra(EXTRA_CREATED_DATE, nowDate.getTime());
 //        data.putExtra(EXTRA_PHOTO, photoBitmap);
@@ -242,8 +213,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
             String successMsg = isEditMode ? "Menu item updated finished" : "Menu item added finished";
             Toast.makeText(AddMenuItemActivity.this, successMsg, Toast.LENGTH_SHORT).show();
             isLoading(false);
-//            Intent intent = new Intent(AddMenuItemActivity.this, SpecificMenuActivity.class);
-//            intent.putExtra("screen_title", mealTime);
             finish();
         });
     }

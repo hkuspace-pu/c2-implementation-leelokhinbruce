@@ -28,8 +28,10 @@ import java.util.concurrent.Executors;
 
 public class SpecificMenuActivity extends AppCompatActivity {
     private ActivitySpecificMenuBinding binding;
+    private String mealTime;
     private MenuItemViewModel menuItemViewModel;
     private static final int ADD_ITEM_REQUEST = 1, EDIT_ITEM_REQUEST = 2;
+    public static final String MENU_TITLE = "MENU_TITLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,8 @@ public class SpecificMenuActivity extends AppCompatActivity {
         setContentView(binding.getRoot());  // make it the active view on the screen
 
         // Get the string from MenuFragment
-        String mealTimeFilter = getIntent().getStringExtra("screen_title");
-        binding.textMenuTitle.setText(mealTimeFilter);
+        mealTime = getIntent().getStringExtra(MENU_TITLE);
+        binding.textMenuTitle.setText(mealTime);
 
         // Close the Activity
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
@@ -69,7 +71,6 @@ public class SpecificMenuActivity extends AppCompatActivity {
                 intent.putExtra(AddMenuItemActivity.EXTRA_FOOD_NAME, menuItem.getFoodName());
                 intent.putExtra(AddMenuItemActivity.EXTRA_PRICE, menuItem.getPrice());
                 intent.putExtra(AddMenuItemActivity.EXTRA_CATEGORY, menuItem.getCategory());
-                intent.putExtra(AddMenuItemActivity.EXTRA_MEAL_TIME, menuItem.getMealTime());
                 intent.putExtra(AddMenuItemActivity.EXTRA_IS_PROMOTION, menuItem.isPromotion());
 
                 startActivityForResult(intent, EDIT_ITEM_REQUEST);
@@ -101,13 +102,11 @@ public class SpecificMenuActivity extends AppCompatActivity {
         menuItemViewModel = new ViewModelProvider(this).get(MenuItemViewModel.class);
         // Observe the change from the menu item list
         // Get all the menu items from view model
-//        menuItemViewModel.getAllMenuItems().observe(this, menuItems
-//                -> adapter.setMenuItems(menuItems));
         menuItemViewModel.getAllMenuItems().observe(this, allMenuItems -> {
             // Filter by mealTime
             List<MenuItem> filtered = new ArrayList<>();
             for (MenuItem item : allMenuItems) {
-                if (mealTimeFilter.equals(item.getMealTime())) {
+                if (mealTime.equals(item.getMealTime())) {
                     filtered.add(item);
                 }
             }
@@ -123,10 +122,10 @@ public class SpecificMenuActivity extends AppCompatActivity {
 
         // Get data from AddMenuItemActivity after added
         if (requestCode == ADD_ITEM_REQUEST && resultCode == RESULT_OK && data != null) {
+            // Get item details
             String foodName = data.getStringExtra(AddMenuItemActivity.EXTRA_FOOD_NAME);
             double price = data.getDoubleExtra(AddMenuItemActivity.EXTRA_PRICE, 0);
             String category = data.getStringExtra(AddMenuItemActivity.EXTRA_CATEGORY);
-            String mealTime = data.getStringExtra(AddMenuItemActivity.EXTRA_MEAL_TIME);
             boolean isPromotion = data.getBooleanExtra(AddMenuItemActivity.EXTRA_IS_PROMOTION, false);
             Date createdDate = new Date();
             createdDate.setTime(data.getLongExtra(AddMenuItemActivity.EXTRA_CREATED_DATE, -1));
@@ -162,7 +161,6 @@ public class SpecificMenuActivity extends AppCompatActivity {
             String foodName = data.getStringExtra(AddMenuItemActivity.EXTRA_FOOD_NAME);
             double price = data.getDoubleExtra(AddMenuItemActivity.EXTRA_PRICE, 0);
             String category = data.getStringExtra(AddMenuItemActivity.EXTRA_CATEGORY);
-            String mealTime = data.getStringExtra(AddMenuItemActivity.EXTRA_MEAL_TIME);
             boolean isPromotion = data.getBooleanExtra(AddMenuItemActivity.EXTRA_IS_PROMOTION, false);
             Date createdDate = new Date();
             createdDate.setTime(data.getLongExtra(AddMenuItemActivity.EXTRA_CREATED_DATE, -1));

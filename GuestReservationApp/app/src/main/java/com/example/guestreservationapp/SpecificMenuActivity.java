@@ -8,10 +8,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.guestreservationapp.databinding.ActivitySpecificMenuBinding;
 import com.example.guestreservationapp.viewmodel.MenuItemViewModel;
 import com.example.restaurant_reservation_lib.adapter.MenuItemAdapter;
+import com.example.restaurant_reservation_lib.entity.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpecificMenuActivity extends AppCompatActivity {
     private ActivitySpecificMenuBinding binding;
+    private String mealTime;
     private MenuItemViewModel menuItemViewModel;
+    public static final String MENU_TITLE = "MENU_TITLE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +26,10 @@ public class SpecificMenuActivity extends AppCompatActivity {
         setContentView(binding.getRoot());  // make it the active view on the screen
 
         // Get the string from MenuFragment
-        binding.textMenuTitle.setText(getIntent().getStringExtra("screen_title"));
+        mealTime = getIntent().getStringExtra(MENU_TITLE);
+        binding.textMenuTitle.setText(mealTime);
+
+        // Close the Activity
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
 
         // Set RecycleView
@@ -35,6 +44,16 @@ public class SpecificMenuActivity extends AppCompatActivity {
         // Initialize ViewModel
         menuItemViewModel = new ViewModelProvider(this).get(MenuItemViewModel.class);
         // Observe the change from the menu item list
-        menuItemViewModel.getAllMenuItems().observe(this, adapter::setMenuItems);
+        menuItemViewModel.getAllMenuItems().observe(this, allMenuItems -> {
+            // Filter by mealTime
+            List<MenuItem> filtered = new ArrayList<>();
+            for (MenuItem item : allMenuItems) {
+                if (mealTime.equals(item.getMealTime())) {
+                    filtered.add(item);
+                }
+            }
+            // List filtered items
+            adapter.setMenuItems(filtered);
+        });
     }
 }
