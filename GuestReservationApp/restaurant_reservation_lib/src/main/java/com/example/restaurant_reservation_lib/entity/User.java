@@ -1,8 +1,8 @@
 package com.example.restaurant_reservation_lib.entity;
 
 public abstract class User {
-    private String password, phoneNumber;
     private final String email;
+    private String password, phoneNumber;
 
     public User(String email, String password, String phoneNumber) {
         this.email = email;
