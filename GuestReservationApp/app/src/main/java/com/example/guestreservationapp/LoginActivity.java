@@ -24,13 +24,6 @@ public class LoginActivity extends BaseValidatedActivity {
         binding.editEmail.addTextChangedListener(inputFieldWatcher);
         binding.editPasswd.addTextChangedListener(inputFieldWatcher);
 
-        // Go to Register screen
-        binding.linkRegister.setOnClickListener(viewRegister -> {
-            Intent intent = new Intent(this, CreateAccountActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
-        });
-
         binding.btnLogin.setEnabled(false);
         // Login the account
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -38,6 +31,13 @@ public class LoginActivity extends BaseValidatedActivity {
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
+        });
+
+        // Go to Register screen
+        binding.linkRegister.setOnClickListener(viewRegister -> {
+            Intent intent = new Intent(this, CreateAccountActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
         });
     }
 
