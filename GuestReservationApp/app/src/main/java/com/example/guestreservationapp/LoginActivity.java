@@ -12,7 +12,7 @@ import com.example.restaurant_reservation_lib.BaseValidatedActivity;
 
 public class LoginActivity extends BaseValidatedActivity {
     private ActivityLoginBinding binding;
-    private String email, password;
+    private String emailOrUsername, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +21,11 @@ public class LoginActivity extends BaseValidatedActivity {
         View view = binding.getRoot();  // get a reference to the root view of the corresponding layout file
         setContentView(view);  // make it the active view on the screen
 
-        binding.editEmail.addTextChangedListener(inputFieldWatcher);
+        binding.editEmailOrUsername.addTextChangedListener(inputFieldWatcher);
         binding.editPasswd.addTextChangedListener(inputFieldWatcher);
 
         binding.btnLogin.setEnabled(false);
-        // Login the account
+        // Login button click
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,10 +44,10 @@ public class LoginActivity extends BaseValidatedActivity {
     TextWatcher inputFieldWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
-            email = binding.textInputEmail.getEditText().getText().toString().trim();
+            emailOrUsername = binding.textInputEmailOrUsername.getEditText().getText().toString().trim();
             password = binding.textInputPasswd.getEditText().getText().toString().trim();
 
-            boolean emailNotEmpty = isNotFieldEmpty(email, binding.textInputEmail, "Please enter email");
+            boolean emailNotEmpty = isNotFieldEmpty(emailOrUsername, binding.textInputEmailOrUsername, "Please enter email or username");
             boolean passwordNotEmpty = isNotFieldEmpty(password, binding.textInputPasswd, "Please enter password");
 
             binding.btnLogin.setEnabled(emailNotEmpty && passwordNotEmpty);

@@ -1,5 +1,6 @@
 package com.example.adminreservationmanagementapp;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
     private static final int ADD_ITEM_REQUEST = 1, EDIT_ITEM_REQUEST = 2;
     public static final String MENU_TITLE = "MENU_TITLE";
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
