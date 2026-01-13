@@ -7,10 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.guestreservationapp.databinding.ActivityCompleteProfileBinding;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class CompleteProfileActivity extends BaseValidatedActivity {
     private ActivityCompleteProfileBinding binding;
@@ -55,9 +58,14 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
             }
         });
 
-
         // Complete button click
         binding.btnComplete.setEnabled(false);
+        binding.btnComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(CompleteProfileActivity.this, "Create Account and Profile successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     TextWatcher inputFieldWatcher = new TextWatcher() {
@@ -65,7 +73,7 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
         public void afterTextChanged(Editable editable) {
             firstName = binding.textInputFirstName.getEditText().getText().toString().trim();
             lastName = binding.textInputLastName.getEditText().getText().toString().trim();
-            phoneNumber = binding.textInputPhone.getEditText().getText().toString().trim();
+            phoneNumber = binding.editPhone.getText().toString().trim();
 
             boolean firstNameNotEmpty = isNotFieldEmpty(firstName, binding.textInputFirstName, "Please enter your first name");
             boolean lastNameNotEmpty = isNotFieldEmpty(lastName, binding.textInputLastName, "Please enter your last name");

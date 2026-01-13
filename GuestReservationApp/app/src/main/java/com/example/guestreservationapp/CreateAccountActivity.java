@@ -11,7 +11,10 @@ import com.example.restaurant_reservation_lib.BaseValidatedActivity;
 
 public class CreateAccountActivity extends BaseValidatedActivity {
     private ActivityCreateAccountBinding binding;
-    private String username, email, password, confirmedPassword;
+    private String username, email, password;
+    public static final String EXTRA_USERNAME = "com.example.guestreservationapp.EXTRA_USERNAME";
+    public static final String EXTRA_EMAIL = "com.example.guestreservationapp.EXTRA_EMAIL";
+    public static final String EXTRA_PASSWORD = "com.example.guestreservationapp.EXTRA_PASSWORD";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +36,23 @@ public class CreateAccountActivity extends BaseValidatedActivity {
 
         // Go to login screen
         binding.linkLogin.setOnClickListener(viewLogin -> {
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(intent);
+            moveToCompleteProfileActivity();
         });
+    }
+
+    private void moveToCompleteProfileActivity() {
+        Intent data = new Intent(this, LoginActivity.class);
+
+        // Pass account data
+        data.putExtra(EXTRA_USERNAME, username);
+        data.putExtra(EXTRA_EMAIL, email);
+        data.putExtra(EXTRA_PASSWORD, password);
+
+        // Setting result as data
+        setResult(RESULT_OK, data);
+
+        data.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(data);
     }
 
     TextWatcher inputFieldWatcher = new TextWatcher() {
@@ -45,7 +61,7 @@ public class CreateAccountActivity extends BaseValidatedActivity {
             username = binding.textInputUsername.getEditText().getText().toString().trim();
             email = binding.textInputEmail.getEditText().getText().toString().trim();
             password = binding.textInputPasswd.getEditText().getText().toString().trim();
-            confirmedPassword = binding.textInputConfirmPasswd.getEditText().getText().toString().trim();
+            String confirmedPassword = binding.textInputConfirmPasswd.getEditText().getText().toString().trim();
 
             boolean validUsername = validUsername(username, binding.textInputUsername);
             boolean validEmail = validEmail(email, binding.textInputEmail);
