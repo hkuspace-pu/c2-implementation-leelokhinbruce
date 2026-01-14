@@ -43,23 +43,13 @@
             android:text="@string/date"
             android:textAppearance="@style/section_text" />
 
-<!--       Date List -->
-        <HorizontalScrollView
+<!--       Date Picker -->
+        <DatePicker
+            android:id="@+id/datePicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="32dp"
-            android:scrollbars="none"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:id="@+id/dateCardContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-<!--               List Date CardViews -->
-            </LinearLayout>
-        </HorizontalScrollView>
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -78,13 +68,17 @@
             android:scrollbars="none"
             android:fillViewport="true">
 
-            <LinearLayout
-                android:id="@+id/timeCardContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <!--               List Date CardViews -->
-            </LinearLayout>
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroupTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:chipSpacing="10dp"
+                    app:itemSpacing="15dp"
+                    app:singleSelection="true"
+                    app:selectionRequired="true"
+                    app:singleLine="true">
+<!--                   List chips by executing ReservationActivity.java -->
+                </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -104,13 +98,17 @@
             android:scrollbars="none"
             android:fillViewport="true">
 
-            <LinearLayout
-                android:id="@+id/guestCardContainer"
-                android:layout_width="wrap_content"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupGuest"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <!--               List Date CardViews -->
-            </LinearLayout>
+                app:chipSpacing="10dp"
+                app:itemSpacing="15dp"
+                app:singleSelection="true"
+                app:selectionRequired="true"
+                app:singleLine="true">
+                <!--                   List chips by executing ReservationActivity.java -->
+            </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -130,16 +128,19 @@
             android:scrollbars="none"
             android:fillViewport="true">
 
-            <LinearLayout
-                android:id="@+id/occasionCardContainer"
-                android:layout_width="wrap_content"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupOccasion"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-                <!--               List Date CardViews -->
-            </LinearLayout>
+                app:chipSpacing="10dp"
+                app:itemSpacing="15dp"
+                app:singleSelection="true">
+                <!--                   List chips by executing ReservationActivity.java -->
+            </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
     </LinearLayout>
 
+<!--   Continue Button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnContinue"
         android:layout_width="match_parent"

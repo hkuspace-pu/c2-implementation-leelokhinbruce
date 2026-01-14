@@ -21,12 +21,14 @@ public class ReservationsFragment extends Fragment {
         binding = FragmentReservationsBinding.inflate(getLayoutInflater(), container, false);
         View view = binding.getRoot();
 
+        // History button click
         binding.btnHistory.setOnClickListener(viewHistory -> {
             Intent intent = new Intent(getContext(), ReservationHistoryActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
 
+        // Book reservation button click
         binding.btnBook.setOnClickListener(viewBook -> {
             Intent intent = new Intent(getContext(), ReservationActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
