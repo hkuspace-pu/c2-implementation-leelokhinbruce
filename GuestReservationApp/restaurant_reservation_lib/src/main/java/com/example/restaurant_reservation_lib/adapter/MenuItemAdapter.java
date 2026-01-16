@@ -1,5 +1,6 @@
 package com.example.restaurant_reservation_lib.adapter;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,6 +42,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
     }
 
     // Updating
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull MenuItemViewHolder holder, int position) {
         MenuItem currentMenuItem = menuItems.get(position);

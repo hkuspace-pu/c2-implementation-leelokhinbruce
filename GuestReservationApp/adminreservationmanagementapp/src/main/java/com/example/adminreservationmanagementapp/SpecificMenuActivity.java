@@ -32,6 +32,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
     private String mealTime;
     private MenuItemViewModel menuItemViewModel;
     private static final int ADD_ITEM_REQUEST = 1, EDIT_ITEM_REQUEST = 2;
+
     public static final String MENU_TITLE = "MENU_TITLE";
 
     @SuppressLint("ClickableViewAccessibility")

@@ -63,7 +63,7 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:maxLength="20"
-                        android:paddingStart="4dp"
+                        android:layout_marginStart="4dp"
                         android:text="@string/location"
                         android:textAppearance="@style/small_text" />
                 </LinearLayout>
@@ -84,11 +84,11 @@
                         android:id="@+id/textTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="4dp"
+                        android:layout_marginStart="4dp"
                         android:text="18:30"
                         android:textAppearance="@style/small_text" />
 
-                    <ImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="4dp"
                         android:layout_height="4dp"
                         android:layout_marginHorizontal="12dp"
@@ -103,15 +103,8 @@
                         android:id="@+id/textGuest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="4dp"
+                        android:layout_marginStart="4dp"
                         android:text="2"
-                        android:textAppearance="@style/small_text" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="4dp"
-                        android:text="@string/guest"
                         android:textAppearance="@style/small_text" />
                 </LinearLayout>
 
@@ -131,7 +124,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingStart="4dp"
+                        android:layout_marginStart="4dp"
                         android:text="Nov 6 Fri"
                         android:textAppearance="@style/small_text" />
 
@@ -142,7 +135,7 @@
                         android:background="@drawable/btn2_bg"
                         android:text="@string/edit_btn"
                         android:textAppearance="@style/small_btn_text"
-                        android:textSize="16dp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -226,7 +219,6 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:maxLength="20"
-                        android:text="Peter Parker"
                         android:textAppearance="@style/small_text" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -235,7 +227,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/edit_btn"
                         android:textColor="@color/orange"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -258,7 +250,6 @@
                         android:ellipsize="end"
                         android:lines="1"
                         android:maxLength="20"
-                        android:text="peter@gmail.com"
                         android:textAppearance="@style/small_text" />
                 </LinearLayout>
 
@@ -278,7 +269,6 @@
                         android:id="@+id/textPhoneNum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(+852) 2671 9153"
                         android:textAppearance="@style/small_text" />
                 </LinearLayout>
 
