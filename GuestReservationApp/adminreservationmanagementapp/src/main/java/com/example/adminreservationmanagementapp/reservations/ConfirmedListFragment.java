@@ -26,14 +26,6 @@ public class ConfirmedListFragment extends Fragment {
 
         List<Reservation> reservationList = new ArrayList<>();
         // Sample Data
-        reservationList.add(new Reservation.Builder(
-                "Today", "18:30", 3, "367")
-                        .setStatus("Confirmed")
-                .build());
-        reservationList.add(new Reservation.Builder(
-                "Nov 8 Thu", "18:00", 2, "823")
-                        .setStatus("Confirmed")
-                .build());
 
         // Assign the reservation list to the adapter
         ReservationAdapter adapter = new ReservationAdapter(reservationList);

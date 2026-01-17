@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GuestReservationApp">
         <activity
+            android:name=".reservation.GuestAndDinnerInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".SpecificMenuActivity"
             android:exported="false" />
         <activity

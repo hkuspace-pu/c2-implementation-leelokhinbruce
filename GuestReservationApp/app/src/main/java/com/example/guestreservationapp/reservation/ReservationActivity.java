@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.guestreservationapp.R;
 import com.example.guestreservationapp.databinding.ActivityReservationBinding;
+import com.example.restaurant_reservation_lib.entity.Reservation;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -49,10 +50,8 @@ public class ReservationActivity extends AppCompatActivity {
         binding = ActivityReservationBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         setContentView(binding.getRoot());  // make it the active view on the screen
 
-        // Close Editing Form and back to main page
-        binding.imgBtnClose.setOnClickListener(viewClose -> {
-            finish();
-        });
+        // Create singleton Reservation instance
+        Reservation reservation = Reservation.getInstance();
 
         // Initialize array list
         ArrayList<String> timeList = new ArrayList<>(Arrays.asList(
@@ -77,15 +76,14 @@ public class ReservationActivity extends AppCompatActivity {
 
         isEditMode = getIntent().getBooleanExtra(ConfirmBookingActivity.EDIT_MODE, false);
         if (isEditMode) {
-            // Get data from ConfirmBookingActivity
-            formattedDate = getIntent().getStringExtra(EXTRA_DATE);
-            time = getIntent().getStringExtra(EXTRA_TIME);
-            partySize = getIntent().getIntExtra(EXTRA_GUEST, 0);
-            occasion = getIntent().getStringExtra(EXTRA_OCCASION);
-            offer = getIntent().getStringExtra(BookingOfferActivity.EXTRA_OFFER);
-
             // Set Date Picker
 //            setSelectedDatePicker(formattedDate);
+
+            // Assign instance data into these attributes
+            formattedDate = reservation.getDate();
+            time = reservation.getTime();
+            partySize = reservation.getGuestCount();
+            occasion = reservation.getOccasion();
 
             // Set up selected chip
             setUpSelectedChip(binding.chipGroupTime, time);
@@ -97,6 +95,11 @@ public class ReservationActivity extends AppCompatActivity {
             LocalDate today = LocalDate.now();
             updateFormattedDate(today);  // Set today by default
         }
+
+        // Close Editing Form and back to main page
+        binding.imgBtnClose.setOnClickListener(viewClose -> {
+            finish();
+        });
 
         // Get a selected chip from Time field
         binding.chipGroupTime.setOnCheckedChangeListener((chipGroup, checkedId) -> {
@@ -113,12 +116,6 @@ public class ReservationActivity extends AppCompatActivity {
             }
         });
         // Get a selected chip from Time field
-//        binding.chipGroupOccasion.setOnCheckedChangeListener((chipGroup, checkedId) -> {
-//            if (checkedId != View.NO_ID) {
-//                Chip chip = findViewById(checkedId);
-//                occasion = chip.getText().toString();
-//            }
-//        });
         binding.chipGroupOccasion.setOnCheckedStateChangeListener((chipGroup, checkedIds) -> {
             if (checkedIds.isEmpty()) {
                 occasion = null;
@@ -135,16 +132,19 @@ public class ReservationActivity extends AppCompatActivity {
         binding.btnContinue.setOnClickListener(viewContinue -> {
             if (isEditMode) {
                 Intent data = new Intent(ReservationActivity.this, ConfirmBookingActivity.class);
-                data.putExtra(BookingOfferActivity.EXTRA_OFFER, offer);
-                data.putExtra(EXTRA_DATE, formattedDate);
-                data.putExtra(EXTRA_TIME, time);
-                data.putExtra(EXTRA_GUEST, partySize);
-                data.putExtra(EXTRA_OCCASION, occasion);
 
+                // Set value for the instance
+                reservation.setDate(formattedDate);
+                reservation.setTime(time);
+                reservation.setGuestCount(partySize);
+                reservation.setOccasion(occasion);
+
+//                data.putExtra(ConfirmBookingActivity.IS_CONTINUE, true);
                 data.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(data);
             } else {
                 Intent data = new Intent(ReservationActivity.this, BookingOfferActivity.class);
+
                 data.putExtra(EXTRA_DATE, formattedDate);
                 data.putExtra(EXTRA_TIME, time);
                 data.putExtra(EXTRA_GUEST, partySize);

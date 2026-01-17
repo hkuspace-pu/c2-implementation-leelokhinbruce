@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.guestreservationapp.R;
 import com.example.guestreservationapp.databinding.ActivityConfirmBookingBinding;
 import com.example.guestreservationapp.mainpage.MainActivity;
+import com.example.restaurant_reservation_lib.entity.Reservation;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,6 +29,7 @@ public class ConfirmBookingActivity extends AppCompatActivity {
     private Handler mainHandler;
 
     public static final String EDIT_MODE = "EDIT_MODE";
+    public static final String IS_CONTINUE = "IS_CONTINUE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,24 +42,36 @@ public class ConfirmBookingActivity extends AppCompatActivity {
         // Main thread handler
         mainHandler = new Handler(Looper.getMainLooper());
 
-        // Get data from previous Activity
-        time = getIntent().getStringExtra(EXTRA_TIME);
-        partySize = getIntent().getIntExtra(EXTRA_GUEST, 0);
-        date = getIntent().getStringExtra(EXTRA_DATE);
-        offer = getIntent().getStringExtra(BookingOfferActivity.EXTRA_OFFER);
-        occasion = getIntent().getStringExtra(EXTRA_OCCASION);
+        // Is Continue (Not Edit)
+        if (getIntent().getBooleanExtra(IS_CONTINUE, false)) {
+            // Get data from previous Activity
+            time = getIntent().getStringExtra(EXTRA_TIME);
+            partySize = getIntent().getIntExtra(EXTRA_GUEST, 0);
+            date = getIntent().getStringExtra(EXTRA_DATE);
+            offer = getIntent().getStringExtra(BookingOfferActivity.EXTRA_OFFER);
+            occasion = getIntent().getStringExtra(EXTRA_OCCASION);
+
+            // Initial setup
+            Reservation.init(new Reservation.Builder(date, time, partySize, "Pending", "B123")
+                    .setOccasion(occasion != null ? occasion : null)
+                    .setSpecialOffer(offer));
+        }
+
+        // Get singleton Reservation instance
+        Reservation reservation = Reservation.getInstance();
+
         // Set values in the current Activity
-        binding.textTime.setText(time);
-        binding.textGuest.setText(String.valueOf(partySize));
-        binding.textDate.setText(date);
-        if (offer.equals("Without Offer"))
-            binding.textSelectedOffer.setText("Please select an offer");
-        else
-            binding.textSelectedOffer.setText(offer);
-        if (occasion == null)
+        binding.textTime.setText(reservation.getTime());
+        binding.textGuest.setText(String.valueOf(reservation.getGuestCount()));
+        binding.textDate.setText(reservation.getDate());
+        if (reservation.getOccasion() == null)
             binding.textOccasion.setText("Optional");
         else
-            binding.textOccasion.setText(occasion);
+            binding.textOccasion.setText(reservation.getOccasion());
+        if (reservation.getSpecialOffer().equals("Without Offer"))
+            binding.textSelectedOffer.setText("Please select an offer");
+        else
+            binding.textSelectedOffer.setText(reservation.getSpecialOffer());
 
         // Cancel the book
         binding.imgBtnClose.setOnClickListener(viewClose -> {
@@ -71,13 +85,6 @@ public class ConfirmBookingActivity extends AppCompatActivity {
             Intent intent = new Intent(ConfirmBookingActivity.this, ReservationActivity.class);
             intent.putExtra(EDIT_MODE, true);
 
-            // Pass data
-            intent.putExtra(EXTRA_DATE, date);
-            intent.putExtra(EXTRA_TIME, time);
-            intent.putExtra(EXTRA_GUEST, partySize);
-            intent.putExtra(EXTRA_OCCASION, occasion);
-            intent.putExtra(BookingOfferActivity.EXTRA_OFFER, offer);
-
             startActivity(intent);
         });
 
@@ -86,18 +93,7 @@ public class ConfirmBookingActivity extends AppCompatActivity {
             Intent intent = new Intent(ConfirmBookingActivity.this, BookingOfferActivity.class);
             intent.putExtra(EDIT_MODE, true);
 
-            // Pass data
-            intent.putExtra(EXTRA_DATE, date);
-            intent.putExtra(EXTRA_TIME, time);
-            intent.putExtra(EXTRA_GUEST, partySize);
-            intent.putExtra(EXTRA_OCCASION, occasion);
-            intent.putExtra(BookingOfferActivity.EXTRA_OFFER, offer);
-
             startActivity(intent);
         });
-
-        // Book Now
-        binding.btnBookNow.setOnClickListener(viewBookNow ->
-                startActivity(new Intent(ConfirmBookingActivity.this, BookSuccessActivity.class)));
     }
 }

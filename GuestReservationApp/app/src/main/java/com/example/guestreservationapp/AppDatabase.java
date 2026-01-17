@@ -11,6 +11,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.guestreservationapp.accessing_data.MenuItemDao;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
+import com.example.restaurant_reservation_lib.entity.Reservation;
+import com.example.restaurant_reservation_lib.entity.User;
 
 // Build Database
 @Database(entities = {MenuItem.class},

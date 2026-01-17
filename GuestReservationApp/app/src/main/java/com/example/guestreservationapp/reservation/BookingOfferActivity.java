@@ -20,6 +20,7 @@ import androidx.cardview.widget.CardView;
 
 import com.example.guestreservationapp.R;
 import com.example.guestreservationapp.databinding.ActivityBookingOfferBinding;
+import com.example.restaurant_reservation_lib.entity.Reservation;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.Objects;
@@ -40,6 +41,8 @@ public class BookingOfferActivity extends AppCompatActivity {
         binding = ActivityBookingOfferBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         setContentView(binding.getRoot());  // make it the active view on the screen
 
+        Reservation reservation = Reservation.getInstance();
+
         // Set click listener for single selection
         binding.cardViewWithoutOffer.setOnClickListener(view ->
                 selectCard(binding.cardViewWithoutOffer, binding.imgBtnWithoutOffer, binding.textWithoutOffer));
@@ -52,7 +55,7 @@ public class BookingOfferActivity extends AppCompatActivity {
         if (isEditMode) {
             // Edit Mode
             binding.btnContinue.setText("Update");
-            switch (Objects.requireNonNull(getIntent().getStringExtra(EXTRA_OFFER))) {
+            switch (reservation.getSpecialOffer()) {
                 case "Special Offer 15%":
                     selectCard(binding.cardView15Percent, binding.imgBtn15Percent, binding.text15Percent);
                     break;
@@ -72,17 +75,24 @@ public class BookingOfferActivity extends AppCompatActivity {
 
         // Continue button click
         binding.btnContinue.setOnClickListener(viewContinue -> {
-            Intent data = new Intent(BookingOfferActivity.this, ConfirmBookingActivity.class);
+            Intent data = new Intent(
+                    BookingOfferActivity.this, ConfirmBookingActivity.class);
 
-            data.putExtra(EXTRA_DATE, getIntent().getStringExtra(EXTRA_DATE));
-            data.putExtra(EXTRA_TIME, getIntent().getStringExtra(EXTRA_TIME));
-            data.putExtra(EXTRA_GUEST, getIntent().getIntExtra(EXTRA_GUEST, 0));
-            data.putExtra(EXTRA_OCCASION, getIntent().getStringExtra(EXTRA_OCCASION));
-            data.putExtra(EXTRA_OFFER, currentSelectedText);
+            if (isEditMode) {
+                reservation.setSpecialOffer(currentSelectedText);
+                data.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            } else {
+                data.putExtra(ConfirmBookingActivity.IS_CONTINUE, true);
+                data.putExtra(EXTRA_DATE, getIntent().getStringExtra(EXTRA_DATE));
+                data.putExtra(EXTRA_TIME, getIntent().getStringExtra(EXTRA_TIME));
+                data.putExtra(EXTRA_GUEST, getIntent().getIntExtra(EXTRA_GUEST, 0));
+                data.putExtra(EXTRA_OCCASION, getIntent().getStringExtra(EXTRA_OCCASION));
+                data.putExtra(EXTRA_OFFER, currentSelectedText);
+            }
 
-            data.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(data);
         });
+
     }
 
     // Selected card

@@ -118,7 +118,6 @@
             android:layout_marginStart="16dp"
             android:text="Occasion (optional)"
             android:textAppearance="@style/section_text" />
-
         <!--       Occasion List -->
         <HorizontalScrollView
             android:layout_width="match_parent"
