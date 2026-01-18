@@ -139,7 +139,6 @@ public class ReservationActivity extends AppCompatActivity {
                 reservation.setGuestCount(partySize);
                 reservation.setOccasion(occasion);
 
-//                data.putExtra(ConfirmBookingActivity.IS_CONTINUE, true);
                 data.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(data);
             } else {

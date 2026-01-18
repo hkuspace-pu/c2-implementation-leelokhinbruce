@@ -3,46 +3,55 @@ package com.example.guestreservationapp;
 import com.example.restaurant_reservation_lib.entity.User;
 
 public class Guest extends User {
-    private String firstName, lastName, avatar;
-    private char gender;
+    private static volatile Guest instance;  // volatile for thread-safety
+    private String firstName, lastName, gender;
 
-    public Guest(String email, String password, String phoneNumber, String firstName, String lastName, String avatar, char gender) {
-        super(email, password, phoneNumber);
+    // Constructor
+    public Guest(String username, String email, String password, String phoneNumber, String firstName, String lastName, String gender) {
+        super(username, email, password, phoneNumber);
         this.firstName = firstName;
         this.lastName = lastName;
-        this.avatar = avatar;
         this.gender = gender;
     }
 
-    public String getFirstName() {
-        return firstName;
+    // Lazy initialization
+    public static synchronized Guest getInstance() {
+        if (instance == null) {
+            instance = new Guest("username", "email", "password", "phone", "firstName", "lastName", "Rather not say");
+        }
+
+        return instance;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    // Create/reset singleton
+    public static Guest init(Guest guest) {
+        instance = guest;
+        return instance;
+    }
+
+    // Getter
+    public String getFirstName() {
+        return firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    // Setter
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public char getGender() {
-        return gender;
-    }
-
-    public void setGender(char gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 }

@@ -9,13 +9,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.guestreservationapp.R;
+
 import com.example.guestreservationapp.databinding.ActivityConfirmBookingBinding;
 import com.example.guestreservationapp.mainpage.MainActivity;
+import com.example.guestreservationapp.Guest;
 import com.example.restaurant_reservation_lib.entity.Reservation;
 
 import java.util.concurrent.ExecutorService;
@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 
 public class ConfirmBookingActivity extends AppCompatActivity {
     private ActivityConfirmBookingBinding binding;
-    private String time, date, offer, occasion;
+    private String time, date, offer, occasion, name, email, phone;
     private int partySize;
     private ExecutorService executorService;
     private Handler mainHandler;
@@ -52,6 +52,7 @@ public class ConfirmBookingActivity extends AppCompatActivity {
             occasion = getIntent().getStringExtra(EXTRA_OCCASION);
 
             // Initial setup
+            Guest.init(new Guest("tester", "test@gmail.com", "Test@123", "(+852) 68731483", "Frank", "Lee", "Male"));
             Reservation.init(new Reservation.Builder(date, time, partySize, "Pending", "B123")
                     .setOccasion(occasion != null ? occasion : null)
                     .setSpecialOffer(offer));
@@ -59,19 +60,23 @@ public class ConfirmBookingActivity extends AppCompatActivity {
 
         // Get singleton Reservation instance
         Reservation reservation = Reservation.getInstance();
+        Guest guest = Guest.getInstance();
 
         // Set values in the current Activity
         binding.textTime.setText(reservation.getTime());
         binding.textGuest.setText(String.valueOf(reservation.getGuestCount()));
         binding.textDate.setText(reservation.getDate());
-        if (reservation.getOccasion() == null)
-            binding.textOccasion.setText("Optional");
-        else
-            binding.textOccasion.setText(reservation.getOccasion());
         if (reservation.getSpecialOffer().equals("Without Offer"))
             binding.textSelectedOffer.setText("Please select an offer");
         else
             binding.textSelectedOffer.setText(reservation.getSpecialOffer());
+        binding.textName.setText(guest.getFirstName() + " " + guest.getLastName());
+        binding.textEmail.setText(guest.getEmail());
+        binding.textPhoneNum.setText(guest.getPhoneNumber());
+        if (reservation.getOccasion() == null)
+            binding.textOccasion.setText("Optional");
+        else
+            binding.textOccasion.setText(reservation.getOccasion());
 
         // Cancel the book
         binding.imgBtnClose.setOnClickListener(viewClose -> {
@@ -84,7 +89,6 @@ public class ConfirmBookingActivity extends AppCompatActivity {
         binding.btnEditReservationDetails.setOnClickListener(viewEditReservation -> {
             Intent intent = new Intent(ConfirmBookingActivity.this, ReservationActivity.class);
             intent.putExtra(EDIT_MODE, true);
-
             startActivity(intent);
         });
 
@@ -92,8 +96,15 @@ public class ConfirmBookingActivity extends AppCompatActivity {
         binding.cardViewBtnOffer.setOnClickListener(viewSelectOffer -> {
             Intent intent = new Intent(ConfirmBookingActivity.this, BookingOfferActivity.class);
             intent.putExtra(EDIT_MODE, true);
-
             startActivity(intent);
+        });
+
+        // Edit Dinner Info
+        binding.textLinkEditGuestAndDinnerInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ConfirmBookingActivity.this, GuestAndDinnerInfoActivity.class));
+            }
         });
     }
 }

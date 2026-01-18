@@ -2,12 +2,19 @@ package com.example.restaurant_reservation_lib.entity;
 
 public abstract class User {
     private final String email;
-    private String password, phoneNumber;
+    private String username, password, phoneNumber;
 
-    public User(String email, String password, String phoneNumber) {
+    // Constructor
+    public User(String username, String email, String password, String phoneNumber) {
+        this.username = username;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
+    }
+
+    // Getter
+    public String getUsername() {
+        return username;
     }
 
     public String getEmail() {
@@ -20,6 +27,11 @@ public abstract class User {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    // Setter
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPassword(String password) {

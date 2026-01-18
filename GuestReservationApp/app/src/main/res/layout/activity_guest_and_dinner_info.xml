@@ -8,6 +8,15 @@
     android:layout_height="match_parent"
     tools:context=".myprofile.PersonalDetailsActivity">
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/imgBtnBack"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/left_arrow_icon" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,33 +34,51 @@
                 android:paddingTop="48dp"
                 android:textAlignment="center"
                 android:textAppearance="@style/screen_subtitle_text" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/imgBtnBack"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@drawable/left_arrow_icon" />
         </FrameLayout>
 
-<!--    Name    -->
+<!--    First Name    -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:id="@+id/textInputName"
+            android:id="@+id/textInputFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/name"
+            android:hint="@string/firstname"
             android:textColorHint="@color/hint_and_stroke"
             android:paddingBottom="12dp"
             app:boxStrokeColor="@color/orange"
             app:endIconMode="clear_text"
             app:endIconTint="@color/grey"
-            app:placeholderText="Peter Parker"
+            app:placeholderText="Peter"
             app:placeholderTextColor="@color/hint_and_stroke">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editName"
+                android:id="@+id/editFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:lines="1"
+                android:maxLength="30"
+                android:ems="30"
+                android:inputType="textPersonName"
+                android:textAppearance="@style/input_field_text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--    First Name    -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/textInputLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/lastname"
+            android:textColorHint="@color/hint_and_stroke"
+            android:paddingBottom="12dp"
+            app:boxStrokeColor="@color/orange"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/grey"
+            app:placeholderText="Parker"
+            app:placeholderTextColor="@color/hint_and_stroke">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editLastName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lines="1"
@@ -69,23 +96,25 @@
             android:layout_height="wrap_content"
             android:hint="@string/email"
             android:textColorHint="@color/hint_and_stroke"
-            android:layout_marginBottom="12dp"
-            app:boxStrokeColor="@color/orange"
-            app:counterMaxLength="30"
-            app:endIconMode="clear_text"
-            app:endIconTint="@color/grey"
-            app:placeholderText="peter@gmail.com"
-            app:placeholderTextColor="@color/hint_and_stroke">
+            android:layout_marginBottom="12dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lines="1"
-                android:maxLength="50"
-                android:ems="50"
                 android:inputType="textWebEmailAddress"
-                android:textAppearance="@style/input_field_text" />
+                android:textAppearance="@style/input_field_text"
+                android:background="@color/disable"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email can't be changed"
+                android:textAppearance="@style/small_grey_text" />
         </com.google.android.material.textfield.TextInputLayout>
 
 <!--       Phone Number -->
@@ -125,6 +154,7 @@
 
                 <!--               Phone Number -->
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editPhone"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -148,7 +178,6 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginBottom="32dp"
             android:scrollbars="none"
             android:fillViewport="true">
