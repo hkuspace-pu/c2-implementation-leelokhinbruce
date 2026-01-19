@@ -27,9 +27,12 @@ public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
     private ActivityGuestAndDinnerInfoBinding binding;
     private String firstName, lastName, phoneNumber, occasion;
     private String selectedCountryCode;
-    private boolean isValidPhone = false,
-            firstNameNotEmpty = false,
-            lastNameNotEmpty = false;
+    private boolean isValidPhone, firstNameNotEmpty, lastNameNotEmpty;
+
+    @Override
+    public void finishActivity(int requestCode) {
+        super.finishActivity(requestCode);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +45,23 @@ public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
         binding.editPhone.addTextChangedListener(inputFieldWatcher);
 
         // Create singleton instance
-        Reservation reservation = Reservation.getInstance();
         Guest guest = Guest.getInstance();
 
         // Assign values from the Guest obj
         firstName = guest.getFirstName();
         lastName = guest.getLastName();
-        occasion = reservation.getOccasion();
-//        String phoneWithCountryCode = guest.getPhoneNumber();
-//
-//        // Split into country code and phone number
-//        Pair<String, String> splitResult = splitPhone(phoneWithCountryCode);
-//        selectedCountryCode = splitResult.first;
-//        phoneNumber = splitResult.second;
+        String phoneWithCountryCode = guest.getPhoneNumber();
+
+        // Split into country code and phone number
+        Pair<String, String> splitResult = splitPhone(phoneWithCountryCode);
+        selectedCountryCode = splitResult.first;
+        phoneNumber = splitResult.second;
+
+        // Set value for these textView
+        binding.editFirstName.setText(guest.getFirstName());
+        binding.editLastName.setText(guest.getLastName());
+        binding.editEmail.setText(guest.getEmail());
+        binding.editPhone.setText(splitResult.second);
 
         // Setup Spinner to matching country code
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -63,41 +70,9 @@ public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
         adapter.setDropDownViewResource(com.example.restaurant_reservation_lib.R.layout.spinner_dropdown_item);
         binding.spinnerCountryCode.setAdapter(adapter);
         // Select the position of the spinner as initialization
-//        int positon = adapter.getPosition(selectedCountryCode);
-//        binding.spinnerCountryCode.setSelection(Math.max(positon, 0));  // 0: fallback if not found
-
-        // Set value for these textView
-        binding.editFirstName.setText(firstName);
-        binding.editLastName.setText(lastName);
-        binding.editEmail.setText(guest.getEmail());
-        phoneNumber = guest.getPhoneNumber();
-//        binding.editPhone.setText(phoneNumber);
-
-        // Initialize array list
-        ArrayList<String> occasionList = new ArrayList<>(Arrays.asList(
-                "Birthday", "Friends Gathering", "Family Gathering", "Dating", "Celebration"
-        ));
-        // Add chips into the Occasion Chip Group
-        for (int i=0; i<occasionList.size(); i++) {
-            String chipText = occasionList.get(i);
-
-            // Inflate chip from layout
-            Chip chip = (Chip) LayoutInflater.from(GuestAndDinnerInfoActivity.this).inflate(
-                    R.layout.chip_layout, binding.chipGroupOccasion, false);
-            chip.setText(chipText);
-            chip.setCheckable(true);
-            binding.chipGroupOccasion.addView(chip);  // Add to the chip group
-        }
-        // Set selected chip
-        if (occasion != null) {
-            for (int i = 0; i < binding.chipGroupOccasion.getChildCount(); i++) {
-                Chip chip = (Chip) binding.chipGroupOccasion.getChildAt(i);
-                if (occasion.equals(chip.getText().toString())) {
-                    binding.chipGroupOccasion.check(chip.getId());
-                    return;
-                }
-            }
-        }
+        int positon = adapter.getPosition(selectedCountryCode);
+        binding.spinnerCountryCode.setSelection(Math.max(positon, 0));  // 0: fallback if not found
+        Log.d("Dinner Info", String.format("Last Name: %s\nCountry Code: %s\nPhone: %s", lastName, selectedCountryCode, phoneNumber));
 
         // Close Editing Form and back to main page
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
@@ -107,11 +82,11 @@ public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
                 selectedCountryCode = adapterView.getItemAtPosition(pos).toString();
-                if (phoneNumber != null)
+                if (phoneNumber != null) {
                     // re-validate when code changes
                     isValidPhone = validPhoneNumber(phoneNumber, selectedCountryCode, binding.textInputPhone);
-
-                binding.btnUpdate.setEnabled(firstNameNotEmpty && lastNameNotEmpty && isValidPhone);
+                    binding.btnUpdate.setEnabled(firstNameNotEmpty && lastNameNotEmpty && isValidPhone);
+                }
             }
 
             @Override
@@ -120,29 +95,14 @@ public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
             }
         });
 
-        // Get a selected chip from Time field
-        binding.chipGroupOccasion.setOnCheckedStateChangeListener(
-                (chipGroup, checkedIds) -> {
-            if (checkedIds.isEmpty()) {
-                // Uncheck the chip
-                occasion = null;
-            } else {
-                int checkedId = checkedIds.get(0);  // since single selection
-                Chip chip = chipGroup.findViewById(checkedId);
-                if (chip != null) {
-                    occasion = chip.getText().toString();
-                }
-            }
-        });
-
         // Update button click
+        binding.btnUpdate.setEnabled(true);
         binding.btnUpdate.setOnClickListener(viewUpdate -> {
             Intent intent = new Intent(GuestAndDinnerInfoActivity.this, ConfirmBookingActivity.class);
 
             guest.setFirstName(firstName);
             guest.setLastName(lastName);
             guest.setPhoneNumber(String.format("(%s) %s", selectedCountryCode, phoneNumber));
-            reservation.setOccasion(occasion);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);

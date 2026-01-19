@@ -100,11 +100,9 @@ public class ConfirmBookingActivity extends AppCompatActivity {
         });
 
         // Edit Dinner Info
-        binding.textLinkEditGuestAndDinnerInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ConfirmBookingActivity.this, GuestAndDinnerInfoActivity.class));
-            }
+        binding.textLinkEditGuestAndDinnerInfo.setOnClickListener(viewEditDinnerInfo -> {
+            Intent intent = new Intent(ConfirmBookingActivity.this, GuestAndDinnerInfoActivity.class);
+            startActivity(intent);
         });
     }
 }

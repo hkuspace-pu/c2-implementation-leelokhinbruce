@@ -55,14 +55,13 @@
                 android:id="@+id/editFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:lines="1"
                 android:maxLength="30"
                 android:ems="30"
                 android:inputType="textPersonName"
                 android:textAppearance="@style/input_field_text" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!--    First Name    -->
+        <!--    Last Name    -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/textInputLastName"
@@ -74,14 +73,13 @@
             app:boxStrokeColor="@color/orange"
             app:endIconMode="clear_text"
             app:endIconTint="@color/grey"
-            app:placeholderText="Parker"
+            app:placeholderText="Peter"
             app:placeholderTextColor="@color/hint_and_stroke">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editLastName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:lines="1"
                 android:maxLength="30"
                 android:ems="30"
                 android:inputType="textPersonName"
@@ -167,31 +165,31 @@
             </LinearLayout>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="4dp"
-            android:layout_marginTop="12dp"
-            android:text="Occasion (optional)"
-            android:textAppearance="@style/section_text" />
-        <!--       Occasion List -->
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:scrollbars="none"
-            android:fillViewport="true">
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:paddingBottom="4dp"-->
+<!--            android:layout_marginTop="12dp"-->
+<!--            android:text="Occasion (optional)"-->
+<!--            android:textAppearance="@style/section_text" />-->
+<!--        &lt;!&ndash;       Occasion List &ndash;&gt;-->
+<!--        <HorizontalScrollView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="32dp"-->
+<!--            android:scrollbars="none"-->
+<!--            android:fillViewport="true">-->
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroupOccasion"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:chipSpacing="10dp"
-                app:itemSpacing="15dp"
-                app:singleSelection="true">
-                <!--                   List chips by executing ReservationActivity.java -->
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
+<!--            <com.google.android.material.chip.ChipGroup-->
+<!--                android:id="@+id/chipGroupOccasion"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                app:chipSpacing="10dp"-->
+<!--                app:itemSpacing="15dp"-->
+<!--                app:singleSelection="true">-->
+<!--                &lt;!&ndash;                   List chips by executing ReservationActivity.java &ndash;&gt;-->
+<!--            </com.google.android.material.chip.ChipGroup>-->
+<!--        </HorizontalScrollView>-->
 
     </LinearLayout>
 
