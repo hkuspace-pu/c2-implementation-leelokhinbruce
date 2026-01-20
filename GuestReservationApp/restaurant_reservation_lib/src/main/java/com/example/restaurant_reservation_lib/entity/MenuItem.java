@@ -24,15 +24,15 @@ public class MenuItem {
     private Bitmap image;  // Stored as BLOB in SQLite
 
     @TypeConverters(DateConverter.class)
-    private Date createdAt;
+    private final Date createdAt;
 
     @TypeConverters(DateConverter.class)
     private Date updatedAt;
 
 //    Public no-arg constructor REQUIRED by Room database
 //    Reason: Room needs a public constructor to instantiate the entity when reading from the database
-    public MenuItem() {
-
+    public MenuItem(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     // Private Constructor - only access via Builder
@@ -116,10 +116,6 @@ public class MenuItem {
 
     public void setImage(Bitmap image) {
         this.image = image;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
     public void setUpdatedAt(Date updatedAt) {

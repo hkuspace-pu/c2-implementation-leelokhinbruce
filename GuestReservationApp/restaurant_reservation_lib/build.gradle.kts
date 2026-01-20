@@ -45,6 +45,9 @@ dependencies {
     // Lifecycle extensions for Room
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     annotationProcessor("androidx.lifecycle:lifecycle-compiler:2.10.0")
+    // Retrofit & Gson for API call
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

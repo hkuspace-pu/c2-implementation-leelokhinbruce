@@ -157,6 +157,7 @@
 
     </LinearLayout>
 
+<!--   Complete Button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnComplete"
         android:layout_width="match_parent"
@@ -167,4 +168,11 @@
         android:background="@drawable/btn_bg"
         android:layout_alignParentBottom="true"
         android:textAppearance="@style/btn_text" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 </RelativeLayout>

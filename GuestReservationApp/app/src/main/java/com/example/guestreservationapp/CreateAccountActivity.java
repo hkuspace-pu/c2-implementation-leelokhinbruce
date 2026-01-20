@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.guestreservationapp.databinding.ActivityCreateAccountBinding;
@@ -31,28 +32,20 @@ public class CreateAccountActivity extends BaseValidatedActivity {
         // Register button click
         binding.btnRegister.setEnabled(false);
         binding.btnRegister.setOnClickListener(viewCompleteProfile -> {
-            startActivity(new Intent(this, CompleteProfileActivity.class));
+            Intent data = new Intent(this, CompleteProfileActivity.class);
+            // Pass account data
+            data.putExtra(EXTRA_USERNAME, username);
+            data.putExtra(EXTRA_EMAIL, email);
+            data.putExtra(EXTRA_PASSWORD, password);
+            startActivity(data);
         });
 
         // Go to login screen
         binding.linkLogin.setOnClickListener(viewLogin -> {
-            moveToCompleteProfileActivity();
+            Intent data = new Intent(this, LoginActivity.class);
+            data.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(data);
         });
-    }
-
-    private void moveToCompleteProfileActivity() {
-        Intent data = new Intent(this, LoginActivity.class);
-
-        // Pass account data
-        data.putExtra(EXTRA_USERNAME, username);
-        data.putExtra(EXTRA_EMAIL, email);
-        data.putExtra(EXTRA_PASSWORD, password);
-
-        // Setting result as data
-        setResult(RESULT_OK, data);
-
-        data.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(data);
     }
 
     TextWatcher inputFieldWatcher = new TextWatcher() {

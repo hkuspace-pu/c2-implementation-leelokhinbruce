@@ -1,6 +1,10 @@
 package com.example.guestreservationapp;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -10,16 +14,32 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.guestreservationapp.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityCompleteProfileBinding;
+import com.example.guestreservationapp.mainpage.MainActivity;
+import com.example.guestreservationapp.request.LoginRequest;
+import com.example.guestreservationapp.request.RegisterRequest;
+import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CompleteProfileActivity extends BaseValidatedActivity {
     private ActivityCompleteProfileBinding binding;
     private String firstName, lastName, phoneNumber;
     private String selectedCountryCode = "+44";  // default
-    private boolean isValidPhone = false;
+    private boolean isValidPhone = false, firstNameNotEmpty = false, lastNameNotEmpty = false;
+    private ExecutorService executorService;
+    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +48,33 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
         View view = binding.getRoot();  // get a reference to the root view of the corresponding layout file
         setContentView(view);  // make it the active view on the screen
 
+        // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
+        executorService = Executors.newSingleThreadExecutor();
+        // Main thread handler
+        mainHandler = new Handler(Looper.getMainLooper());
+
+        // Get data from CreateAccountActivity
+        String username = getIntent().getStringExtra(CreateAccountActivity.EXTRA_USERNAME);
+        String email = getIntent().getStringExtra(CreateAccountActivity.EXTRA_EMAIL);
+        String password = getIntent().getStringExtra(CreateAccountActivity.EXTRA_PASSWORD);
+
         binding.editFirstName.addTextChangedListener(inputFieldWatcher);
         binding.editLastName.addTextChangedListener(inputFieldWatcher);
         binding.editPhone.addTextChangedListener(inputFieldWatcher);
 
         // Setup Spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        // Country Code Adapter
+        ArrayAdapter<CharSequence> countryCodeAdapter = ArrayAdapter.createFromResource(this,
                 com.example.restaurant_reservation_lib.R.array.country_codes,
                 com.example.restaurant_reservation_lib.R.layout.spinner_selected_item);
-        adapter.setDropDownViewResource(com.example.restaurant_reservation_lib.R.layout.spinner_dropdown_item);
-        binding.spinnerCountryCode.setAdapter(adapter);
+        countryCodeAdapter.setDropDownViewResource(com.example.restaurant_reservation_lib.R.layout.spinner_dropdown_item);
+        binding.spinnerCountryCode.setAdapter(countryCodeAdapter);
+        // Gender Adapter
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(this,
+                com.example.restaurant_reservation_lib.R.array.genders,
+                com.example.restaurant_reservation_lib.R.layout.spinner_selected_item);
+        genderAdapter.setDropDownViewResource(com.example.restaurant_reservation_lib.R.layout.spinner_dropdown_item);
+        binding.spinnerGender.setAdapter(genderAdapter);
 
         // Back
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
@@ -50,6 +87,7 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
                 if (phoneNumber != null)
                     // re-validate when code changes
                     isValidPhone = validPhoneNumber(phoneNumber, selectedCountryCode, binding.textInputPhone);
+                binding.btnComplete.setEnabled(firstNameNotEmpty && lastNameNotEmpty && isValidPhone);
             }
 
             @Override
@@ -60,12 +98,74 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
 
         // Complete button click
         binding.btnComplete.setEnabled(false);
-        binding.btnComplete.setOnClickListener(new View.OnClickListener() {
+        binding.btnComplete.setOnClickListener(viewComplete -> {
+            String gender = binding.spinnerGender.getSelectedItem().toString();
+
+            // Show alert dialog before create account
+            new MaterialAlertDialogBuilder(CompleteProfileActivity.this)
+                    .setTitle("Register Account")
+                    .setMessage("Are you sure the correct information of your account?")
+                    .setCancelable(false)
+                    .setPositiveButton("Sign In", (dialog, which) -> {
+                        isLoading(true);  // Loading progress bar
+                        String fullPhone = String.format("(%s) %s", selectedCountryCode, phoneNumber);
+                        RegisterRequest registerRequest = new RegisterRequest(username, email, password, firstName, lastName, fullPhone, gender);
+                        // Complete register and save user account by making API call
+                        executorService.execute(() ->
+                                createUserAccount(registerRequest, email, password));
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) ->
+                            dialog.cancel()).show();
+        });
+    }
+
+    // Insert user data into the local database
+    private void createUserAccount(RegisterRequest registerRequest, String email, String password) {
+        AuthApi api = ApiClient.getClient().create(AuthApi.class);
+        Call<Void> registerCall = api.registerUser(registerRequest);
+
+        // Registration
+        registerCall.enqueue(new Callback<Void>() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(CompleteProfileActivity.this, "Create Account and Profile successfully", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    mainHandler.post(() ->
+                            Toast.makeText(CompleteProfileActivity.this, "Registration successful", Toast.LENGTH_SHORT).show());
+
+                    // Auto sign in after registration
+                    LoginRequest loginRequest = new LoginRequest(email, password);
+                    Call<Void> loginCall = api.loginUser(loginRequest);
+
+                    loginCall.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                mainHandler.post(() ->
+                                        Toast.makeText(CompleteProfileActivity.this, "Login successful", Toast.LENGTH_SHORT).show());
+                            } else {
+                                mainHandler.post(() ->
+                                        Toast.makeText(CompleteProfileActivity.this, "Login failed: " + response.message(), Toast.LENGTH_SHORT).show());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.e("createUserAccount", "Login network error: " + t.getMessage());
+                        }
+                    });
+                } else {
+                    mainHandler.post(() ->
+                            Toast.makeText(CompleteProfileActivity.this, "Registration failed: " + response.message(), Toast.LENGTH_SHORT).show());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("createUserAccount", "Registration network error: " + t.getMessage());
             }
         });
+
+        mainHandler.post(() -> isLoading(false));
     }
 
     TextWatcher inputFieldWatcher = new TextWatcher() {
@@ -75,8 +175,8 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
             lastName = binding.textInputLastName.getEditText().getText().toString().trim();
             phoneNumber = binding.editPhone.getText().toString().trim();
 
-            boolean firstNameNotEmpty = isNotFieldEmpty(firstName, binding.textInputFirstName, "Please enter your first name");
-            boolean lastNameNotEmpty = isNotFieldEmpty(lastName, binding.textInputLastName, "Please enter your last name");
+            firstNameNotEmpty = isNotFieldEmpty(firstName, binding.textInputFirstName, "Please enter your first name");
+            lastNameNotEmpty = isNotFieldEmpty(lastName, binding.textInputLastName, "Please enter your last name");
             isValidPhone = validPhoneNumber(phoneNumber, selectedCountryCode, binding.textInputPhone);
 
             binding.btnComplete.setEnabled(firstNameNotEmpty && lastNameNotEmpty && isValidPhone);
@@ -92,4 +192,15 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
 
         }
     };
+
+    // Disable anything during loading data
+    private void isLoading(boolean status) {
+        if (status) {
+            binding.progressBar.setVisibility(View.VISIBLE);
+            binding.btnComplete.setClickable(false);
+        } else {
+            binding.progressBar.setVisibility(View.GONE);
+            binding.btnComplete.setClickable(true);
+        }
+    }
 }

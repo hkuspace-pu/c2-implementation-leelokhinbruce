@@ -56,7 +56,10 @@ dependencies {
     // ViewModel and LiveData
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.10.0")
     implementation("androidx.lifecycle:lifecycle-livedata:2.10.0")
-
+    // Retrofit & Gson for API call
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")  // OKHTTP3
     // java.time
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 
