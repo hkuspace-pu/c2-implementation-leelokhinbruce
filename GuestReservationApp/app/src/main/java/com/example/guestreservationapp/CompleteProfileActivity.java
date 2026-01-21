@@ -1,7 +1,9 @@
 package com.example.guestreservationapp;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,6 +24,7 @@ import com.example.guestreservationapp.request.LoginRequest;
 import com.example.guestreservationapp.request.RegisterRequest;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
+import com.example.restaurant_reservation_lib.SessionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -122,26 +125,39 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
     // Insert user data into the local database
     private void createUserAccount(RegisterRequest registerRequest, String email, String password) {
         AuthApi api = ApiClient.getClient().create(AuthApi.class);
-        Call<Void> registerCall = api.registerUser(registerRequest);
+        Call<String> registerCall = api.registerUser(registerRequest);
 
-        // Registration
-        registerCall.enqueue(new Callback<Void>() {
+        // Sign Up
+        registerCall.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     mainHandler.post(() ->
                             Toast.makeText(CompleteProfileActivity.this, "Registration successful", Toast.LENGTH_SHORT).show());
 
-                    // Auto sign in after registration
+                    // Auto Sign In after registration
                     LoginRequest loginRequest = new LoginRequest(email, password);
-                    Call<Void> loginCall = api.loginUser(loginRequest);
+                    Call<String> loginCall = api.loginUser(loginRequest);  // Returns token
 
-                    loginCall.enqueue(new Callback<Void>() {
+                    loginCall.enqueue(new Callback<String>() {
                         @Override
-                        public void onResponse(Call<Void> call, Response<Void> response) {
+                        public void onResponse(Call<String> call, Response<String> response) {
                             if (response.isSuccessful()) {
-                                mainHandler.post(() ->
-                                        Toast.makeText(CompleteProfileActivity.this, "Login successful", Toast.LENGTH_SHORT).show());
+                                String token = response.body();
+                                // Init shared preferences and support method for editing
+                                SessionManager session = new SessionManager(CompleteProfileActivity.this);
+                                // Save session in shared preferences
+                                session.saveSession(token, email);
+
+                                // Update Guest singleton with data
+//                                updateGuestSingleton(registerRequest);
+
+                                // Starting main screen
+                                mainHandler.post(() -> {
+                                    Toast.makeText(CompleteProfileActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(CompleteProfileActivity.this, MainActivity.class));
+                                    finish();
+                                });
                             } else {
                                 mainHandler.post(() ->
                                         Toast.makeText(CompleteProfileActivity.this, "Login failed: " + response.message(), Toast.LENGTH_SHORT).show());
@@ -149,7 +165,7 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<Void> call, Throwable t) {
+                        public void onFailure(Call<String> call, Throwable t) {
                             Log.e("createUserAccount", "Login network error: " + t.getMessage());
                         }
                     });
@@ -160,13 +176,27 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 Log.e("createUserAccount", "Registration network error: " + t.getMessage());
             }
         });
 
         mainHandler.post(() -> isLoading(false));
     }
+
+    // Update Guest singleton with registration data
+//    public void updateGuestSingleton(RegisterRequest registerRequest) {
+//        Guest guest = new Guest(
+//                registerRequest.getUsername(),
+//                registerRequest.getEmail(),
+//                registerRequest.getPassword(),
+//                registerRequest.getPhoneNumber(),
+//                registerRequest.getFirstName(),
+//                registerRequest.getLastName(),
+//                registerRequest.getGender()
+//        );
+//        Guest.init(guest);  // Update singleton
+//    }
 
     TextWatcher inputFieldWatcher = new TextWatcher() {
         @Override

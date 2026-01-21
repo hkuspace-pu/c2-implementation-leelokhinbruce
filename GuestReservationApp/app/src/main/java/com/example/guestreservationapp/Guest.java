@@ -14,7 +14,7 @@ public class Guest extends User {
         this.gender = gender;
     }
 
-    // Lazy initialization
+    // Lazy initialization: creation of instance when required
     public static synchronized Guest getInstance() {
         if (instance == null) {
             instance = new Guest("username", "email", "password", "phone", "firstName", "lastName", "Rather not say");

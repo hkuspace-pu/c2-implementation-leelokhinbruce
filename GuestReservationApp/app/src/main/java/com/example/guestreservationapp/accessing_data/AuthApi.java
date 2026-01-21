@@ -11,8 +11,8 @@ import retrofit2.http.POST;
 public interface AuthApi {
     // Returns Void since backend returns String msg
     @POST("/api/auth/register")
-    Call<Void> registerUser(@Body RegisterRequest registerRequest);
+    Call<String> registerUser(@Body RegisterRequest registerRequest);
 
     @POST("/api/auth/login")
-    Call<Void> loginUser(@Body LoginRequest loginRequest);
+    Call<String> loginUser(@Body LoginRequest loginRequest);
 }
