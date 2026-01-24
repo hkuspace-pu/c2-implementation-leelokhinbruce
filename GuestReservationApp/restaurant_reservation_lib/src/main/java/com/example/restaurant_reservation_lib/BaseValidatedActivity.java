@@ -3,15 +3,13 @@ package com.example.restaurant_reservation_lib;
 import android.content.res.ColorStateList;
 import android.text.TextUtils;
 import android.util.Patterns;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BaseValidatedActivity extends AppCompatActivity {
+public class BaseValidatedActivity extends SessionManager {
     private static final Map<String, PhoneRule> PHONE_RULES = new HashMap<>();
 
     static {

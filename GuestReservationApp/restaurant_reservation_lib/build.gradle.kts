@@ -48,6 +48,9 @@ dependencies {
     // Retrofit & Gson for API call
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    // RxDataStore in DataStore
+    implementation("androidx.datastore:datastore-preferences-rxjava2:1.0.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

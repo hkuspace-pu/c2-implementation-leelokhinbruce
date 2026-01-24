@@ -49,6 +49,8 @@ dependencies {
 
     // Room database (SQLite)
     implementation("androidx.room:room-runtime:2.8.4")
+    implementation(libs.datastore.rxjava2)
+//    implementation(libs.datastore.preferences.core.jvm)
     annotationProcessor("androidx.room:room-compiler:2.8.4")
     // Lifecycle extensions for Room
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
@@ -60,6 +62,9 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.10.0")  // OKHTTP3
+    // RxDataStore in DataStore
+    implementation("androidx.datastore:datastore-preferences-core:1.2.0")
+    implementation("androidx.datastore:datastore-preferences-rxjava2:1.0.0")
     // java.time
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 

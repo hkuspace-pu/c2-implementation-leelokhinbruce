@@ -1,8 +1,6 @@
 package com.example.guestreservationapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,30 +10,39 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.datastore.preferences.core.Preferences;
+import androidx.datastore.preferences.core.PreferencesKeys;
+import androidx.datastore.preferences.rxjava2.RxPreferenceDataStoreBuilder;
+import androidx.datastore.rxjava2.RxDataStore;
 
 import com.example.guestreservationapp.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityLoginBinding;
 import com.example.guestreservationapp.mainpage.MainActivity;
 import com.example.guestreservationapp.request.LoginRequest;
-import com.example.guestreservationapp.request.RegisterRequest;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
-import com.example.restaurant_reservation_lib.SessionManager;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.example.restaurant_reservation_lib.DataStoreManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LoginActivity extends BaseValidatedActivity {
     private ActivityLoginBinding binding;
     private String emailOrUsername, password;
     private ExecutorService executorService;
     private Handler mainHandler;
-    private SessionManager session;
+    // DataStore for secure preferences
+    // Used to store key-value pairs in a file
+    private RxDataStore<Preferences> dataStore;
+    private String accessToken;
+
+    // DataStore keys for tokens
+    private static final Preferences.Key<String> KEY_ACCESS_TOKEN = PreferencesKeys.stringKey("access_token");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,30 +51,29 @@ public class LoginActivity extends BaseValidatedActivity {
         View view = binding.getRoot();  // get a reference to the root view of the corresponding layout file
         setContentView(view);  // make it the active view on the screen
 
+        // Init DataStore
+        dataStore = DataStoreManager.getInstance(this);
+
+        // Auto-login if session exists
+        accessToken = getAccessToken(dataStore, KEY_ACCESS_TOKEN);
+        if (accessToken != null) {
+            Log.d("LoginActivity", "Get Token from DataStore: " + accessToken);
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+
         // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
         executorService = Executors.newSingleThreadExecutor();
         // Main thread handler
         mainHandler = new Handler(Looper.getMainLooper());
 
-        // Init shared preferences and support method for editing
-        session = new SessionManager(this);
-        // Check if session is exists then one current user is logged
-        if (session.isLoggedIn()) {
-            // Has session
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }
-        Log.e("LoginActivity", "Session: " + session.getToken());
-
-        // Monitoring input fields
         binding.editEmailOrUsername.addTextChangedListener(inputFieldWatcher);
         binding.editPasswd.addTextChangedListener(inputFieldWatcher);
 
         binding.btnLogin.setEnabled(false);
         // Login button click
-        binding.btnLogin.setOnClickListener(viewLogin -> {
-            executorService.execute(() -> loginUser(emailOrUsername, password));
-        });
+        binding.btnLogin.setOnClickListener(viewLogin ->
+                executorService.execute(() -> loginUser(emailOrUsername, password)));
 
         // Go to Register screen
         binding.linkRegister.setOnClickListener(viewRegister -> {
@@ -77,27 +83,29 @@ public class LoginActivity extends BaseValidatedActivity {
         });
     }
 
-    // Sign In for validating user credential
     private void loginUser(String usernameOrEmail, String password) {
         LoginRequest loginRequest = new LoginRequest(usernameOrEmail, password);
         AuthApi api = ApiClient.getClient().create(AuthApi.class);
-        Call<String> call = api.loginUser(loginRequest);  // Returns token
+        Call<Map<String, String>> call = api.loginUser(loginRequest);  // Returns token
 
-        // Send POST request
-        call.enqueue(new Callback<String>() {
+        // Handle the response in Callback
+        call.enqueue(new Callback<Map<String, String>>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                // backend response: (return new ResponseEntity<>(...))
                 if (response.isSuccessful()) {
-                    String token = response.body();
-                    // Save session in shared preferences
-                    session.saveSession(token, usernameOrEmail);
-                    Log.d("loginUser", "Token: " + token);
+                    accessToken = response.body().get("access_token");
 
-                    // Starting main screen
+                    // Store tokens in DataStore
+                    saveToken(accessToken, dataStore, KEY_ACCESS_TOKEN);
+
+                    // Go to main screen
                     mainHandler.post(() -> {
+                        Log.d("loginUser", "Token: " + accessToken);
                         Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
+                        Intent intent = new Intent(new Intent(LoginActivity.this, MainActivity.class));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
                     });
                 } else {
                     mainHandler.post(() ->
@@ -106,8 +114,8 @@ public class LoginActivity extends BaseValidatedActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.e("login", "Network error: " + t.getMessage());
+            public void onFailure(Call<Map<String, String>> call, Throwable t) {
+                Log.e("loginUser", "Network error: " + t.getMessage());
             }
         });
     }

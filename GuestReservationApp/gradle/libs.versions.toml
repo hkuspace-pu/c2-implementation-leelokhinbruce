@@ -8,6 +8,8 @@ material = "1.10.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 playServicesMaps = "19.2.0"
+datastoreRxjava2 = "1.2.0"
+datastorePreferencesCoreJvm = "1.2.0"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -18,6 +20,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+datastore-rxjava2 = { group = "androidx.datastore", name = "datastore-rxjava2", version.ref = "datastoreRxjava2" }
+datastore-preferences-core-jvm = { group = "androidx.datastore", name = "datastore-preferences-core-jvm", version.ref = "datastorePreferencesCoreJvm" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

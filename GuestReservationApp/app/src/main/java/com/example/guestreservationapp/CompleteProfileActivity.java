@@ -1,9 +1,6 @@
 package com.example.guestreservationapp;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,9 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.guestreservationapp.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityCompleteProfileBinding;
 import com.example.guestreservationapp.mainpage.MainActivity;
@@ -24,17 +18,23 @@ import com.example.guestreservationapp.request.LoginRequest;
 import com.example.guestreservationapp.request.RegisterRequest;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
-import com.example.restaurant_reservation_lib.SessionManager;
+import com.example.restaurant_reservation_lib.DataStoreManager;
+import com.example.restaurant_reservation_lib.Encryptor;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import androidx.datastore.preferences.core.MutablePreferences;
+import androidx.datastore.preferences.core.Preferences;
+import androidx.datastore.preferences.core.PreferencesKeys;
+import androidx.datastore.preferences.rxjava2.RxPreferenceDataStoreBuilder;
+import androidx.datastore.rxjava2.RxDataStore;
 
 public class CompleteProfileActivity extends BaseValidatedActivity {
     private ActivityCompleteProfileBinding binding;
@@ -43,6 +43,12 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
     private boolean isValidPhone = false, firstNameNotEmpty = false, lastNameNotEmpty = false;
     private ExecutorService executorService;
     private Handler mainHandler;
+    // DataStore for secure preferences
+    // Used to store key-value pairs in a file
+    private RxDataStore<Preferences> dataStore;
+
+    // DataStore keys for tokens
+    private static final Preferences.Key<String> KEY_ACCESS_TOKEN = PreferencesKeys.stringKey("access_token");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,9 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
         binding = ActivityCompleteProfileBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         View view = binding.getRoot();  // get a reference to the root view of the corresponding layout file
         setContentView(view);  // make it the active view on the screen
+
+        // Init DataStore
+        dataStore = DataStoreManager.getInstance(this);
 
         // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
         executorService = Executors.newSingleThreadExecutor();
@@ -125,37 +134,35 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
     // Insert user data into the local database
     private void createUserAccount(RegisterRequest registerRequest, String email, String password) {
         AuthApi api = ApiClient.getClient().create(AuthApi.class);
-        Call<String> registerCall = api.registerUser(registerRequest);
+        Call<Map<String, String>> registerCall = api.registerUser(registerRequest);
 
         // Sign Up
-        registerCall.enqueue(new Callback<String>() {
+        registerCall.enqueue(new Callback<Map<String, String>>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
                 if (response.isSuccessful()) {
                     mainHandler.post(() ->
                             Toast.makeText(CompleteProfileActivity.this, "Registration successful", Toast.LENGTH_SHORT).show());
 
                     // Auto Sign In after registration
                     LoginRequest loginRequest = new LoginRequest(email, password);
-                    Call<String> loginCall = api.loginUser(loginRequest);  // Returns token
+                    Call<Map<String, String>> loginCall = api.loginUser(loginRequest);  // Returns token
 
-                    loginCall.enqueue(new Callback<String>() {
+                    loginCall.enqueue(new Callback<Map<String, String>>() {
                         @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
+                        public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
                             if (response.isSuccessful()) {
-                                String token = response.body();
-                                // Init shared preferences and support method for editing
-                                SessionManager session = new SessionManager(CompleteProfileActivity.this);
-                                // Save session in shared preferences
-                                session.saveSession(token, email);
+                                // Encrypt and save tokens
+                                String accessToken = response.body().get("access_token");
 
-                                // Update Guest singleton with data
-//                                updateGuestSingleton(registerRequest);
+                                // Store tokens in DataStore
+                                saveToken(accessToken, dataStore, KEY_ACCESS_TOKEN);
 
                                 // Starting main screen
                                 mainHandler.post(() -> {
                                     Toast.makeText(CompleteProfileActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(CompleteProfileActivity.this, MainActivity.class));
+                                    Intent intent = new Intent(new Intent(CompleteProfileActivity.this, MainActivity.class));
+                                    startActivity(intent);
                                     finish();
                                 });
                             } else {
@@ -165,7 +172,7 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<String> call, Throwable t) {
+                        public void onFailure(Call<Map<String, String>> call, Throwable t) {
                             Log.e("createUserAccount", "Login network error: " + t.getMessage());
                         }
                     });
@@ -176,7 +183,7 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Map<String, String>> call, Throwable t) {
                 Log.e("createUserAccount", "Registration network error: " + t.getMessage());
             }
         });
@@ -184,20 +191,7 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
         mainHandler.post(() -> isLoading(false));
     }
 
-    // Update Guest singleton with registration data
-//    public void updateGuestSingleton(RegisterRequest registerRequest) {
-//        Guest guest = new Guest(
-//                registerRequest.getUsername(),
-//                registerRequest.getEmail(),
-//                registerRequest.getPassword(),
-//                registerRequest.getPhoneNumber(),
-//                registerRequest.getFirstName(),
-//                registerRequest.getLastName(),
-//                registerRequest.getGender()
-//        );
-//        Guest.init(guest);  // Update singleton
-//    }
-
+    // Monitor input fields
     TextWatcher inputFieldWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {

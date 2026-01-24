@@ -1,48 +1,52 @@
 package com.example.restaurant_reservation_lib;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.util.Log;
 
-public class SessionManager {
-    private static final String PREF_NAME = "user_session";
-    private static final String TOKEN_KEY = "jwt_token";
-    private static final String USERNAME_OR_EMAIL_KEY = "username_or_email";
+import androidx.appcompat.app.AppCompatActivity;
+import io.reactivex.Single;
+import io.reactivex.functions.Function;
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+import androidx.datastore.preferences.core.Preferences;
+import androidx.datastore.preferences.core.MutablePreferences;
+import androidx.datastore.rxjava2.RxDataStore;
 
-    // Constructor
-    public SessionManager(Context context) {
-        // Initialize shared preferences
-        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        // Call method to edit values in shared preferences
-        editor = sharedPreferences.edit();
+public class SessionManager extends AppCompatActivity {
+    // Save encrypted token in DataStore
+    protected void saveToken(String accessToken, RxDataStore<Preferences> dataStore,
+                              Preferences.Key<String> key_token) {
+        // Encrypt tokens
+        String encryptedAccessToken = Encryptor.encrypt(accessToken);
+
+        // Store in DataStore
+        // updateDataAsync(): ensure thread-safe, atomic changes
+        Single<Preferences> updateSingle = dataStore.updateDataAsync(prefs -> {
+            MutablePreferences mutable = prefs.toMutablePreferences();
+            mutable.set(key_token, encryptedAccessToken);
+            return Single.just(mutable);
+        });
+        updateSingle.subscribe();
+        Log.d("saveTokens", "Token saved in DataStore");
     }
 
-    // Save values in shared preferences
-    public void saveSession(String token, String usernameOrEmail) {
-        editor.putString(TOKEN_KEY, token);
-        editor.putString(USERNAME_OR_EMAIL_KEY, usernameOrEmail);
-        editor.apply();  // Save data with key and value
+    // Retrieve and decrypt access token
+    protected String getAccessToken(RxDataStore<Preferences> dataStore,
+                                    Preferences.Key<String> key_token) {
+        Preferences prefs = dataStore.data().blockingFirst();
+        String encryptedToken = prefs.get(key_token);
+
+        return encryptedToken != null ? Encryptor.decrypt(encryptedToken) : null;
     }
 
-    // Get data from shared preferences
-    public String getToken() {
-        return sharedPreferences.getString(TOKEN_KEY, null);
-    }
-
-    public String getUsernameOrEmailKey() {
-        return sharedPreferences.getString(USERNAME_OR_EMAIL_KEY, null);
-    }
-
-    // Auto-login if token is exist
-    public boolean isLoggedIn() {
-        return getToken() != null;
-    }
-
-    // Clear the data in shared preferences
-    public void clearSession() {
-        editor.clear();
-        editor.apply();  // Apply empty data
+    // Clear token
+    protected void clearToken(RxDataStore<Preferences> dataStore) {
+        Single<Preferences> updateSingle = dataStore.updateDataAsync(prefs -> {
+            MutablePreferences mutable = prefs.toMutablePreferences();
+            mutable.clear();
+            return Single.just(mutable);
+        });
+        updateSingle.subscribe(
+                preferences -> Log.d("SessionManager", "Token cleared successfully"),
+                throwable -> Log.e("SessionManager", "Failed to clear token: " + throwable.getMessage())
+        );
     }
 }
