@@ -10,18 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.datastore.preferences.core.Preferences;
-import androidx.datastore.preferences.core.PreferencesKeys;
-import androidx.datastore.preferences.rxjava2.RxPreferenceDataStoreBuilder;
-import androidx.datastore.rxjava2.RxDataStore;
-
 import com.example.guestreservationapp.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityLoginBinding;
 import com.example.guestreservationapp.mainpage.MainActivity;
 import com.example.guestreservationapp.request.LoginRequest;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
-import com.example.restaurant_reservation_lib.DataStoreManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,13 +30,6 @@ public class LoginActivity extends BaseValidatedActivity {
     private String emailOrUsername, password;
     private ExecutorService executorService;
     private Handler mainHandler;
-    // DataStore for secure preferences
-    // Used to store key-value pairs in a file
-    private RxDataStore<Preferences> dataStore;
-    private String accessToken;
-
-    // DataStore keys for tokens
-    private static final Preferences.Key<String> KEY_ACCESS_TOKEN = PreferencesKeys.stringKey("access_token");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +38,10 @@ public class LoginActivity extends BaseValidatedActivity {
         View view = binding.getRoot();  // get a reference to the root view of the corresponding layout file
         setContentView(view);  // make it the active view on the screen
 
-        // Init DataStore
-        dataStore = DataStoreManager.getInstance(this);
-
-        // Auto-login if session exists
-        accessToken = getAccessToken(dataStore, KEY_ACCESS_TOKEN);
-        if (accessToken != null) {
-            Log.d("LoginActivity", "Get Token from DataStore: " + accessToken);
+        // Auto-login if session exists (token stores in DataStore already)
+        String token = getAccessToken();
+        if (token != null) {
+            Log.d("LoginActivity", "Get Token from DataStore: " + token);
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
@@ -85,7 +69,7 @@ public class LoginActivity extends BaseValidatedActivity {
 
     private void loginUser(String usernameOrEmail, String password) {
         LoginRequest loginRequest = new LoginRequest(usernameOrEmail, password);
-        AuthApi api = ApiClient.getClient().create(AuthApi.class);
+        AuthApi api = ApiClient.getClient(null).create(AuthApi.class);
         Call<Map<String, String>> call = api.loginUser(loginRequest);  // Returns token
 
         // Handle the response in Callback
@@ -94,10 +78,10 @@ public class LoginActivity extends BaseValidatedActivity {
             public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
                 // backend response: (return new ResponseEntity<>(...))
                 if (response.isSuccessful()) {
-                    accessToken = response.body().get("access_token");
+                    String accessToken = response.body().get("access_token");
 
                     // Store tokens in DataStore
-                    saveToken(accessToken, dataStore, KEY_ACCESS_TOKEN);
+                    saveToken(accessToken);
 
                     // Go to main screen
                     mainHandler.post(() -> {

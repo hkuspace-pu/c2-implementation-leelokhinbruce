@@ -43,12 +43,6 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
     private boolean isValidPhone = false, firstNameNotEmpty = false, lastNameNotEmpty = false;
     private ExecutorService executorService;
     private Handler mainHandler;
-    // DataStore for secure preferences
-    // Used to store key-value pairs in a file
-    private RxDataStore<Preferences> dataStore;
-
-    // DataStore keys for tokens
-    private static final Preferences.Key<String> KEY_ACCESS_TOKEN = PreferencesKeys.stringKey("access_token");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +50,6 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
         binding = ActivityCompleteProfileBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         View view = binding.getRoot();  // get a reference to the root view of the corresponding layout file
         setContentView(view);  // make it the active view on the screen
-
-        // Init DataStore
-        dataStore = DataStoreManager.getInstance(this);
 
         // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
         executorService = Executors.newSingleThreadExecutor();
@@ -133,7 +124,7 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
 
     // Insert user data into the local database
     private void createUserAccount(RegisterRequest registerRequest, String email, String password) {
-        AuthApi api = ApiClient.getClient().create(AuthApi.class);
+        AuthApi api = ApiClient.getClient(null).create(AuthApi.class);
         Call<Map<String, String>> registerCall = api.registerUser(registerRequest);
 
         // Sign Up
@@ -156,7 +147,7 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
                                 String accessToken = response.body().get("access_token");
 
                                 // Store tokens in DataStore
-                                saveToken(accessToken, dataStore, KEY_ACCESS_TOKEN);
+                                saveToken(accessToken);
 
                                 // Starting main screen
                                 mainHandler.post(() -> {

@@ -1,27 +1,44 @@
 package com.example.restaurant_reservation_lib;
 
+import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Single;
 import io.reactivex.functions.Function;
 
 import androidx.datastore.preferences.core.Preferences;
 import androidx.datastore.preferences.core.MutablePreferences;
+import androidx.datastore.preferences.core.PreferencesKeys;
 import androidx.datastore.rxjava2.RxDataStore;
 
 public class SessionManager extends AppCompatActivity {
+    // DataStore for secure preferences
+    // Used to store key-value pairs in a file
+    private RxDataStore<Preferences> dataStore;
+
+    // DataStore keys for tokens
+    private static final Preferences.Key<String> KEY_ACCESS_TOKEN = PreferencesKeys.stringKey("access_token");
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Init DataStore
+        dataStore = DataStoreManager.getInstance(this);
+    }
+
     // Save encrypted token in DataStore
-    protected void saveToken(String accessToken, RxDataStore<Preferences> dataStore,
-                              Preferences.Key<String> key_token) {
-        // Encrypt tokens
+    protected void saveToken(String accessToken) {
+        // Encrypt tokens and user id
         String encryptedAccessToken = Encryptor.encrypt(accessToken);
 
         // Store in DataStore
         // updateDataAsync(): ensure thread-safe, atomic changes
         Single<Preferences> updateSingle = dataStore.updateDataAsync(prefs -> {
             MutablePreferences mutable = prefs.toMutablePreferences();
-            mutable.set(key_token, encryptedAccessToken);
+            mutable.set(KEY_ACCESS_TOKEN, encryptedAccessToken);
+            // Store user id too
             return Single.just(mutable);
         });
         updateSingle.subscribe();
@@ -29,16 +46,15 @@ public class SessionManager extends AppCompatActivity {
     }
 
     // Retrieve and decrypt access token
-    protected String getAccessToken(RxDataStore<Preferences> dataStore,
-                                    Preferences.Key<String> key_token) {
+    protected String getAccessToken() {
         Preferences prefs = dataStore.data().blockingFirst();
-        String encryptedToken = prefs.get(key_token);
+        String encryptedToken = prefs.get(KEY_ACCESS_TOKEN);
 
         return encryptedToken != null ? Encryptor.decrypt(encryptedToken) : null;
     }
 
     // Clear token
-    protected void clearToken(RxDataStore<Preferences> dataStore) {
+    protected void clearToken() {
         Single<Preferences> updateSingle = dataStore.updateDataAsync(prefs -> {
             MutablePreferences mutable = prefs.toMutablePreferences();
             mutable.clear();

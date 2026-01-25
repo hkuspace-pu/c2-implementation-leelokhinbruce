@@ -17,7 +17,8 @@ public class Guest extends User {
     // Lazy initialization: creation of instance when required
     public static synchronized Guest getInstance() {
         if (instance == null) {
-            instance = new Guest("username", "email", "password", "phone", "firstName", "lastName", "Rather not say");
+            // default instance without any data (except gender)
+            instance = new Guest(null, null, null, null, null, null, "Rather not say");
         }
 
         return instance;
@@ -53,5 +54,10 @@ public class Guest extends User {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    // Clear Guest instance data
+    public static void resetInstance() {
+        instance = null;
     }
 }

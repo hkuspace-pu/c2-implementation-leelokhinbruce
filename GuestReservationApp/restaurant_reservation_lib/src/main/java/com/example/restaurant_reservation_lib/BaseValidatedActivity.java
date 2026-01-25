@@ -2,12 +2,15 @@ package com.example.restaurant_reservation_lib;
 
 import android.content.res.ColorStateList;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.util.Patterns;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BaseValidatedActivity extends SessionManager {
     private static final Map<String, PhoneRule> PHONE_RULES = new HashMap<>();
@@ -121,5 +124,21 @@ public class BaseValidatedActivity extends SessionManager {
             confirmedPasswordTextField.setError("Password is not match");
             return false;
         }
+    }
+
+    // Helper: Split country code and phone number
+    protected Pair<String, String> splitPhone(String fullPhone) {
+        Pattern pattern = Pattern.compile("\\(\\+(\\d+)\\)\\s*(\\d+)");
+        Matcher matcher = pattern.matcher(fullPhone);
+
+        // Match the pattern
+        if (matcher.matches()) {
+            String code = "+" + matcher.group(1);
+            String number = matcher.group(2);
+            return new Pair<>(code, number);
+        }
+
+        // Error case
+        return new Pair<>("+44", "");
     }
 }

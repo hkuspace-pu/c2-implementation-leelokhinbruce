@@ -72,7 +72,6 @@ public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
         // Select the position of the spinner as initialization
         int positon = adapter.getPosition(selectedCountryCode);
         binding.spinnerCountryCode.setSelection(Math.max(positon, 0));  // 0: fallback if not found
-        Log.d("Dinner Info", String.format("Last Name: %s\nCountry Code: %s\nPhone: %s", lastName, selectedCountryCode, phoneNumber));
 
         // Close Editing Form and back to main page
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
@@ -107,22 +106,6 @@ public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         });
-    }
-
-    // Helper: Split country code and phone number
-    private Pair<String, String> splitPhone(String fullPhone) {
-        Pattern pattern = Pattern.compile("\\(\\+(\\d+)\\)\\s*(\\d+)");
-        Matcher matcher = pattern.matcher(fullPhone);
-
-        // Match the pattern
-        if (matcher.matches()) {
-            String code = "+" + matcher.group(1);
-            String number = matcher.group(2);
-            return new Pair<>(code, number);
-        }
-
-        // Error case
-        return new Pair<>("+44", "");
     }
 
     // Text input monitor

@@ -3,18 +3,28 @@ package com.example.guestreservationapp.mainpage;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.guestreservationapp.Guest;
 import com.example.guestreservationapp.R;
+import com.example.guestreservationapp.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityMainBinding;
+import com.example.restaurant_reservation_lib.ApiClient;
+import com.example.restaurant_reservation_lib.SessionManager;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class MainActivity extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MainActivity extends SessionManager {
     private ActivityMainBinding binding;
     private Fragment homeFragment, menuFragment, reservationsFragment, discoverFragment, profileFragment;
     private ExecutorService executorService;
@@ -31,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         executorService = Executors.newSingleThreadExecutor();
         // Main thread handler
         mainHandler = new Handler(Looper.getMainLooper());
+
+        // Fetch user data
+        executorService.execute(this::fetchUserData);
 
         // screens of menu
         homeFragment = new HomeFragment();
@@ -72,5 +85,30 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.mainContainer, fragment)
                 .commit();
+    }
+
+    // Fetch user data
+    private void fetchUserData() {
+        String token = getAccessToken();
+        AuthApi api = ApiClient.getClient(token).create(AuthApi.class);
+        Call<Guest> call = api.getGuestData("Bearer " + token);  // show for clarity even the token in interceptor
+
+        call.enqueue(new Callback<Guest>() {
+            @Override
+            public void onResponse(Call<Guest> call, Response<Guest> response) {
+                if (response.isSuccessful()) {
+                    Guest guest = response.body();
+                    Guest.init(guest);
+                    Log.d("MainActivity fetchUserData()", "User instance: " + guest);
+                } else {
+                    Log.e("MainActivity fetchUserData()", "Failed to fetch user data: " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Guest> call, Throwable t) {
+                Log.e("MainActivity fetchUserData()", "Network error: " + t.getMessage());
+            }
+        });
     }
 }
