@@ -1,8 +1,8 @@
 package com.example.restaurant_reservation_lib.entity;
 
 public abstract class User {
-    private final String email;
-    private String username, password, phoneNumber;
+    private final String email, username;
+    private String password, phoneNumber;
 
     // Constructor
     public User(String username, String email, String password, String phoneNumber) {
@@ -30,10 +30,6 @@ public abstract class User {
     }
 
     // Setter
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }

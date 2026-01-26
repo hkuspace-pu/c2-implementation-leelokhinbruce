@@ -1,23 +1,33 @@
 package com.example.guestreservationapp.myprofile;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.guestreservationapp.Guest;
+import com.example.guestreservationapp.accessing_data.GuestInfoApi;
 import com.example.guestreservationapp.databinding.ActivityPhoneNumberBinding;
+import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PhoneNumberActivity extends BaseValidatedActivity {
     private ActivityPhoneNumberBinding binding;
@@ -62,7 +72,7 @@ public class PhoneNumberActivity extends BaseValidatedActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                phoneNumber = binding.textInputPhone.getEditText().getText().toString().trim();
+                phoneNumber = charSequence.toString().trim();
                 isValidPhone = validPhoneNumber(phoneNumber, countryCode, binding.textInputPhone);
                 binding.btnUpdate.setEnabled(isValidPhone);
             }
@@ -100,5 +110,51 @@ public class PhoneNumberActivity extends BaseValidatedActivity {
         });
 
         // Update button click
+        binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialAlertDialogBuilder(PhoneNumberActivity.this)
+                        .setTitle("Update Phone Number")
+                        .setMessage("Are your sure to update the phone number?")
+                        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String fullPhone = String.format("(%s) %s", countryCode, phoneNumber);
+                                executorService.execute(() -> savePhoneNumber(fullPhone));
+                            }
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel()).show();
+            }
+        });
+    }
+
+    // Update phone number
+    private void savePhoneNumber(String fullPhone) {
+        String token = getAccessToken();
+        GuestInfoApi api = ApiClient.getClient(token).create(GuestInfoApi.class);
+
+        Guest guest = Guest.getInstance();
+        guest.setPhoneNumber(fullPhone);
+
+        Call<String> call = api.updateProfileDetails(guest);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    mainHandler.post(() -> {
+                        Toast.makeText(PhoneNumberActivity.this, "Phone number updated successfully", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                } else {
+                    mainHandler.post(() ->
+                            Toast.makeText(PhoneNumberActivity.this, "Update failed: " + response.message(), Toast.LENGTH_SHORT).show());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("savePhoneNumber", "Network error: " + t.getMessage());
+            }
+        });
     }
 }

@@ -1,4 +1,4 @@
-package com.example.guestreservationapp.request;
+package com.example.restaurant_reservation_lib.request;
 
 public class LoginRequest {
     private String usernameOrEmail, password;

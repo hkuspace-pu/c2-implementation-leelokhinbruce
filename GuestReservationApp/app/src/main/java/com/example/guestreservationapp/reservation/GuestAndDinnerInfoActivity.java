@@ -4,24 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.example.guestreservationapp.R;
 import com.example.guestreservationapp.databinding.ActivityGuestAndDinnerInfoBinding;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
 import com.example.guestreservationapp.Guest;
-import com.example.restaurant_reservation_lib.entity.Reservation;
-import com.google.android.material.chip.Chip;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
     private ActivityGuestAndDinnerInfoBinding binding;

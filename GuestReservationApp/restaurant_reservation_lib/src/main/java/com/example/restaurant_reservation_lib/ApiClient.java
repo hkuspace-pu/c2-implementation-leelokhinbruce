@@ -28,7 +28,7 @@ public class ApiClient{
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .client(client)
-                    .baseUrl("http://192.168.50.246:8080/")  // Connected website
+                    .baseUrl("http://192.168.50.246:8080/")  // Connected website (e.g. http://192.168.50.246:8080/)
                     // addConverterFactory(): uses Gson as info handling Converte
                     .addConverterFactory(ScalarsConverterFactory.create())  // handles plain strings
                     .addConverterFactory(GsonConverterFactory.create())  // Change to Gson info

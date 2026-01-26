@@ -5,14 +5,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.guestreservationapp.Guest;
 import com.example.guestreservationapp.R;
-import com.example.guestreservationapp.accessing_data.AuthApi;
+import com.example.guestreservationapp.accessing_data.GuestInfoApi;
 import com.example.guestreservationapp.databinding.ActivityMainBinding;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.SessionManager;
@@ -90,8 +88,9 @@ public class MainActivity extends SessionManager {
     // Fetch user data
     private void fetchUserData() {
         String token = getAccessToken();
-        AuthApi api = ApiClient.getClient(token).create(AuthApi.class);
-        Call<Guest> call = api.getGuestData("Bearer " + token);  // show for clarity even the token in interceptor
+        // getClient(token): pass the token to the Authorization header
+        GuestInfoApi api = ApiClient.getClient(token).create(GuestInfoApi.class);
+        Call<Guest> call = api.getGuestData();
 
         call.enqueue(new Callback<Guest>() {
             @Override

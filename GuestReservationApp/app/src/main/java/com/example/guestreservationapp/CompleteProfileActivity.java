@@ -11,30 +11,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-import com.example.guestreservationapp.accessing_data.AuthApi;
+import com.example.restaurant_reservation_lib.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityCompleteProfileBinding;
 import com.example.guestreservationapp.mainpage.MainActivity;
-import com.example.guestreservationapp.request.LoginRequest;
-import com.example.guestreservationapp.request.RegisterRequest;
+import com.example.restaurant_reservation_lib.request.LoginRequest;
+import com.example.restaurant_reservation_lib.request.RegisterRequest;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
-import com.example.restaurant_reservation_lib.DataStoreManager;
-import com.example.restaurant_reservation_lib.Encryptor;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import androidx.datastore.preferences.core.MutablePreferences;
-import androidx.datastore.preferences.core.Preferences;
-import androidx.datastore.preferences.core.PreferencesKeys;
-import androidx.datastore.preferences.rxjava2.RxPreferenceDataStoreBuilder;
-import androidx.datastore.rxjava2.RxDataStore;
 
 public class CompleteProfileActivity extends BaseValidatedActivity {
     private ActivityCompleteProfileBinding binding;
@@ -151,7 +142,7 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
 
                                 // Starting main screen
                                 mainHandler.post(() -> {
-                                    Toast.makeText(CompleteProfileActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(CompleteProfileActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(new Intent(CompleteProfileActivity.this, MainActivity.class));
                                     startActivity(intent);
                                     finish();

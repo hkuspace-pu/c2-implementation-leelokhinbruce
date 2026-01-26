@@ -1,4 +1,4 @@
-package com.example.guestreservationapp.request;
+package com.example.restaurant_reservation_lib.request;
 
 public class RegisterRequest {
     private String username, email, password, firstName, lastName, phoneNumber, gender;

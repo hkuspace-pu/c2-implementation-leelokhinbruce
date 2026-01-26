@@ -1,7 +1,6 @@
 package com.example.restaurant_reservation_lib.entity;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

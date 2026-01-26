@@ -1,17 +1,14 @@
 package com.example.adminreservationmanagementapp;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -24,8 +21,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class SpecificMenuActivity extends AppCompatActivity {
     private ActivitySpecificMenuBinding binding;
@@ -150,6 +145,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
                     true
             ).build();
 
+            // Insert the menu item data into the local database
             menuItemViewModel.insertMenuItem(menuItem);
 
             Log.d("SpecialMenuActivity onActivityResult()", "Result code: " + resultCode + "\nItem Id: " + menuItem.getId());
@@ -181,6 +177,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
             ).build();
             menuItem.setId(id);
 
+            // Update the menu item data from the local database
             menuItemViewModel.updateMenuItem(menuItem);
             Log.d("SpecialMenuActivity onActivityResult()", "Result code: " + resultCode + "\nItem Id: " + menuItem.getId());
             Toast.makeText(this, "Menu item updated", Toast.LENGTH_SHORT).show();

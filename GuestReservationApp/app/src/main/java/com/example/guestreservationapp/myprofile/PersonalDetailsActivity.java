@@ -1,25 +1,28 @@
 package com.example.guestreservationapp.myprofile;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.example.guestreservationapp.Guest;
-import com.example.guestreservationapp.R;
+import com.example.guestreservationapp.accessing_data.GuestInfoApi;
 import com.example.guestreservationapp.databinding.ActivityPersonalDetailsBinding;
+import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PersonalDetailsActivity extends BaseValidatedActivity {
     private ActivityPersonalDetailsBinding binding;
@@ -62,27 +65,48 @@ public class PersonalDetailsActivity extends BaseValidatedActivity {
         binding.imgBtnBack.setOnClickListener(viewBack -> finish());
 
         // Update button click
-        binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new MaterialAlertDialogBuilder(PersonalDetailsActivity.this)
-                        .setTitle("Update Profile Details")
-                        .setMessage("Are you sure to update your profile details?")
-                        .setCancelable(false)
-                        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        })
-                        .setNegativeButton("Cancel", (dialog, which) ->
-                                dialog.cancel()).show();
-            }
-        });
+        binding.btnUpdate.setOnClickListener(viewUpdate -> new MaterialAlertDialogBuilder(PersonalDetailsActivity.this)
+                .setTitle("Update Profile Details")
+                .setMessage("Are you sure to update your profile details?")
+                .setPositiveButton("Update", (dialog, which) -> {
+                    String gender = binding.spinnerGender.getSelectedItem().toString();
+                    executorService.execute(() -> saveProfileDetails(firstName, lastName, gender));
+                })
+                .setNegativeButton("Cancel", (dialog, which) ->
+                        dialog.cancel()).show());
     }
 
-    private void saveProfileDetails() {
+    // Update profile details
+    private void saveProfileDetails(String firstName, String lastName, String gender) {
+        String token = getAccessToken();
+        GuestInfoApi api = ApiClient.getClient(token).create(GuestInfoApi.class);
 
+        // Get guest instance and set its values
+        Guest guest = Guest.getInstance();
+        guest.setFirstName(firstName);
+        guest.setLastName(lastName);
+        guest.setGender(gender);
+
+        Call<String> call = api.updateProfileDetails(guest);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    mainHandler.post(() -> {
+                        Toast.makeText(PersonalDetailsActivity.this, "Profile details updated successfully", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                } else {
+                    mainHandler.post(() ->
+                            Toast.makeText(PersonalDetailsActivity.this, "Update failed: " + response.message(), Toast.LENGTH_SHORT).show());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("saveProfileDetails", "Network error: " + t.getMessage());
+            }
+        });
     }
 
     // Monitor input fields

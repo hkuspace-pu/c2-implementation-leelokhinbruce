@@ -10,10 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.guestreservationapp.accessing_data.AuthApi;
+import com.example.restaurant_reservation_lib.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityLoginBinding;
 import com.example.guestreservationapp.mainpage.MainActivity;
-import com.example.guestreservationapp.request.LoginRequest;
+import com.example.restaurant_reservation_lib.request.LoginRequest;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
 
@@ -41,7 +41,6 @@ public class LoginActivity extends BaseValidatedActivity {
         // Auto-login if session exists (token stores in DataStore already)
         String token = getAccessToken();
         if (token != null) {
-            Log.d("LoginActivity", "Get Token from DataStore: " + token);
             startActivity(new Intent(this, MainActivity.class));
             finish();
         }
@@ -71,21 +70,27 @@ public class LoginActivity extends BaseValidatedActivity {
         LoginRequest loginRequest = new LoginRequest(usernameOrEmail, password);
         AuthApi api = ApiClient.getClient(null).create(AuthApi.class);
         Call<Map<String, String>> call = api.loginUser(loginRequest);  // Returns token
-
         // Handle the response in Callback
         call.enqueue(new Callback<Map<String, String>>() {
             @Override
             public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
                 // backend response: (return new ResponseEntity<>(...))
                 if (response.isSuccessful()) {
-                    String accessToken = response.body().get("access_token");
+                    Map<String, String> res = response.body();
+                    String token = res.get("access_token");
+                    String role = res.get("role");
+
+                    if (!"ROLE_GUEST".equals(role)) {
+                        mainHandler.post(() ->
+                                Toast.makeText(LoginActivity.this, "This app is for guests only. Please use the staff app to login.", Toast.LENGTH_SHORT).show());
+                        return;
+                    }
 
                     // Store tokens in DataStore
-                    saveToken(accessToken);
+                    saveToken(token);
 
                     // Go to main screen
                     mainHandler.post(() -> {
-                        Log.d("loginUser", "Token: " + accessToken);
                         Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(new Intent(LoginActivity.this, MainActivity.class));
                         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -104,6 +109,7 @@ public class LoginActivity extends BaseValidatedActivity {
         });
     }
 
+    // Monitor input fields
     TextWatcher inputFieldWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {

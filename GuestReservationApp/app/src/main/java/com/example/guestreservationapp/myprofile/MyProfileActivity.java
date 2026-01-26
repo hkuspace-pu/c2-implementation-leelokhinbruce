@@ -2,26 +2,14 @@ package com.example.guestreservationapp.myprofile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.guestreservationapp.Guest;
 import com.example.guestreservationapp.LoginActivity;
-import com.example.guestreservationapp.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityMyProfileBinding;
-import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.SessionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MyProfileActivity extends SessionManager {
     private ActivityMyProfileBinding binding;

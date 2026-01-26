@@ -5,27 +5,16 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.guestreservationapp.Guest;
 import com.example.guestreservationapp.MyPointsActivity;
-import com.example.guestreservationapp.R;
-import com.example.guestreservationapp.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.FragmentProfileBinding;
 import com.example.guestreservationapp.myprofile.MyProfileActivity;
 import com.example.guestreservationapp.reservation.ReservationHistoryActivity;
 import com.example.guestreservationapp.settings.SettingsActivity;
-import com.example.restaurant_reservation_lib.ApiClient;
-import com.example.restaurant_reservation_lib.SessionManager;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import retrofit2.Call;
 
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;

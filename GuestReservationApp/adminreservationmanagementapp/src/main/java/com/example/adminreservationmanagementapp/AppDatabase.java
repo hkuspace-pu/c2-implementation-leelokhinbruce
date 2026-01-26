@@ -42,7 +42,9 @@ public abstract class AppDatabase extends RoomDatabase {
                                 @Override
                                 public void migrate(@NonNull SupportSQLiteDatabase db) {
                                     db.execSQL("DROP TABLE IF EXISTS mealType");
+                                    db.execSQL("DROP TABLE IF EXISTS mealTime");
                                     db.execSQL("DROP TABLE IF EXISTS menuMealType");
+                                    db.execSQL("DROP TABLE IF EXISTS menuMealTime");
                                 }
                             })
                             // Add call back to the database
@@ -62,9 +64,10 @@ public abstract class AppDatabase extends RoomDatabase {
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
 
-            // Insert initial data on first creation
             db.execSQL("DROP TABLE IF EXISTS mealType");
+            db.execSQL("DROP TABLE IF EXISTS mealTime");
             db.execSQL("DROP TABLE IF EXISTS menuMealType");
+            db.execSQL("DROP TABLE IF EXISTS menuMealTime");
 
             new PopulateDbAsyncTask(INSTANCE).execute();
         }

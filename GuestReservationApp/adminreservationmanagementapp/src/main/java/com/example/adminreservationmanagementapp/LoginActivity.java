@@ -2,18 +2,32 @@ package com.example.adminreservationmanagementapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.example.adminreservationmanagementapp.databinding.ActivityLoginBinding;
 import com.example.adminreservationmanagementapp.mainpage.MainActivity;
+import com.example.restaurant_reservation_lib.ApiClient;
+import com.example.restaurant_reservation_lib.accessing_data.AuthApi;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
+import com.example.restaurant_reservation_lib.request.LoginRequest;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class LoginActivity extends BaseValidatedActivity {
     private ActivityLoginBinding binding;
     private String username, password;
+    private ExecutorService executorService;
+    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,19 +36,72 @@ public class LoginActivity extends BaseValidatedActivity {
         View view = binding.getRoot();  // get a reference to the root view of the corresponding layout file
         setContentView(view);  // make it the active view on the screen
 
+        // Auto-login if session exists (token stores in DataStore already)
+        String token = getAccessToken();
+        if (token != null) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+
+        // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
+        executorService = Executors.newSingleThreadExecutor();
+        // Main thread handler
+        mainHandler = new Handler(Looper.getMainLooper());
+
         binding.editUsername.addTextChangedListener(inputFieldWatcher);
         binding.editPasswd.addTextChangedListener(inputFieldWatcher);
 
         binding.btnLogin.setEnabled(false);
         // Login button click
-        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+        binding.btnLogin.setOnClickListener(viewLogin ->
+                executorService.execute(() -> loginUser(username, password)));
+    }
+
+    private void loginUser(String usernameOrEmail, String password) {
+        LoginRequest loginRequest = new LoginRequest(usernameOrEmail, password);
+        AuthApi api = ApiClient.getClient(null).create(AuthApi.class);
+        Call<Map<String, String>> call = api.loginUser(loginRequest);  // Returns token
+        // Handle the response in Callback
+        call.enqueue(new Callback<Map<String, String>>() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
+                // backend response: (return new ResponseEntity<>(...))
+                if (response.isSuccessful()) {
+                    Map<String, String> res = response.body();
+                    String token = res.get("access_token");
+                    String role = res.get("role");
+
+                    if (!"ROLE_STAFF".equals(role)) {
+                        mainHandler.post(() ->
+                                Toast.makeText(LoginActivity.this, "This app is for staff only. Please use the guest app to login.", Toast.LENGTH_SHORT).show());
+                        return;
+                    }
+
+                    // Store tokens in DataStore
+                    saveToken(token);
+
+                    // Go to main screen
+                    mainHandler.post(() -> {
+
+                        Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(new Intent(LoginActivity.this, MainActivity.class));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    });
+                } else {
+                    mainHandler.post(() ->
+                            Toast.makeText(LoginActivity.this, "Login failed: " + response.message(), Toast.LENGTH_SHORT).show());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, String>> call, Throwable t) {
+                Log.e("loginUser", "Network error: " + t.getMessage());
             }
         });
     }
 
+    // Monitor input fields
     TextWatcher inputFieldWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable editable) {
