@@ -110,22 +110,18 @@ public class PhoneNumberActivity extends BaseValidatedActivity {
         });
 
         // Update button click
-        binding.btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        binding.btnUpdate.setOnClickListener(viewUpdate ->
                 new MaterialAlertDialogBuilder(PhoneNumberActivity.this)
-                        .setTitle("Update Phone Number")
-                        .setMessage("Are your sure to update the phone number?")
-                        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String fullPhone = String.format("(%s) %s", countryCode, phoneNumber);
-                                executorService.execute(() -> savePhoneNumber(fullPhone));
-                            }
-                        })
-                        .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel()).show();
-            }
-        });
+                .setTitle("Update Phone Number")
+                .setMessage("Are your sure to update the phone number?")
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String fullPhone = String.format("(%s) %s", countryCode, phoneNumber);
+                        executorService.execute(() -> savePhoneNumber(fullPhone));
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel()).show());
     }
 
     // Update phone number

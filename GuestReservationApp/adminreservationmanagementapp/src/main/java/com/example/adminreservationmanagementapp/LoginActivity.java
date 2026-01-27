@@ -82,11 +82,11 @@ public class LoginActivity extends BaseValidatedActivity {
 
                     // Go to main screen
                     mainHandler.post(() -> {
-
                         Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(new Intent(LoginActivity.this, MainActivity.class));
                         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
+                        finish();
                     });
                 } else {
                     mainHandler.post(() ->

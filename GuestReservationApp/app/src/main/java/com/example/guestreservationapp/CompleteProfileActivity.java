@@ -103,7 +103,8 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
                     .setPositiveButton("Sign In", (dialog, which) -> {
                         isLoading(true);  // Loading progress bar
                         String fullPhone = String.format("(%s) %s", selectedCountryCode, phoneNumber);
-                        RegisterRequest registerRequest = new RegisterRequest(username, email, password, firstName, lastName, fullPhone, gender);
+                        RegisterRequest registerRequest =
+                                new RegisterRequest(username, email, password, firstName, lastName, fullPhone, gender);
                         // Complete register and save user account by making API call
                         executorService.execute(() ->
                                 createUserAccount(registerRequest, email, password));

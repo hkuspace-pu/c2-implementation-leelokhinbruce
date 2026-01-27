@@ -1,7 +1,7 @@
 package com.example.restaurant_reservation_lib.entity;
 
 public abstract class User {
-    private final String email, username;
+    private final String username, email;
     private String password, phoneNumber;
 
     // Constructor

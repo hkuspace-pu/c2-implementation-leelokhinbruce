@@ -94,7 +94,7 @@ public class MainActivity extends SessionManager {
                 if (response.isSuccessful()) {
                     Staff staff = response.body();
                     Staff.init(staff);
-                    Log.d("MainActivity fetchUserData()", "User instance: " + staff);
+                    Log.d("MainActivity fetchUserData()", "User instance: " + staff.getEmail());
                 } else {
                     Log.e("MainActivity fetchUserData()", "Failed to fetch user data: " + response.message());
                 }

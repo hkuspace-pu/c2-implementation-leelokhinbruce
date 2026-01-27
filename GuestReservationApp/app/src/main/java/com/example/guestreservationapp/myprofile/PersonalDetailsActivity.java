@@ -87,6 +87,7 @@ public class PersonalDetailsActivity extends BaseValidatedActivity {
         guest.setLastName(lastName);
         guest.setGender(gender);
 
+        // Call POST request
         Call<String> call = api.updateProfileDetails(guest);
         call.enqueue(new Callback<String>() {
             @Override

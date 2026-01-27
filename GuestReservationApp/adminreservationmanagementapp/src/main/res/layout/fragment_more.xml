@@ -133,4 +133,5 @@
             android:layout_gravity="bottom"
             android:background="@color/line" />
     </FrameLayout>
+
 </LinearLayout>

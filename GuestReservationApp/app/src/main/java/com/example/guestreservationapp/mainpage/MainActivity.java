@@ -98,7 +98,7 @@ public class MainActivity extends SessionManager {
                 if (response.isSuccessful()) {
                     Guest guest = response.body();
                     Guest.init(guest);
-                    Log.d("MainActivity fetchUserData()", "User instance: " + guest);
+                    Log.d("MainActivity fetchUserData()", "User instance: " + guest.getFirstName());
                 } else {
                     Log.e("MainActivity fetchUserData()", "Failed to fetch user data: " + response.message());
                 }

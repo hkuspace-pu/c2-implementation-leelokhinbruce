@@ -50,6 +50,7 @@ public class LoginActivity extends BaseValidatedActivity {
         // Main thread handler
         mainHandler = new Handler(Looper.getMainLooper());
 
+        // Monitor input fields
         binding.editEmailOrUsername.addTextChangedListener(inputFieldWatcher);
         binding.editPasswd.addTextChangedListener(inputFieldWatcher);
 
@@ -95,6 +96,7 @@ public class LoginActivity extends BaseValidatedActivity {
                         Intent intent = new Intent(new Intent(LoginActivity.this, MainActivity.class));
                         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
+                        finish();
                     });
                 } else {
                     mainHandler.post(() ->

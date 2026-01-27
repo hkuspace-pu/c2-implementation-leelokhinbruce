@@ -3,18 +3,15 @@ package com.example.adminreservationmanagementapp.settings;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.example.adminreservationmanagementapp.R;
-import com.example.adminreservationmanagementapp.databinding.ActivityLoginBinding;
+import com.example.adminreservationmanagementapp.LoginActivity;
+import com.example.adminreservationmanagementapp.Staff;
 import com.example.adminreservationmanagementapp.databinding.ActivitySettingsBinding;
+import com.example.restaurant_reservation_lib.SessionManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends SessionManager {
     private ActivitySettingsBinding binding;
 
     @Override
@@ -30,5 +27,22 @@ public class SettingsActivity extends AppCompatActivity {
 
         binding.frameBtnChangeBranchStatus.setOnClickListener(viewChangeBranchStatus ->
                 startActivity(new Intent(SettingsActivity.this, ChangeBranchStatusActivity.class)));
+
+        // Logout button click
+        binding.btnLogout.setOnClickListener(viewLogout ->
+                new MaterialAlertDialogBuilder(SettingsActivity.this)
+                .setTitle("Logout Account")
+                .setMessage("Are you sure want to sign out your account?")
+                .setPositiveButton("Sign Out", (dialog, which) -> {
+                    Toast.makeText(SettingsActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+                    clearToken();  // Clear DataStore (remove token)
+                    Staff.resetInstance();  // Clear guest instance
+
+                    Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                })
+                .setNegativeButton("Cancel", (dialog, which) ->
+                        dialog.cancel()).show());
     }
 }

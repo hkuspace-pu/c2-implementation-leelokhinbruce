@@ -4,13 +4,13 @@ import com.example.restaurant_reservation_lib.entity.User;
 
 public class Staff extends User {
     private static volatile Staff instance;  // volatile for thread-safety
-    private String jobTitle, workingLocation;
+    private String position, workingBranch;
 
     // Constructor
-    public Staff(String username, String email, String password, String phoneNumber, String jobTitle, String workingLocation) {
+    public Staff(String username, String email, String password, String phoneNumber, String position, String workingBranch) {
         super(username, email, password, phoneNumber);
-        this.jobTitle = jobTitle;
-        this.workingLocation = workingLocation;
+        this.position = position;
+        this.workingBranch = workingBranch;
     }
 
     // Lazy initialization: creation of instance when required
@@ -29,20 +29,20 @@ public class Staff extends User {
         return instance;
     }
 
-    public String getJobTitle() {
-        return jobTitle;
+    public String getPosition() {
+        return position;
     }
 
-    public String getWorkingLocation() {
-        return workingLocation;
+    public String getWorkingBranch() {
+        return workingBranch;
     }
 
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
-    public void setWorkingLocation(String workingLocation) {
-        this.workingLocation = workingLocation;
+    public void setWorkingBranch(String workingBranch) {
+        this.workingBranch = workingBranch;
     }
 
     // Clear Guest instance data

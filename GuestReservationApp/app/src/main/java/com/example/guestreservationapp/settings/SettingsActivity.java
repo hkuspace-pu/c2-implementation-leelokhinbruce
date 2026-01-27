@@ -15,6 +15,8 @@ public class SettingsActivity extends AppCompatActivity {
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         setContentView(binding.getRoot());  // make it the active view on the screen
 
+        binding.imgBtnBack.setOnClickListener(viewBack -> finish());
+
         binding.frameBtnNotificationSettings.setOnClickListener(viewNotificationSettings ->
                 startActivity(new Intent(SettingsActivity.this, NotificationSettingsActivity.class)));
 
@@ -23,7 +25,5 @@ public class SettingsActivity extends AppCompatActivity {
 
         binding.frameBtnDeleteAccount.setOnClickListener(viewDeleteAccount ->
                 startActivity(new Intent(SettingsActivity.this, DeleteAccountActivity.class)));
-
-        binding.imgBtnBack.setOnClickListener(viewBack -> finish());
     }
 }

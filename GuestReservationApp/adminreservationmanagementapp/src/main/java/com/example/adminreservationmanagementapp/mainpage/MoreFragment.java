@@ -8,12 +8,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.adminreservationmanagementapp.R;
 import com.example.adminreservationmanagementapp.databinding.FragmentMoreBinding;
 import com.example.adminreservationmanagementapp.reservations.ReservationHistoryActivity;
 import com.example.adminreservationmanagementapp.settings.AccountDetailsActivity;
 import com.example.adminreservationmanagementapp.settings.SettingsActivity;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class MoreFragment extends Fragment {
     private FragmentMoreBinding binding;
