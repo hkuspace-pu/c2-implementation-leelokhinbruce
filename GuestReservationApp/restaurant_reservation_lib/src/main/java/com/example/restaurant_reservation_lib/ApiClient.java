@@ -17,7 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class ApiClient{
-    private static Retrofit retrofit = null;
 
     public static Retrofit getClient(String token) {
         // OKHttp Interceptor
@@ -25,21 +24,17 @@ public class ApiClient{
                 .addInterceptor(new AuthInterceptor(token))  // Pass token to header
                 .build();
 
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
+        return new Retrofit.Builder()
                     .client(client)
                     .baseUrl("http://192.168.50.246:8080/")  // Connected website (e.g. http://192.168.50.246:8080/)
                     // addConverterFactory(): uses Gson as info handling Converte
                     .addConverterFactory(ScalarsConverterFactory.create())  // handles plain strings
                     .addConverterFactory(GsonConverterFactory.create())  // Change to Gson info
                     .build();
-        }
-
-        return retrofit;
     }
 
     // Retrofit Interceptor for Token (Automatic Header Addition)
-    public static class AuthInterceptor implements Interceptor {
+    public static class AuthInterceptor extends SessionManager implements Interceptor {
         private final String token;
 
         public AuthInterceptor(String token) {

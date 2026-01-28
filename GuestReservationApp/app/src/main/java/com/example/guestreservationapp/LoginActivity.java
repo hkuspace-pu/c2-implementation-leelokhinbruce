@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.guestreservationapp.accessing_data.GuestInfoApi;
 import com.example.restaurant_reservation_lib.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityLoginBinding;
 import com.example.guestreservationapp.mainpage.MainActivity;
@@ -28,8 +29,6 @@ import java.util.concurrent.Executors;
 public class LoginActivity extends BaseValidatedActivity {
     private ActivityLoginBinding binding;
     private String emailOrUsername, password;
-    private ExecutorService executorService;
-    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +44,6 @@ public class LoginActivity extends BaseValidatedActivity {
             finish();
         }
 
-        // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
-        executorService = Executors.newSingleThreadExecutor();
-        // Main thread handler
-        mainHandler = new Handler(Looper.getMainLooper());
-
         // Monitor input fields
         binding.editEmailOrUsername.addTextChangedListener(inputFieldWatcher);
         binding.editPasswd.addTextChangedListener(inputFieldWatcher);
@@ -57,7 +51,7 @@ public class LoginActivity extends BaseValidatedActivity {
         binding.btnLogin.setEnabled(false);
         // Login button click
         binding.btnLogin.setOnClickListener(viewLogin ->
-                executorService.execute(() -> loginUser(emailOrUsername, password)));
+                loginUser(emailOrUsername, password));
 
         // Go to Register screen
         binding.linkRegister.setOnClickListener(viewRegister -> {
@@ -82,16 +76,13 @@ public class LoginActivity extends BaseValidatedActivity {
                     String role = res.get("role");
 
                     if (!"ROLE_GUEST".equals(role)) {
-                        mainHandler.post(() ->
-                                Toast.makeText(LoginActivity.this, "This app is for guests only. Please use the staff app to login.", Toast.LENGTH_SHORT).show());
+                        Toast.makeText(LoginActivity.this, "This app is for guests only. Please use the staff app to login.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     // Store tokens in DataStore
-                    saveToken(token);
-
-                    // Go to main screen
-                    mainHandler.post(() -> {
+                    saveToken(token, () -> {
+                        // Go to main screen
                         Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(new Intent(LoginActivity.this, MainActivity.class));
                         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -99,8 +90,7 @@ public class LoginActivity extends BaseValidatedActivity {
                         finish();
                     });
                 } else {
-                    mainHandler.post(() ->
-                            Toast.makeText(LoginActivity.this, "Login failed: " + response.message(), Toast.LENGTH_SHORT).show());
+                    Toast.makeText(LoginActivity.this, "Failed to login", Toast.LENGTH_SHORT).show();
                 }
             }
 

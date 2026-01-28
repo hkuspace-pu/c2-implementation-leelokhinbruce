@@ -60,7 +60,7 @@ public class ResetPasswordActivity extends BaseValidatedActivity {
                 .setPositiveButton("Reset", (dialog, i) -> {
                     isLoading(true);  // Loading progress bar
                     ResetPasswordRequest resetPasswordRequest =
-                            new ResetPasswordRequest(newPasswd, newPasswd);
+                            new ResetPasswordRequest(currentPasswd, newPasswd);
                     executorService.execute(() -> resetPassword(resetPasswordRequest));
                 })
                 .setNegativeButton("Cancel", (dialog, i) ->
@@ -78,13 +78,14 @@ public class ResetPasswordActivity extends BaseValidatedActivity {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful()) {
                     mainHandler.post(() -> {
+                        // Return the success msg from backend
                         Toast.makeText(ResetPasswordActivity.this, response.body(), Toast.LENGTH_SHORT).show();
                         isLoading(false);
                         finish();
                     });
                 } else {
                     mainHandler.post(() -> {
-                        Toast.makeText(ResetPasswordActivity.this, "Reset failed: " + response.body(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ResetPasswordActivity.this, "Current password incorrect", Toast.LENGTH_SHORT).show();
                         isLoading(false);
                     });
                 }

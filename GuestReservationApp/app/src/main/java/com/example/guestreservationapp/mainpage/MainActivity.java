@@ -41,7 +41,7 @@ public class MainActivity extends SessionManager {
         mainHandler = new Handler(Looper.getMainLooper());
 
         // Fetch user data
-        executorService.execute(this::fetchUserData);
+        fetchUserData();
 
         // screens of menu
         homeFragment = new HomeFragment();
@@ -91,16 +91,19 @@ public class MainActivity extends SessionManager {
         // getClient(token): pass the token to the Authorization header
         GuestInfoApi api = ApiClient.getClient(token).create(GuestInfoApi.class);
         Call<Guest> call = api.getGuestData();
+        Log.d("MainActivity fetchUserData()", "Token: " + token);
 
         call.enqueue(new Callback<Guest>() {
             @Override
             public void onResponse(Call<Guest> call, Response<Guest> response) {
+                Log.d("MainActivity fetchUserData()", "Response: " + response);
                 if (response.isSuccessful()) {
                     Guest guest = response.body();
                     Guest.init(guest);
-                    Log.d("MainActivity fetchUserData()", "User instance: " + guest.getFirstName());
+                    Log.d("MainActivity fetchUserData()", "Fetch user data: " + guest.getEmail());
                 } else {
-                    Log.e("MainActivity fetchUserData()", "Failed to fetch user data: " + response.message());
+                    // response.code(): return HTTP status code
+                    Log.e("MainActivity fetchUserData()", "Failed to fetch user data: " + response.code() + " " + response.errorBody());
                 }
             }
 

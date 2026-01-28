@@ -25,8 +25,6 @@ import retrofit2.Response;
 public class MainActivity extends SessionManager {
     private ActivityMainBinding binding;
     private Fragment reservationsFragment, menuFragment, notificationsFragment, moreFragment;
-    private ExecutorService executorService;
-    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +32,8 @@ public class MainActivity extends SessionManager {
         binding = ActivityMainBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         setContentView(binding.getRoot());  // make it the active view on the screen
 
-        // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
-        executorService = Executors.newSingleThreadExecutor();
-        // Main thread handler
-        mainHandler = new Handler(Looper.getMainLooper());
-
         // Fetch user data
-        executorService.execute(this::fetchUserData);
+        fetchUserData();
 
         reservationsFragment = new ReservationsFragment();
         menuFragment = new MenuFragment();
@@ -87,6 +80,7 @@ public class MainActivity extends SessionManager {
         // getClient(token): pass the token to the Authorization header
         StaffInfoApi api = ApiClient.getClient(token).create(StaffInfoApi.class);
         Call<Staff> call = api.getStaffData();
+        Log.d("MainActivity fetchUserData()", "Token: " + token);
 
         call.enqueue(new Callback<Staff>() {
             @Override

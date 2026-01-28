@@ -139,10 +139,8 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
                                 String accessToken = response.body().get("access_token");
 
                                 // Store tokens in DataStore
-                                saveToken(accessToken);
-
-                                // Starting main screen
-                                mainHandler.post(() -> {
+                                saveToken(accessToken, () -> {
+                                    // Starting main screen
                                     Toast.makeText(CompleteProfileActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(new Intent(CompleteProfileActivity.this, MainActivity.class));
                                     startActivity(intent);

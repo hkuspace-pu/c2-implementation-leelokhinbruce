@@ -26,8 +26,6 @@ import java.util.concurrent.Executors;
 public class LoginActivity extends BaseValidatedActivity {
     private ActivityLoginBinding binding;
     private String username, password;
-    private ExecutorService executorService;
-    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +41,13 @@ public class LoginActivity extends BaseValidatedActivity {
             finish();
         }
 
-        // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
-        executorService = Executors.newSingleThreadExecutor();
-        // Main thread handler
-        mainHandler = new Handler(Looper.getMainLooper());
-
         binding.editUsername.addTextChangedListener(inputFieldWatcher);
         binding.editPasswd.addTextChangedListener(inputFieldWatcher);
 
         binding.btnLogin.setEnabled(false);
         // Login button click
         binding.btnLogin.setOnClickListener(viewLogin ->
-                executorService.execute(() -> loginUser(username, password)));
+                loginUser(username, password));
     }
 
     private void loginUser(String usernameOrEmail, String password) {
@@ -72,25 +65,27 @@ public class LoginActivity extends BaseValidatedActivity {
                     String role = res.get("role");
 
                     if (!"ROLE_STAFF".equals(role)) {
-                        mainHandler.post(() ->
-                                Toast.makeText(LoginActivity.this, "This app is for staff only. Please use the guest app to login.", Toast.LENGTH_SHORT).show());
+                        Toast.makeText(LoginActivity.this,
+                                "This app is for staff only. Please use the guest app to login.",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     // Store tokens in DataStore
-                    saveToken(token);
-
-                    // Go to main screen
-                    mainHandler.post(() -> {
-                        Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(new Intent(LoginActivity.this, MainActivity.class));
+                    saveToken(token, () -> {
+                        // Go to main screen
+                        Toast.makeText(LoginActivity.this,
+                                "Login successful", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(new Intent(LoginActivity.this,
+                                MainActivity.class));
                         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
                         finish();
                     });
                 } else {
-                    mainHandler.post(() ->
-                            Toast.makeText(LoginActivity.this, "Login failed: " + response.message(), Toast.LENGTH_SHORT).show());
+                    Toast.makeText(LoginActivity.this,
+                            "Login failed: " + response.message(),
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
