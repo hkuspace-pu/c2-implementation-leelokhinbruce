@@ -34,7 +34,7 @@ public class ApiClient{
     }
 
     // Retrofit Interceptor for Token (Automatic Header Addition)
-    public static class AuthInterceptor extends SessionManager implements Interceptor {
+    public static class AuthInterceptor implements Interceptor {
         private final String token;
 
         public AuthInterceptor(String token) {
