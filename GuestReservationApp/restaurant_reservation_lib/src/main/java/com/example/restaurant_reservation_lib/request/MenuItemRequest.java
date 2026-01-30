@@ -7,13 +7,11 @@ public class MenuItemRequest {
     private String foodName, category, mealTime;
     private double price;
     private boolean isAvailable, isPromotion;
-//    private String imgUrl;
-    private Date lastModified;
+    private Date updatedAt;
 
     // Constructor
     public MenuItemRequest(Long id, String foodName, String category, String mealTime, double price,
-                           boolean isAvailable, boolean isPromotion,
-                           Date lastModified) {
+                           boolean isAvailable, boolean isPromotion, Date updatedAt) {
         this.id = id;
         this.foodName = foodName;
         this.category = category;
@@ -21,8 +19,7 @@ public class MenuItemRequest {
         this.price = price;
         this.isAvailable = isAvailable;
         this.isPromotion = isPromotion;
-//        this.imgUrl = imgUrl;
-        this.lastModified = lastModified;
+        this.updatedAt = updatedAt;
     }
 
     // Getter
@@ -54,11 +51,7 @@ public class MenuItemRequest {
         return isPromotion;
     }
 
-//    public String getImgUrl() {
-//        return imgUrl;
-//    }
-
-    public Date getLastModified() {
-        return lastModified;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 }

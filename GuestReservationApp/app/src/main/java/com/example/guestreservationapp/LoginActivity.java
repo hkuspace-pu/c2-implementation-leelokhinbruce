@@ -2,33 +2,30 @@ package com.example.guestreservationapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.guestreservationapp.accessing_data.GuestInfoApi;
 import com.example.restaurant_reservation_lib.accessing_data.AuthApi;
 import com.example.guestreservationapp.databinding.ActivityLoginBinding;
 import com.example.guestreservationapp.mainpage.MainActivity;
 import com.example.restaurant_reservation_lib.request.LoginRequest;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
+import com.example.restaurant_reservation_lib.session_management.SessionManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class LoginActivity extends BaseValidatedActivity {
     private ActivityLoginBinding binding;
     private String emailOrUsername, password;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +35,7 @@ public class LoginActivity extends BaseValidatedActivity {
         setContentView(view);  // make it the active view on the screen
 
         // Auto-login if session exists (token stores in DataStore already)
-        String token = getAccessToken();
+        String token = sessionManager.getAccessToken();
         if (token != null) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
@@ -81,14 +78,13 @@ public class LoginActivity extends BaseValidatedActivity {
                     }
 
                     // Store tokens in DataStore
-                    saveToken(token, () -> {
-                        // Go to main screen
-                        Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(new Intent(LoginActivity.this, MainActivity.class));
-                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        startActivity(intent);
-                        finish();
-                    });
+                    sessionManager.saveToken(token);
+                    // Go to main screen
+                    Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(new Intent(LoginActivity.this, MainActivity.class));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Failed to login", Toast.LENGTH_SHORT).show();
                 }

@@ -5,13 +5,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.guestreservationapp.Guest;
 import com.example.guestreservationapp.LoginActivity;
 import com.example.guestreservationapp.databinding.ActivityMyProfileBinding;
 import com.example.restaurant_reservation_lib.session_management.SessionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class MyProfileActivity extends SessionManager {
+public class MyProfileActivity extends AppCompatActivity {
     private ActivityMyProfileBinding binding;
 
     @Override
@@ -46,7 +48,7 @@ public class MyProfileActivity extends SessionManager {
                     .setMessage("Are you sure want to sign out your account?")
                     .setPositiveButton("Sign Out", (dialog, which) -> {
                         Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
-                        clearToken();  // Clear DataStore (remove token)
+                        new SessionManager(getApplicationContext()).clearToken();  // Clear DataStore (remove token)
                         Guest.resetInstance();  // Clear guest instance
 
                         Intent intent = new Intent(MyProfileActivity.this, LoginActivity.class);

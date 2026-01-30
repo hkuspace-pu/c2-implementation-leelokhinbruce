@@ -4,13 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.adminreservationmanagementapp.LoginActivity;
 import com.example.adminreservationmanagementapp.Staff;
 import com.example.adminreservationmanagementapp.databinding.ActivitySettingsBinding;
 import com.example.restaurant_reservation_lib.session_management.SessionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class SettingsActivity extends SessionManager {
+public class SettingsActivity extends AppCompatActivity {
     private ActivitySettingsBinding binding;
 
     @Override
@@ -34,7 +36,7 @@ public class SettingsActivity extends SessionManager {
                 .setMessage("Are you sure want to sign out your account?")
                 .setPositiveButton("Sign Out", (dialog, which) -> {
                     Toast.makeText(SettingsActivity.this, "Logout", Toast.LENGTH_SHORT).show();
-                    clearToken();  // Clear DataStore (remove token)
+                    new SessionManager(getApplicationContext()).clearToken();  // Clear DataStore (remove token)
                     Staff.resetInstance();  // Clear guest instance
 
                     Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);

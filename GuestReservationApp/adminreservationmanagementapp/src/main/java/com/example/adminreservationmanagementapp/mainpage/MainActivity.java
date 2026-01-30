@@ -3,6 +3,7 @@ package com.example.adminreservationmanagementapp.mainpage;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.adminreservationmanagementapp.R;
@@ -16,7 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends SessionManager {
+public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private Fragment reservationsFragment, menuFragment, notificationsFragment, moreFragment;
 
@@ -70,7 +71,7 @@ public class MainActivity extends SessionManager {
 
     // Fetch user data
     private void fetchUserData() {
-        String token = getAccessToken();
+        String token = new SessionManager(getApplicationContext()).getAccessToken();
         // getClient(token): pass the token to the Authorization header
         StaffInfoApi api = ApiClient.getClient(token).create(StaffInfoApi.class);
         Call<Staff> call = api.getStaffData();

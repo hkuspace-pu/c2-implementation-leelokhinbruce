@@ -20,7 +20,7 @@ public interface MenuItemDao {
     void insertItem(MenuItem menuItem);
 
     // Edit a menu item
-    @Upsert
+    @Update
     void updateItem(MenuItem menuItem);
 
     // Remove a menu item

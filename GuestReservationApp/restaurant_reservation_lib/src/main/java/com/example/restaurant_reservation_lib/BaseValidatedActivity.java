@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.util.Pair;
 import android.util.Patterns;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.restaurant_reservation_lib.session_management.SessionManager;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -13,7 +15,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class BaseValidatedActivity extends SessionManager {
+public class BaseValidatedActivity extends AppCompatActivity {
     private static final Map<String, PhoneRule> PHONE_RULES = new HashMap<>();
 
     static {

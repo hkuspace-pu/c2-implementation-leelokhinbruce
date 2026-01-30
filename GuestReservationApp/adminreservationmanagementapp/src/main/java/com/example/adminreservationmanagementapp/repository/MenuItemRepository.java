@@ -1,6 +1,7 @@
 package com.example.adminreservationmanagementapp.repository;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -40,8 +41,6 @@ public class MenuItemRepository {
         executorService.execute(() -> dao.insertItem(menuItem));
         // Enqueue WorkManager sync immediately
         SyncHelper.enqueueImmediateSync(app);  // Schedules a OneTimeWorkRequest for SyncWorker
-
-//        new InsertItemAsyncTask(menuItemDao).execute(menuItem);
     }
 
     // UPDATE
@@ -54,8 +53,6 @@ public class MenuItemRepository {
         menuItem.setUpdatedAt(new Date());
         executorService.execute(() -> dao.updateItem(menuItem));
         SyncHelper.enqueueImmediateSync(app);
-
-//        new UpdateItemAsyncTask(menuItemDao).execute(menuItem);
     }
 
     // DELETE
@@ -67,65 +64,5 @@ public class MenuItemRepository {
             executorService.execute(() -> dao.deleteItem(menuItem));
             SyncHelper.enqueueImmediateSync(app);
         }
-
-//        new DeleteItemAsyncTask(menuItemDao).execute(menuItem);
     }
-
-    // --- Async task methods ---
-//    private static class InsertItemAsyncTask extends AsyncTask<MenuItem, Void, Void> {
-//        private MenuItemDao dao;
-//
-//        private InsertItemAsyncTask(MenuItemDao dao) {
-//            this.dao = dao;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(MenuItem... menuItems) {
-//            // Insert the menu item in dao
-//            try{
-//                dao.insertItem(menuItems[0]);
-//            } catch (Exception e) {
-//                Log.e("InsertItemAsyncTask", "Insertion failed: " + e.getMessage(), e);
-//            }
-//            return null;
-//        }
-//    }
-//
-//    private static class UpdateItemAsyncTask extends AsyncTask<MenuItem, Void, Void> {
-//        private MenuItemDao dao;
-//
-//        private UpdateItemAsyncTask(MenuItemDao dao) {
-//            this.dao = dao;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(MenuItem... menuItems) {
-//            try{
-//                dao.updateItem(menuItems[0]);
-//            } catch (Exception e) {
-//                Log.e("UpdateItemAsyncTask", "Updating failed: " + e.getMessage(), e);
-//            }
-//
-//            return null;
-//        }
-//    }
-//
-//    private static class DeleteItemAsyncTask extends AsyncTask<MenuItem, Void, Void> {
-//        private MenuItemDao dao;
-//
-//        private DeleteItemAsyncTask(MenuItemDao dao) {
-//            this.dao = dao;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(MenuItem... menuItems) {
-//            try{
-//                dao.deleteItem(menuItems[0]);
-//            } catch (Exception e) {
-//                Log.e("DeleteItemAsyncTask", "Deletion failed: " + e.getMessage(), e);
-//            }
-//
-//            return null;
-//        }
-//    }
 }

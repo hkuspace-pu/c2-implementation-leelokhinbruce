@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.guestreservationapp.Guest;
@@ -22,11 +23,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends SessionManager {
+public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private Fragment homeFragment, menuFragment, reservationsFragment, discoverFragment, profileFragment;
-    private ExecutorService executorService;
-    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +33,6 @@ public class MainActivity extends SessionManager {
         binding = ActivityMainBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         View view = binding.getRoot();  // get a reference to the root view of the corresponding layout file
         setContentView(view);  // make it the active view on the screen
-
-        // Creates a thread pool with a single worker thread to make sure threads will be executed sequentially
-        executorService = Executors.newSingleThreadExecutor();
-        // Main thread handler
-        mainHandler = new Handler(Looper.getMainLooper());
 
         // Fetch user data
         fetchUserData();
@@ -87,7 +81,7 @@ public class MainActivity extends SessionManager {
 
     // Fetch user data
     private void fetchUserData() {
-        String token = getAccessToken();
+        String token = new SessionManager(getApplicationContext()).getAccessToken();
         // getClient(token): pass the token to the Authorization header
         GuestInfoApi api = ApiClient.getClient(token).create(GuestInfoApi.class);
         Call<Guest> call = api.getGuestData();

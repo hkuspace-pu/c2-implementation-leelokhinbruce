@@ -15,16 +15,16 @@ import retrofit2.http.Path;
 
 public interface MenuApi {
     @GET("/api/menu")
-    Call<List<MenuItem>> getAllMenuItems();
+    Call<List<MenuItemRequest>> getAllMenuItems();
 
     @GET("/api/menu/{mealTime}")
-    Call<List<MenuItem>> getMenuItemsWithMealTime(@Path("mealTime") String mealTime);
+    Call<List<MenuItemRequest>> getMenuItemsWithMealTime(@Path("mealTime") String mealTime);
 
     @POST("/api/menu")
-    Call<MenuItem> addMenuItem(@Body MenuItem menuItem);
+    Call<MenuItemRequest> addMenuItem(@Body MenuItemRequest dto);
 
     @PUT("/api/menu/{id}")
-    Call<MenuItem> editMenuItem(@Path("id") long id, @Body MenuItem menuItem);
+    Call<MenuItemRequest> editMenuItem(@Path("id") long id, @Body MenuItemRequest dto);
 
     @DELETE("/api/menu/{id}")
     Call<Void> deleteMenuItem(@Path("id") long id);

@@ -18,6 +18,7 @@ import com.example.restaurant_reservation_lib.request.LoginRequest;
 import com.example.restaurant_reservation_lib.request.RegisterRequest;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
+import com.example.restaurant_reservation_lib.session_management.SessionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -139,13 +140,12 @@ public class CompleteProfileActivity extends BaseValidatedActivity {
                                 String accessToken = response.body().get("access_token");
 
                                 // Store tokens in DataStore
-                                saveToken(accessToken, () -> {
-                                    // Starting main screen
-                                    Toast.makeText(CompleteProfileActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(new Intent(CompleteProfileActivity.this, MainActivity.class));
-                                    startActivity(intent);
-                                    finish();
-                                });
+                                new SessionManager(getApplicationContext()).saveToken(accessToken);
+                                // Starting main screen
+                                Toast.makeText(CompleteProfileActivity.this, "Login successfully", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(new Intent(CompleteProfileActivity.this, MainActivity.class));
+                                startActivity(intent);
+                                finish();
                             } else {
                                 mainHandler.post(() ->
                                         Toast.makeText(CompleteProfileActivity.this, "Login failed: " + response.message(), Toast.LENGTH_SHORT).show());

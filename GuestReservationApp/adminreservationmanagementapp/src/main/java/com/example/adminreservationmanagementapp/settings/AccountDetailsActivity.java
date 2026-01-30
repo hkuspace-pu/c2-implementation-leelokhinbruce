@@ -16,6 +16,7 @@ import com.example.adminreservationmanagementapp.accessing_data.StaffInfoApi;
 import com.example.adminreservationmanagementapp.databinding.ActivityAccountDetailsBinding;
 import com.example.restaurant_reservation_lib.ApiClient;
 import com.example.restaurant_reservation_lib.BaseValidatedActivity;
+import com.example.restaurant_reservation_lib.session_management.SessionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.concurrent.ExecutorService;
@@ -107,7 +108,7 @@ public class AccountDetailsActivity extends BaseValidatedActivity {
 
     // Update staff account details
     private void saveAccountDetails(String phone) {
-        String token = getAccessToken();
+        String token = new SessionManager(getApplicationContext()).getAccessToken();
         // Create API endpoint
         StaffInfoApi api = ApiClient.getClient(token).create(StaffInfoApi.class);
 
