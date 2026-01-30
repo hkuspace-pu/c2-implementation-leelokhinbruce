@@ -1,4 +1,4 @@
-package com.example.adminreservationmanagementapp;
+package com.example.adminreservationmanagementapp.database_management;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -17,7 +17,7 @@ import com.example.restaurant_reservation_lib.entity.MenuItem;
 
 // Build Database
 @Database(entities = {MenuItem.class},
-        version = 5, exportSchema = false)  // Annotated with a @Database annotation
+        version = 6, exportSchema = false)  // Annotated with a @Database annotation
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
     // Returns an instance of the database class
@@ -36,19 +36,8 @@ public abstract class AppDatabase extends RoomDatabase {
                     // the database class with the database name
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "menuItem_and_reservation_database")
-                            // Add fall back to destructive migration to the database
-//                            .fallbackToDestructiveMigration()
-                            .addMigrations(new Migration(4, 5) {
-                                @Override
-                                public void migrate(@NonNull SupportSQLiteDatabase db) {
-                                    db.execSQL("DROP TABLE IF EXISTS mealType");
-                                    db.execSQL("DROP TABLE IF EXISTS mealTime");
-                                    db.execSQL("DROP TABLE IF EXISTS menuMealType");
-                                    db.execSQL("DROP TABLE IF EXISTS menuMealTime");
-                                }
-                            })
-                            // Add call back to the database
-                            .addCallback(roomCallback)
+                            // fallbackToDestructiveMigration(): Drop old DB, recreate with new schema, fix crash instantly
+                            .fallbackToDestructiveMigration()
                             // Build the database
                             .build();
                 }
@@ -57,21 +46,6 @@ public abstract class AppDatabase extends RoomDatabase {
 
         return INSTANCE;
     }
-
-    // Callback: call when database is created
-    private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-
-            db.execSQL("DROP TABLE IF EXISTS mealType");
-            db.execSQL("DROP TABLE IF EXISTS mealTime");
-            db.execSQL("DROP TABLE IF EXISTS menuMealType");
-            db.execSQL("DROP TABLE IF EXISTS menuMealTime");
-
-            new PopulateDbAsyncTask(INSTANCE).execute();
-        }
-    };
 
     // Async task class: performs task in background
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {

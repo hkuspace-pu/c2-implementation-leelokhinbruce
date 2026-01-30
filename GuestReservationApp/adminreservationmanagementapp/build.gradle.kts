@@ -51,6 +51,7 @@ dependencies {
 
     // Room database (SQLite)
     implementation("androidx.room:room-runtime:2.8.4")
+    implementation(libs.work.runtime)
     annotationProcessor("androidx.room:room-compiler:2.8.4")
     // Lifecycle extensions for Room
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")

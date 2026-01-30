@@ -4,7 +4,8 @@ import android.content.res.ColorStateList;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.Patterns;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.restaurant_reservation_lib.session_management.SessionManager;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.HashMap;

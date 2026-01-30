@@ -13,7 +13,7 @@ import com.example.guestreservationapp.R;
 import com.example.guestreservationapp.accessing_data.GuestInfoApi;
 import com.example.guestreservationapp.databinding.ActivityMainBinding;
 import com.example.restaurant_reservation_lib.ApiClient;
-import com.example.restaurant_reservation_lib.SessionManager;
+import com.example.restaurant_reservation_lib.session_management.SessionManager;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

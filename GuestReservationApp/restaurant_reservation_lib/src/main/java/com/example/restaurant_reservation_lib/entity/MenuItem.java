@@ -1,50 +1,50 @@
 package com.example.restaurant_reservation_lib.entity;
 
-import android.graphics.Bitmap;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.restaurant_reservation_lib.converter.DateConverter;
-import com.example.restaurant_reservation_lib.converter.PhotoConverter;
 
 import java.util.Date;
 
+// Local/Room Entity for SQLite
 @Entity(tableName = "menuItem")
 public class MenuItem {
     @PrimaryKey(autoGenerate = true)
     private long id;
+
+    private Long serverId;  // id for MySQL
     private String foodName, category, mealTime;
     private double price;
     private boolean isAvailable, isPromotion;
 
-    @TypeConverters(PhotoConverter.class)
-    private Bitmap image;  // Stored as BLOB in SQLite
-
-    @TypeConverters(DateConverter.class)
-    private final Date createdAt;
+    // Store image as base64 or path to local file
+//    private String image;
 
     @TypeConverters(DateConverter.class)
     private Date updatedAt;
 
-//    Public no-arg constructor REQUIRED by Room database
+    // Sync action: 0 = NONE, 1 = CREATE, 2 = UPDATE, 3 = DELETE
+    private int syncAction;  // Tells the sync worker what to do
+
+    //    Public no-arg constructor REQUIRED by Room database
 //    Reason: Room needs a public constructor to instantiate the entity when reading from the database
-    public MenuItem(Date createdAt) {
-        this.createdAt = createdAt;
+    public MenuItem() {
     }
 
     // Private Constructor - only access via Builder
     private MenuItem(Builder builder) {
+        this.serverId = builder.serverId;
         this.foodName = builder.foodName;
-        this.price = builder.price;
         this.category = builder.category;
         this.mealTime = builder.mealTime;
-        this.isPromotion = builder.isPromotion;
-        this.image = builder.image;
-        this.createdAt = builder.createAt;
-        this.updatedAt = builder.updateAt;
+        this.price = builder.price;
         this.isAvailable = builder.isAvailable;
+        this.isPromotion = builder.isPromotion;
+//        this.image = builder.image;
+        this.updatedAt = builder.updateAt;
+        this.syncAction = builder.syncAction;
     }
 
     // Getter
@@ -52,12 +52,12 @@ public class MenuItem {
         return id;
     }
 
-    public String getFoodName() {
-        return foodName;
+    public Long getServerId() {
+        return serverId;
     }
 
-    public double getPrice() {
-        return price;
+    public String getFoodName() {
+        return foodName;
     }
 
     public String getCategory() {
@@ -68,24 +68,28 @@ public class MenuItem {
         return mealTime;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
     public boolean isPromotion() {
         return isPromotion;
     }
 
-    public Bitmap getImage() {
-        return image;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
+//    public String getImage() {
+//        return image;
+//    }
 
     public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
+    public int getSyncAction() {
+        return syncAction;
     }
 
     // Setter
@@ -93,12 +97,12 @@ public class MenuItem {
         this.id = id;
     }
 
-    public void setFoodName(String foodName) {
-        this.foodName = foodName;
+    public void setServerId(Long serverId) {
+        this.serverId = serverId;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
     }
 
     public void setCategory(String category) {
@@ -109,20 +113,28 @@ public class MenuItem {
         this.mealTime = mealTime;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
     public void setPromotion(boolean promotion) {
         isPromotion = promotion;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
-    }
+//    public void setImage(String image) {
+//        this.image = image;
+//    }
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public void setAvailable(boolean available) {
-        isAvailable = available;
+    public void setSyncAction(int syncAction) {
+        this.syncAction = syncAction;
     }
 
     // Static class Builder (manufacturer)
@@ -132,33 +144,36 @@ public class MenuItem {
         private final String foodName, category, mealTime;
         private final double price;
         private final boolean isAvailable, isPromotion;
-        private final Date createAt;
+        private Date updateAt;
+        private int syncAction;
 
         // Optional fields
-        private Bitmap image;
-        private Date updateAt;
+        private Long serverId;
+//        private String image;
 
         // Builder constructor (mandatory)
-        public Builder(String foodName, double price, String category, String mealTime, boolean isPromotion, Date createAt, boolean isAvailable) {
+        public Builder(String foodName, String category, String mealTime, double price,
+                       boolean isAvailable, boolean isPromotion, Date updateAt, int syncAction) {
             this.foodName = foodName;
-            this.price = price;
             this.category = category;
             this.mealTime = mealTime;
-            this.isPromotion = isPromotion;
-            this.createAt = createAt;
+            this.price = price;
             this.isAvailable = isAvailable;
-        }
-
-        // Setter methods (optional)
-        public Builder setImage(Bitmap image) {
-            this.image = image;
-            return this;
-        }
-
-        public Builder setUpdateAt(Date updateAt) {
+            this.isPromotion = isPromotion;
             this.updateAt = updateAt;
+            this.syncAction = syncAction;
+        }
+
+        // Setter methods
+        public Builder setServerId(Long serverId) {
+            this.serverId = serverId;
             return this;
         }
+
+//        public Builder setImage(String image) {
+//            this.image = image;
+//            return this;
+//        }
 
         // Build method: deal with outer class; to return outer instance
         public MenuItem build() {

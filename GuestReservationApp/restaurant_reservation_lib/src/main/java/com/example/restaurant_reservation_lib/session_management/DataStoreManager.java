@@ -1,4 +1,4 @@
-package com.example.restaurant_reservation_lib;
+package com.example.restaurant_reservation_lib.session_management;
 
 import android.content.Context;
 

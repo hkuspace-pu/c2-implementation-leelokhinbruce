@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.example.guestreservationapp.Guest;
 import com.example.guestreservationapp.LoginActivity;
 import com.example.guestreservationapp.databinding.ActivityMyProfileBinding;
-import com.example.restaurant_reservation_lib.SessionManager;
+import com.example.restaurant_reservation_lib.session_management.SessionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class MyProfileActivity extends SessionManager {

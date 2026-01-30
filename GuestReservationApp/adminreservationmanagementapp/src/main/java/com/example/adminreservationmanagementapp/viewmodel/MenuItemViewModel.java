@@ -11,8 +11,8 @@ import com.example.restaurant_reservation_lib.entity.MenuItem;
 import java.util.List;
 
 public class MenuItemViewModel extends AndroidViewModel {
-    private MenuItemRepository repository;
-    private LiveData<List<MenuItem>> allMenuItems;
+    private final MenuItemRepository repository;
+    private final LiveData<List<MenuItem>> allMenuItems;
 
     // Constructor
     public MenuItemViewModel(Application app) {

@@ -137,12 +137,13 @@ public class SpecificMenuActivity extends AppCompatActivity {
             // Build a menu item
             MenuItem menuItem = new MenuItem.Builder(
                     foodName,
-                    price,
                     category,
                     mealTime,
+                    price,
+                    true,
                     isPromotion,
                     createdDate,
-                    true
+                    1  // CREATE
             ).build();
 
             // Insert the menu item data into the local database
@@ -161,19 +162,20 @@ public class SpecificMenuActivity extends AppCompatActivity {
             double price = data.getDoubleExtra(AddMenuItemActivity.EXTRA_PRICE, 0);
             String category = data.getStringExtra(AddMenuItemActivity.EXTRA_CATEGORY);
             boolean isPromotion = data.getBooleanExtra(AddMenuItemActivity.EXTRA_IS_PROMOTION, false);
-            Date createdDate = new Date();
-            createdDate.setTime(data.getLongExtra(AddMenuItemActivity.EXTRA_CREATED_DATE, -1));
+            Date modifiedDate = new Date();
+            modifiedDate.setTime(data.getLongExtra(AddMenuItemActivity.EXTRA_CREATED_DATE, -1));
 //            Bitmap photoBitmap = (Bitmap) data.getParcelableExtra(EXTRA_PHOTO);
 
             // Build a menu item
             MenuItem menuItem = new MenuItem.Builder(
                     foodName,
-                    price,
                     category,
                     mealTime,
+                    price,
+                    true,
                     isPromotion,
-                    createdDate,
-                    true
+                    modifiedDate,
+                    2  // UPDATE
             ).build();
             menuItem.setId(id);
 

@@ -2,13 +2,12 @@ package com.example.adminreservationmanagementapp.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.adminreservationmanagementapp.LoginActivity;
 import com.example.adminreservationmanagementapp.Staff;
 import com.example.adminreservationmanagementapp.databinding.ActivitySettingsBinding;
-import com.example.restaurant_reservation_lib.SessionManager;
+import com.example.restaurant_reservation_lib.session_management.SessionManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class SettingsActivity extends SessionManager {

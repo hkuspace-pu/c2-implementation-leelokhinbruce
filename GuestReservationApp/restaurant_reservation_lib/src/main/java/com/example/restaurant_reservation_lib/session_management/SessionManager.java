@@ -1,4 +1,4 @@
-package com.example.restaurant_reservation_lib;
+package com.example.restaurant_reservation_lib.session_management;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,7 +8,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
 
 import androidx.datastore.preferences.core.Preferences;
 import androidx.datastore.preferences.core.MutablePreferences;
@@ -58,7 +57,7 @@ public class SessionManager extends AppCompatActivity {
     }
 
     // Retrieve and decrypt access token
-    protected String getAccessToken() {
+    public String getAccessToken() {
         Preferences prefs = dataStore.data().blockingFirst();
         String encryptedToken = prefs.get(KEY_ACCESS_TOKEN);
 
