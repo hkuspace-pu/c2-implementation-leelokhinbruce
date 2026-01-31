@@ -43,11 +43,11 @@ public class MenuItemRequest {
         return price;
     }
 
-    public boolean getIsAvailable() {
+    public boolean isAvailable() {
         return isAvailable;
     }
 
-    public boolean getIsPromotion() {
+    public boolean isPromotion() {
         return isPromotion;
     }
 

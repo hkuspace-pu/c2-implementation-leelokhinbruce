@@ -1,6 +1,7 @@
 package com.example.adminreservationmanagementapp;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
                 intent.putExtra(AddMenuItemActivity.EXTRA_PRICE, menuItem.getPrice());
                 intent.putExtra(AddMenuItemActivity.EXTRA_CATEGORY, menuItem.getCategory());
                 intent.putExtra(AddMenuItemActivity.EXTRA_IS_PROMOTION, menuItem.isPromotion());
+                intent.putExtra(AddMenuItemActivity.EXTRA_SERVER_ID, menuItem.getServerId());
 
                 startActivityForResult(intent, EDIT_ITEM_REQUEST);
             }
@@ -79,8 +81,10 @@ public class SpecificMenuActivity extends AppCompatActivity {
                 new MaterialAlertDialogBuilder(SpecificMenuActivity.this)
                         .setTitle("Delete " + menuItem.getFoodName())
                         .setMessage("Are you sure to delete the menu item?")
-                        .setPositiveButton("Delete", (dialog, which) ->
-                                menuItemViewModel.deleteMenuItem(menuItem))
+                        .setPositiveButton("Delete", (dialog, i) -> {
+                            menuItem.setSyncAction(3);
+                            menuItemViewModel.deleteMenuItem(menuItem);
+                        })
                         .setNegativeButton("Cancel", (dialog, which) ->
                                 dialog.cancel()).show();
             }
@@ -108,7 +112,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
                     filtered.add(item);
                 }
             }
-            // List filtered items
+            // Add filtered items to the adapter
             adapter.setMenuItems(filtered);
         });
     }
@@ -127,7 +131,6 @@ public class SpecificMenuActivity extends AppCompatActivity {
             boolean isPromotion = data.getBooleanExtra(AddMenuItemActivity.EXTRA_IS_PROMOTION, false);
             Date createdDate = new Date();
             createdDate.setTime(data.getLongExtra(AddMenuItemActivity.EXTRA_CREATED_DATE, -1));
-//            Bitmap photoBitmap = (Bitmap) data.getParcelableExtra(EXTRA_PHOTO);
 
             String mealType = data.getStringExtra(AddMenuItemActivity.EXTRA_MEAL_TYPE);
             if (mealType != null) {
@@ -164,7 +167,7 @@ public class SpecificMenuActivity extends AppCompatActivity {
             boolean isPromotion = data.getBooleanExtra(AddMenuItemActivity.EXTRA_IS_PROMOTION, false);
             Date modifiedDate = new Date();
             modifiedDate.setTime(data.getLongExtra(AddMenuItemActivity.EXTRA_CREATED_DATE, -1));
-//            Bitmap photoBitmap = (Bitmap) data.getParcelableExtra(EXTRA_PHOTO);
+            long serverId = data.getLongExtra(AddMenuItemActivity.EXTRA_SERVER_ID, -1);
 
             // Build a menu item
             MenuItem menuItem = new MenuItem.Builder(
@@ -176,8 +179,9 @@ public class SpecificMenuActivity extends AppCompatActivity {
                     isPromotion,
                     modifiedDate,
                     2  // UPDATE
-            ).build();
-            menuItem.setId(id);
+            ).setServerId(serverId)  // Specify the server id, avoiding to change the action to 1 in the updateMenuItem() of MenuItemRepository
+                    .build();
+            menuItem.setId(id);  // Specify the id
 
             // Update the menu item data from the local database
             menuItemViewModel.updateMenuItem(menuItem);

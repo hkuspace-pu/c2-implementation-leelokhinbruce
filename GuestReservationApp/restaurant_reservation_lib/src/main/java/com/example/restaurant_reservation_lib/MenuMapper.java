@@ -25,8 +25,8 @@ public class MenuMapper {
                 dto.getCategory(),
                 dto.getMealTime(),
                 dto.getPrice(),
-                dto.getIsAvailable(),
-                dto.getIsPromotion(),
+                dto.isAvailable(),
+                dto.isPromotion(),
                 dto.getUpdatedAt(),
                 0  // nothing pending after pull from server
         ).build();

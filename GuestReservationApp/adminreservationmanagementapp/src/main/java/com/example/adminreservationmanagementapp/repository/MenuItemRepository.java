@@ -45,7 +45,8 @@ public class MenuItemRepository {
 
     // UPDATE
     public void updateMenuItem(MenuItem menuItem) {
-        if (menuItem.getServerId() == null)  // The menu item doesn't exist in MySQL
+        if (menuItem.getServerId() == null || menuItem.getServerId() == -1)
+            // The menu item doesn't exist in MySQL
             menuItem.setSyncAction(1);  // CREATE
         else
             menuItem.setSyncAction(2);  // UPDATE
@@ -57,12 +58,10 @@ public class MenuItemRepository {
 
     // DELETE
     public void deleteMenuItem(MenuItem menuItem) {
-        if (menuItem.getServerId() == null)  // The menu item doesn't exist in MySQL
-            executorService.execute(() -> dao.deleteItem(menuItem));
-        else {
-            menuItem.setSyncAction(3);  // DELETE
-            executorService.execute(() -> dao.deleteItem(menuItem));
-            SyncHelper.enqueueImmediateSync(app);
-        }
+        menuItem.setSyncAction(3);  // DELETE
+        // Update the item to set its syncAction = 3 in local DB
+        executorService.execute(() -> dao.updateItem(menuItem));
+        SyncHelper.enqueueImmediateSync(app);
+        Log.d("MenuItemRepository deleteMenuItem()", "Menu item action: " + menuItem.getSyncAction());
     }
 }

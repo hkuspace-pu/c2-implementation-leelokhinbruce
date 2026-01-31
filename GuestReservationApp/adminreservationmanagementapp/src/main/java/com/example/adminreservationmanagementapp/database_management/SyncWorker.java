@@ -50,8 +50,9 @@ public class SyncWorker extends Worker {
 
                 // local item -> DTO request
                 MenuItemRequest dto = MenuMapper.toDto(item);
-                Log.d("SyncWorker", "Food Name: " + dto.getFoodName());
-                Log.d("SyncWorker", "Price: $" + dto.getPrice());
+                Log.d("SyncWorker", "Local Promotion: " + dto.isAvailable());
+                Log.d("SyncWorker", "Server Id: " + item.getServerId());
+                Log.d("SyncWorker", "Action: " + action);
 
                 // 1. Verify Sync action in the item to decide how to interact with the server DB
                 // 2. Get response from the server after calls API request
@@ -64,6 +65,7 @@ public class SyncWorker extends Worker {
                     if (res.isSuccessful() && res.body() != null) {
                         // Update local DB: set serverId and clear syncAction
                         MenuItemRequest serverItem = res.body();
+                        Log.d("SyncWorker", "Server Promotion: " + serverItem.isPromotion());
                         item.setServerId(serverItem.getId());  // Save serverId as sync done
                         item.setSyncAction(0);  // Server confirmed
                         dao.updateItem(item);  // update in local DB
@@ -73,13 +75,6 @@ public class SyncWorker extends Worker {
                 }
                 // UPDATE
                 else if (action == 2) {
-                    if (item.getServerId() == null) {
-                        // Treat as CREATE if MySQL doesn't have the item
-                        item.setSyncAction(1);
-                        dao.updateItem(item);
-                        continue;
-                    }
-
                     Response<MenuItemRequest> res = api.editMenuItem(item.getServerId(), dto).execute();
                     Log.d("SyncWorker", "UPDATE Response: " + res.body());
 
@@ -94,15 +89,17 @@ public class SyncWorker extends Worker {
                     Log.d("SyncWorker", "DELETE Response: " + res.body());
 
                     if (res.isSuccessful()) {
-//                        dao.deleteItem(item);  // delete in local DB
-                        Log.d("SyncWorker", "Delete item in server DB");
-                    } else return Result.retry();
+                        dao.deleteItem(item);
+                        Log.d("SyncWorker", "Delete menu item from server database");
+                    } else {
+                        Log.d("SyncWorker", "The menu item not found in the server database");
+                    }
                 }
             }
 
             // PULL remote and merge (get MySQL -> SQLite)
             // In case other staff already added/edited/deleted other menu items
-            Response<List<MenuItemRequest>> res = api.getAllMenuItems().execute();
+            Response<List<MenuItemRequest>> res = api.pullAllMenuItems().execute();
 
             if (res.isSuccessful() && res.body() != null) {
                 for (MenuItemRequest serverItem : res.body()) {
@@ -110,7 +107,7 @@ public class SyncWorker extends Worker {
                     MenuItem localItem = dao.getByServerId(serverItem.getId());
 
                     if (localItem == null) {
-                        // Insert the server item if it doesn't exist in local DB
+                        // Insert the server items if they don't exist in local DB
                         MenuItem newLocalItem = MenuMapper.fromDto(serverItem);
                         dao.insertItem(newLocalItem);
                     } else if (serverItem.getUpdatedAt().after(localItem.getUpdatedAt())) {

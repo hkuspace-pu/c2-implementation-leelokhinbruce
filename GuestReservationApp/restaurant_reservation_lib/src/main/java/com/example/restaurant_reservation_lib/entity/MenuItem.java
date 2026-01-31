@@ -144,8 +144,8 @@ public class MenuItem {
         private final String foodName, category, mealTime;
         private final double price;
         private final boolean isAvailable, isPromotion;
-        private Date updateAt;
-        private int syncAction;
+        private final Date updateAt;
+        private final int syncAction;
 
         // Optional fields
         private Long serverId;

@@ -1,23 +1,32 @@
 package com.example.guestreservationapp;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.guestreservationapp.databinding.ActivitySpecificMenuBinding;
-import com.example.guestreservationapp.viewmodel.MenuItemViewModel;
+import com.example.restaurant_reservation_lib.ApiClient;
+import com.example.restaurant_reservation_lib.accessing_data.MenuApi;
 import com.example.restaurant_reservation_lib.adapter.MenuItemAdapter;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
+import com.example.restaurant_reservation_lib.session_management.SessionManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SpecificMenuActivity extends AppCompatActivity {
     private ActivitySpecificMenuBinding binding;
-    private String mealTime;
-    private MenuItemViewModel menuItemViewModel;
     public static final String MENU_TITLE = "MENU_TITLE";
+    private String mealTime;
+    private MenuItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,23 +46,45 @@ public class SpecificMenuActivity extends AppCompatActivity {
         binding.recycleMenu.setHasFixedSize(true);
 
         // Assign the menu items to the adapter
-        final MenuItemAdapter adapter = new MenuItemAdapter(false);  // false - option button is gone
+        adapter = new MenuItemAdapter(false);  // false - option button is gone
         // Set the adapter instance to the RecycleView to inflate the items
         binding.recycleMenu.setAdapter(adapter);
 
-        // Initialize ViewModel
-        menuItemViewModel = new ViewModelProvider(this).get(MenuItemViewModel.class);
-        // Observe the change from the menu item list
-        menuItemViewModel.getAllMenuItems().observe(this, allMenuItems -> {
-            // Filter by mealTime
-            List<MenuItem> filtered = new ArrayList<>();
-            for (MenuItem item : allMenuItems) {
-                if (mealTime.equals(item.getMealTime())) {
-                    filtered.add(item);
+        // Fetch menu items from server database
+        fetchMenuItems();
+    }
+
+    private void fetchMenuItems() {
+        String token = new SessionManager(getApplicationContext()).getAccessToken();
+        MenuApi api = ApiClient.getClient(token).create(MenuApi.class);
+        Call<List<MenuItem>> call = api.getAllMenuItems();
+
+        call.enqueue(new Callback<List<MenuItem>>() {
+            @Override
+            public void onResponse(Call<List<MenuItem>> call, Response<List<MenuItem>> response) {
+                Log.d("SpecificMenuActivity", "API code = " + response.code());
+                Log.d("SpecificMenuActivity", "API raw = " + response.raw());
+
+                if (response.isSuccessful() && response.body() != null) {
+                    // Filter by mealTime
+                    List<MenuItem> filtered = new ArrayList<>();
+                    for (MenuItem item : response.body()) {
+                        if (mealTime.equals(item.getMealTime())) {
+                            filtered.add(item);
+                        }
+                    }
+                    // Add filtered items to the adapter
+                    adapter.setMenuItems(filtered);
+                } else {
+                    Log.e("SpecificMenuActivity", "Failed to get menu items: " +
+                            response.errorBody().toString());
                 }
             }
-            // List filtered items
-            adapter.setMenuItems(filtered);
+
+            @Override
+            public void onFailure(Call<List<MenuItem>> call, Throwable t) {
+                Log.e("SpecificMenuActivity", "Network error: " + t.getMessage());
+            }
         });
     }
 }

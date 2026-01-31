@@ -27,7 +27,6 @@ import java.util.concurrent.Executors;
 public class AddMenuItemActivity extends BaseValidatedActivity {
     private ActivityAddMenuItemBinding binding;
     private String foodName, priceStr, mealType;
-    private Bitmap imageBitmap;
     private boolean isEditMode = false;
     private ArrayAdapter<CharSequence> adapter;
     private Intent intent;
@@ -45,8 +44,8 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
     public static final String EXTRA_CATEGORY = "com.example.adminreservationmanagementapp.EXTRA_CATEGORY";
     public static final String EXTRA_IS_PROMOTION = "com.example.adminreservationmanagementapp.EXTRA_IS_PROMOTION";
     public static final String EXTRA_CREATED_DATE = "com.example.adminreservationmanagementapp.EXTRA_CREATED_DATE";
-    public static final String EXTRA_PHOTO = "com.example.adminreservationmanagementapp.EXTRA_PHOTO";
-    public static final String EXTRA_MEAL_TYPE = "com.example.adminreservationmanagementapp.EXTRA_MEAL_TYPES";
+    public static final String EXTRA_MEAL_TYPE = "com.example.adminreservationmanagementapp.EXTRA_MEAL_TYPE";
+    public static final String EXTRA_SERVER_ID = "com.example.adminreservationmanagementapp.EXTRA_SERVER_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,26 +159,6 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         binding.btnSubmit.setEnabled(true);
     }
 
-    // Photo
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (data != null && data.getData() != null && resultCode == RESULT_OK) {
-            // Upload photo via URL
-            Uri imageUri = data.getData();
-            binding.imgPhoto.setImageURI(imageUri);
-//            try {
-//                imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                Toast.makeText(this, "Failed to load photo", Toast.LENGTH_SHORT).show();
-//            }
-        } else {
-            binding.imgPhoto.setImageDrawable(getResources().getDrawable(com.example.restaurant_reservation_lib.R.drawable.photo_icon));
-        }
-    }
-
     // Save menu item data and pass them to SpecificMenuActivity
     private void saveMenuItem(String foodName, double price, String category, boolean isPromotion, Date nowDate, String mealType) {
         Intent data = new Intent();
@@ -197,6 +176,10 @@ public class AddMenuItemActivity extends BaseValidatedActivity {
         if (id != -1 && isEditMode) {
             data.putExtra(EXTRA_ID, id);  // Passing id
         }
+
+        long server_id = intent.getLongExtra(EXTRA_SERVER_ID, -1);
+        if (server_id != 1 && isEditMode)
+            data.putExtra(EXTRA_SERVER_ID, server_id);  // Passing server id (Server item id)
 
         // Setting result as data
         setResult(RESULT_OK, data);

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restaurant_reservation_lib.databinding.MenuItemBinding;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
+import com.example.restaurant_reservation_lib.request.MenuItemRequest;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -34,6 +34,8 @@ public class LoginActivity extends BaseValidatedActivity {
         View view = binding.getRoot();  // get a reference to the root view of the corresponding layout file
         setContentView(view);  // make it the active view on the screen
 
+        // Init session manager
+        sessionManager = new SessionManager(getApplicationContext());
         // Auto-login if session exists (token stores in DataStore already)
         String token = sessionManager.getAccessToken();
         if (token != null) {
