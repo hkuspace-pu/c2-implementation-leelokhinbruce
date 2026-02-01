@@ -21,7 +21,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
 
     // Track currently open item
     private MenuItemViewHolder currentOpenHolder = null;
-    private static final float ACTION_REVEAL_WIDTH_DP = 150f;  // 65dp width x 2 buttons
+    private static final float ACTION_REVEAL_WIDTH_DP = 130f;  // 65dp width x 2 buttons
 
     public MenuItemAdapter(boolean isStaffSide) {
         this.isStaffSide = isStaffSide;

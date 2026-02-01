@@ -87,14 +87,12 @@ public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
         // Update button click
         binding.btnUpdate.setEnabled(true);
         binding.btnUpdate.setOnClickListener(viewUpdate -> {
-            Intent intent = new Intent(GuestAndDinnerInfoActivity.this, ConfirmBookingActivity.class);
 
             guest.setFirstName(firstName);
             guest.setLastName(lastName);
             guest.setPhoneNumber(String.format("(%s) %s", selectedCountryCode, phoneNumber));
 
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            finish();
         });
     }
 

@@ -21,7 +21,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
 
     // Track currently open item
     private ReservationViewHolder currentOpenHolder = null;
-    private static final float ACTION_REVEAL_WIDTH_DP = 130f;  // 75dp width x 2 buttons
+    private static final float ACTION_REVEAL_WIDTH_DP = 150f;  // 75dp width x 2 buttons
 
     // Creation - Creates a new ViewHolder obj for each item in the RecycleView
     @NonNull
@@ -91,6 +91,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<ReservationAdapter.
     }
 
     // Set values to the adapter
+    @SuppressLint("NotifyDataSetChanged")
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
         notifyDataSetChanged();

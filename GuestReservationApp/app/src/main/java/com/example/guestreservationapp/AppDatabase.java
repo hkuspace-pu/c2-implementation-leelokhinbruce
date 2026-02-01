@@ -14,7 +14,7 @@ import com.example.restaurant_reservation_lib.entity.Reservation;
 
 // Build Database
 @Database(entities = {Reservation.class},
-version = 4, exportSchema = false)  // Annotated with a @Database annotation
+version = 5, exportSchema = false)  // Annotated with a @Database annotation
 public abstract class AppDatabase extends RoomDatabase {
     // Returns an instance of the database class
     private static volatile AppDatabase INSTANCE;
@@ -30,7 +30,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "menuItem_and_reservation_database")
                             .fallbackToDestructiveMigration()
-                            .addCallback(roomCallback)
+//                            .addCallback(roomCallback)
                             .build();
                 }
             }

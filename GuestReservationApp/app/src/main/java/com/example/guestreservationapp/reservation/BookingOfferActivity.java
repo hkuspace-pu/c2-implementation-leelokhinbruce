@@ -1,40 +1,28 @@
 package com.example.guestreservationapp.reservation;
 
-import static com.example.guestreservationapp.reservation.ReservationActivity.EXTRA_DATE;
-import static com.example.guestreservationapp.reservation.ReservationActivity.EXTRA_GUEST;
-import static com.example.guestreservationapp.reservation.ReservationActivity.EXTRA_OCCASION;
-import static com.example.guestreservationapp.reservation.ReservationActivity.EXTRA_TIME;
+import static com.example.guestreservationapp.reservation.ConfirmBookingActivity.EXTRA_DATE;
+import static com.example.guestreservationapp.reservation.ConfirmBookingActivity.EXTRA_GUEST;
+import static com.example.guestreservationapp.reservation.ConfirmBookingActivity.EXTRA_OCCASION;
+import static com.example.guestreservationapp.reservation.ConfirmBookingActivity.EXTRA_OFFER;
+import static com.example.guestreservationapp.reservation.ConfirmBookingActivity.EXTRA_TIME;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
 
-import com.example.guestreservationapp.R;
 import com.example.guestreservationapp.databinding.ActivityBookingOfferBinding;
 import com.example.restaurant_reservation_lib.entity.BookReservation;
-import com.example.restaurant_reservation_lib.entity.Reservation;
 import com.google.android.material.card.MaterialCardView;
-
-import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class BookingOfferActivity extends AppCompatActivity {
     private ActivityBookingOfferBinding binding;
     private MaterialCardView currentSelectedCard = null;
     private AppCompatImageButton checkedImgBtn = null;
     private String currentSelectedText = null;
-
-    public static final String EXTRA_OFFER = "com.example.guestreservationapp.EXTRA_OFFER";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,22 +64,23 @@ public class BookingOfferActivity extends AppCompatActivity {
 
         // Continue button click
         binding.btnContinue.setOnClickListener(viewContinue -> {
-            Intent data = new Intent(
-                    BookingOfferActivity.this, ConfirmBookingActivity.class);
-
             if (isEditMode) {
                 reservation.setSpecialOffer(currentSelectedText);
-                data.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                finishActivity(ConfirmBookingActivity.EDIT_BOOKING_OFFER);
+                finish();
             } else {
+                Intent data = new Intent(
+                        BookingOfferActivity.this, ConfirmBookingActivity.class);
+
                 data.putExtra(ConfirmBookingActivity.IS_CONTINUE, true);
                 data.putExtra(EXTRA_DATE, getIntent().getStringExtra(EXTRA_DATE));
                 data.putExtra(EXTRA_TIME, getIntent().getStringExtra(EXTRA_TIME));
                 data.putExtra(EXTRA_GUEST, getIntent().getIntExtra(EXTRA_GUEST, 0));
                 data.putExtra(EXTRA_OCCASION, getIntent().getStringExtra(EXTRA_OCCASION));
                 data.putExtra(EXTRA_OFFER, currentSelectedText);
-            }
 
-            startActivity(data);
+                startActivity(data);
+            }
         });
 
     }

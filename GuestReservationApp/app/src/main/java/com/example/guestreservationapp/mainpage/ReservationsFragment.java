@@ -1,6 +1,7 @@
 package com.example.guestreservationapp.mainpage;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -13,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.guestreservationapp.R;
 import com.example.guestreservationapp.databinding.FragmentReservationsBinding;
+import com.example.guestreservationapp.reservation.ConfirmBookingActivity;
 import com.example.guestreservationapp.reservation.ReservationActivity;
 import com.example.guestreservationapp.reservation.ReservationHistoryActivity;
 import com.example.guestreservationapp.viewmodel.ReservationViewModel;
 import com.example.restaurant_reservation_lib.adapter.ReservationAdapter;
 import com.example.restaurant_reservation_lib.entity.Reservation;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ReservationsFragment extends Fragment {
     private FragmentReservationsBinding binding;
@@ -41,6 +44,31 @@ public class ReservationsFragment extends Fragment {
         // Set item action listener for item of recycle view
         // Adapter as a listener to listen which menu item is being activated (clicked)
         // Display dialog when clicked a hidden button on an item
+        adapter.setOnItemActionListener(new ReservationAdapter.OnItemActionListener() {
+            @Override
+            public void onEdit(Reservation reservation) {
+                Intent intent = new Intent(getContext(), ConfirmBookingActivity.class);
+                intent.putExtra(ConfirmBookingActivity.EDIT_MODE, true);
+                intent.putExtra(ConfirmBookingActivity.EXTRA_TIME, reservation.getTime());
+                intent.putExtra(ConfirmBookingActivity.EXTRA_GUEST, reservation.getPartySize());
+                intent.putExtra(ConfirmBookingActivity.EXTRA_DATE, reservation.getDate());
+                intent.putExtra(ConfirmBookingActivity.EXTRA_OFFER, reservation.getSpecialOffer());
+                intent.putExtra(ConfirmBookingActivity.EXTRA_OCCASION, reservation.getOccasion());
+
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancel(Reservation reservation) {
+                new MaterialAlertDialogBuilder(getContext())
+                        .setTitle("Cancel Reservation")
+                        .setMessage("Are you sure to cancel the reservation?")
+                        .setPositiveButton("Yes", (dialog, i) ->
+                                reservationViewModel.cancelReservation(reservation))
+                        .setNegativeButton("No", (dialog, i) ->
+                                dialog.cancel()).show();
+            }
+        });
 
         // Close open actions when tapping outside any item
         binding.getRoot().setOnTouchListener((view1, motionEvent) -> {

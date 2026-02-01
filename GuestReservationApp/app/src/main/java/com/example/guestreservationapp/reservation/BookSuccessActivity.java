@@ -1,5 +1,6 @@
 package com.example.guestreservationapp.reservation;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.example.restaurant_reservation_lib.entity.BookReservation;
 public class BookSuccessActivity extends AppCompatActivity {
     private ActivityBookSuccessBinding binding;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class BookSuccessActivity extends AppCompatActivity {
         binding.btnViewReservations.setOnClickListener(viewReservations -> {
             BookReservation.resetInstance();  // Clear reservation instance
             Intent intent = new Intent(BookSuccessActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  // Clear all activities for booking reservation
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);  // Clear all activities for booking reservation
             startActivity(intent);
         });
     }

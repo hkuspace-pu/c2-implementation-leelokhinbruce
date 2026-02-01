@@ -1,5 +1,10 @@
 package com.example.guestreservationapp.reservation;
 
+import static com.example.guestreservationapp.reservation.ConfirmBookingActivity.EXTRA_DATE;
+import static com.example.guestreservationapp.reservation.ConfirmBookingActivity.EXTRA_GUEST;
+import static com.example.guestreservationapp.reservation.ConfirmBookingActivity.EXTRA_OCCASION;
+import static com.example.guestreservationapp.reservation.ConfirmBookingActivity.EXTRA_TIME;
+
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -39,11 +44,6 @@ public class ReservationActivity extends AppCompatActivity {
     private String time = "8:00", occasion, formattedDate, offer;
     private int partySize = 1;
     private boolean isEditMode;
-
-    public static final String EXTRA_DATE = "com.example.guestreservationapp.EXTRA_DATE";
-    public static final String EXTRA_TIME = "com.example.guestreservationapp.EXTRA_TIME";
-    public static final String EXTRA_GUEST = "com.example.guestreservationapp.EXTRA_GUEST";
-    public static final String EXTRA_OCCASION = "com.example.guestreservationapp.EXTRA_OCCASION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,16 +132,13 @@ public class ReservationActivity extends AppCompatActivity {
         // Continue button click
         binding.btnContinue.setOnClickListener(viewContinue -> {
             if (isEditMode) {
-                Intent data = new Intent(ReservationActivity.this, ConfirmBookingActivity.class);
-
                 // Set value for the instance
                 reservation.setDate(formattedDate);
                 reservation.setTime(time);
                 reservation.setGuestCount(partySize);
                 reservation.setOccasion(occasion);
 
-                data.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(data);
+                finish();
             } else {
                 Intent data = new Intent(ReservationActivity.this, BookingOfferActivity.class);
 
@@ -226,24 +223,4 @@ public class ReservationActivity extends AppCompatActivity {
             }
         }
     }
-
-    // Edit mode: set selected DatePicker
-//    private void setSelectedDatePicker(String formatted) {
-//        DateTimeFormatter parser = DateTimeFormatter.ofPattern("MMM d EEE", Locale.ENGLISH);
-//
-//        // Parse the formatted date -> LocalDate
-//        LocalDate parsed = LocalDate.parse(formatted, parser);
-//
-//        LocalDate selectedDate = LocalDate.of(
-//                LocalDate.now().getYear(), parsed.getMonth(), parsed.getDayOfMonth());
-//
-//        Log.d("Selected Date Picker", selectedDate.toString());
-//
-//        // Update DatePicker (month is 0-based)
-//        binding.datePicker.updateDate(
-//                selectedDate.getYear(),
-//                selectedDate.getMonthValue(),
-//                selectedDate.getDayOfMonth()
-//        );
-//    }
 }

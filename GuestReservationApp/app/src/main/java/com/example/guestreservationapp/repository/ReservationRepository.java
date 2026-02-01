@@ -1,6 +1,7 @@
 package com.example.guestreservationapp.repository;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -37,6 +38,7 @@ public class ReservationRepository {
     // UPDATE
     public void updateReservation(Reservation reservation) {
         executorService.execute(() -> dao.updateItem(reservation));
+        Log.d("ReservationRepository", "Update reservation date: " + reservation.getDate());
     }
 
     // DELETE

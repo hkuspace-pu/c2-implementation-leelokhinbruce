@@ -14,9 +14,13 @@ public class Reservation {
     @NotNull
     private String id;
 
+    // reservation details
     private String date, time, status, occasion, specialOffer, reason;
     private String bookingNo;
     private int partySize;
+
+    // guest details
+    private String name, email, phoneNumber;
 
     // Sync action: 0 = NONE, 1 = CREATE, 2 = UPDATE, 3 = DELETE
     private int syncAction;  // Tells the sync worker what to do
@@ -27,7 +31,8 @@ public class Reservation {
 
     // Constructor
     public Reservation(String date, String time, String status, String occasion, String specialOffer,
-                       String reason, String bookingNo, int partySize, int syncAction) {
+                       String reason, String bookingNo, int partySize, int syncAction,
+                       String name, String email, String phoneNumber) {
         this.id = UUID.randomUUID().toString();  // auto-generate UUID
         this.date = date;
         this.time = time;
@@ -38,6 +43,9 @@ public class Reservation {
         this.bookingNo = bookingNo;
         this.partySize = partySize;
         this.syncAction = syncAction;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     // Getter
@@ -82,6 +90,18 @@ public class Reservation {
         return syncAction;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     // Setter
     public void setId(@NonNull String id) {
         this.id = id;
@@ -121,5 +141,17 @@ public class Reservation {
 
     public void setSyncAction(int syncAction) {
         this.syncAction = syncAction;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

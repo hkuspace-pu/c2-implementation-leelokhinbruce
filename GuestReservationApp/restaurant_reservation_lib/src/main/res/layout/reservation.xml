@@ -140,8 +140,7 @@
         android:layout_gravity="center_vertical"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
-        android:src="@drawable/ming_cute_more_icon"
-        android:visibility="invisible"/>
+        android:src="@drawable/ming_cute_more_icon" />
     </LinearLayout>
 
 </RelativeLayout>
