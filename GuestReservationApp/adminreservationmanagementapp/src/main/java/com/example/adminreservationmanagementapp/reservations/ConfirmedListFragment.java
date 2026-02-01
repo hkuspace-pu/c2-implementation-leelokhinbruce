@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.adminreservationmanagementapp.databinding.FragmentConfirmedListBinding;
-import com.example.restaurant_reservation_lib.entity.Reservation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +22,6 @@ public class ConfirmedListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentConfirmedListBinding.inflate(inflater, container, false);
-
-        List<Reservation> reservationList = new ArrayList<>();
-        // Sample Data
-
-        // Assign the reservation list to the adapter
-        ReservationAdapter adapter = new ReservationAdapter(reservationList);
-        // Set the LayoutManager that the RecycleView will use
-        binding.recycleConfirmed.setLayoutManager(new LinearLayoutManager(getContext()));
-        // Set the adapter instance to the RecycleView to inflate the items
-        binding.recycleConfirmed.setAdapter(adapter);
 
         return binding.getRoot();
     }

@@ -9,20 +9,18 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.guestreservationapp.accessing_data.MenuItemDao;
-import com.example.restaurant_reservation_lib.entity.MenuItem;
+import com.example.guestreservationapp.accessing_data.ReservationDao;
 import com.example.restaurant_reservation_lib.entity.Reservation;
-import com.example.restaurant_reservation_lib.entity.User;
 
 // Build Database
-@Database(entities = {MenuItem.class},
-version = 3, exportSchema = false)  // Annotated with a @Database annotation
+@Database(entities = {Reservation.class},
+version = 4, exportSchema = false)  // Annotated with a @Database annotation
 public abstract class AppDatabase extends RoomDatabase {
     // Returns an instance of the database class
     private static volatile AppDatabase INSTANCE;
 
-    // Returns an abstract for the DAO class (MenuItemDao)
-    public abstract MenuItemDao menuItemDao();
+    // Returns an abstract for the DAO class (ReservationDao)
+    public abstract ReservationDao reservationDao();
 
     // Getting an instance for the database
     public static AppDatabase getDatabase(Context context) {
@@ -48,24 +46,7 @@ public abstract class AppDatabase extends RoomDatabase {
             super.onCreate(db);
 
             // Insert initial data on first creation
-            db.execSQL("DROP TABLE IF EXISTS mealTime");
-            db.execSQL("DROP TABLE IF EXISTS menuMealTime");
-            db.execSQL("DROP TABLE IF EXISTS mealType");
-            db.execSQL("DROP TABLE IF EXISTS menuMealType");
-
-            new PopulateDbAsyncTask(INSTANCE).execute();
+            db.execSQL("DROP TABLE IF EXISTS menuItem");
         }
     };
-
-    // Async task class: performs task in background
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        PopulateDbAsyncTask(AppDatabase instance) {
-            MenuItemDao dao = instance.menuItemDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            return null;
-        }
-    }
 }

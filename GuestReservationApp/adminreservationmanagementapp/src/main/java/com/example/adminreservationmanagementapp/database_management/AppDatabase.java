@@ -46,16 +46,4 @@ public abstract class AppDatabase extends RoomDatabase {
 
         return INSTANCE;
     }
-
-    // Async task class: performs task in background
-    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        PopulateDbAsyncTask(AppDatabase instance) {
-            MenuItemDao dao = instance.menuItemDao();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            return null;
-        }
-    }
 }

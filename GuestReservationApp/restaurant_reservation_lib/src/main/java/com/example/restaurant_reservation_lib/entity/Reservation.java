@@ -1,40 +1,51 @@
 package com.example.restaurant_reservation_lib.entity;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
+
+@Entity(tableName = "reservation")
 public class Reservation {
-    private static volatile Reservation instance;  // Volatile for thread-safety
+    @PrimaryKey
+    @NotNull
+    private String id;
 
-    private String date, time, status, reason, occasion, specialOffer;
+    private String date, time, status, occasion, specialOffer, reason;
     private String bookingNo;
-    private int guestCount;
+    private int partySize;
 
-    // Private Constructor - only called from Builder or getInstance
-    private Reservation(Builder builder) {
-        this.date = builder.date;
-        this.time = builder.time;
-        this.guestCount = builder.guestCount;
-        this.status = builder.status;
-        this.bookingNo = builder.bookingNo;
-        this.occasion = builder.occasion;
-        this.specialOffer = builder.specialOffer;
+    // Sync action: 0 = NONE, 1 = CREATE, 2 = UPDATE, 3 = DELETE
+    private int syncAction;  // Tells the sync worker what to do
+
+    //    Public no-arg constructor REQUIRED by Room database
+//    Reason: Room needs a public constructor to instantiate the entity when reading from the database
+    public Reservation() {}
+
+    // Constructor
+    public Reservation(String date, String time, String status, String occasion, String specialOffer,
+                       String reason, String bookingNo, int partySize, int syncAction) {
+        this.id = UUID.randomUUID().toString();  // auto-generate UUID
+        this.date = date;
+        this.time = time;
+        this.status = status;
+        this.occasion = occasion;
+        this.specialOffer = specialOffer;
+        this.reason = reason;
+        this.bookingNo = bookingNo;
+        this.partySize = partySize;
+        this.syncAction = syncAction;
     }
 
-    // Lazy initialization
-    // static method to provide access to the single instance
-    // synchronized: ensures that only one thread can access the getInstance() at a time, preventing multiple instances
-    public static synchronized Reservation getInstance() {
-        if (instance == null)
-            instance = new Builder("default_date", "default_time", 1, "Pending", "default_bookingNo").build();  // Create instance if it doesn't exist
-
-        return instance;
+    // Getter
+    @NonNull
+    public String getId() {
+        return id;
     }
 
-    // Create/reset singleton with Builder
-    public static Reservation init(Builder builder) {
-        instance = builder.build();
-        return instance;
-    }
-
-    // Getters
     public String getDate() {
         return date;
     }
@@ -43,20 +54,8 @@ public class Reservation {
         return time;
     }
 
-    public int getGuestCount() {
-        return guestCount;
-    }
-
-    public String getBookingNo() {
-        return bookingNo;
-    }
-
     public String getStatus() {
         return status;
-    }
-
-    public String getReason() {
-        return reason;
     }
 
     public String getOccasion() {
@@ -67,7 +66,27 @@ public class Reservation {
         return specialOffer;
     }
 
-    // Setters
+    public String getReason() {
+        return reason;
+    }
+
+    public String getBookingNo() {
+        return bookingNo;
+    }
+
+    public int getPartySize() {
+        return partySize;
+    }
+
+    public int getSyncAction() {
+        return syncAction;
+    }
+
+    // Setter
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
     public void setDate(String date) {
         this.date = date;
     }
@@ -80,14 +99,6 @@ public class Reservation {
         this.status = status;
     }
 
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public void setGuestCount(int guestCount) {
-        this.guestCount = guestCount;
-    }
-
     public void setOccasion(String occasion) {
         this.occasion = occasion;
     }
@@ -96,40 +107,19 @@ public class Reservation {
         this.specialOffer = specialOffer;
     }
 
-    // Builder Class
-    public static class Builder {
-        private String date, time, status, reason, occasion, specialOffer;
-        private final String bookingNo;
-        private int guestCount;
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
-        // Builder Constructor (mandatory)
-        public Builder(String date, String time, int guestCount, String status, String bookingNo) {
-            this.date = date;
-            this.time = time;
-            this.guestCount = guestCount;
-            this.status = status;
-            this.bookingNo = bookingNo;
-        }
+    public void setBookingNo(String bookingNo) {
+        this.bookingNo = bookingNo;
+    }
 
-        // Setter methods (optional call)
-        public Builder setReason(String reason) {
-            this.reason = reason;
-            return this;
-        }
+    public void setPartySize(int partySize) {
+        this.partySize = partySize;
+    }
 
-        public Builder setOccasion(String occasion) {
-            this.occasion = occasion;
-            return this;
-        }
-
-        public Builder setSpecialOffer(String specialOffer) {
-            this.specialOffer = specialOffer;
-            return this;
-        }
-
-        // Build method: deal with outer class; to return outer instance
-        public Reservation build() {
-            return new Reservation(this);
-        }
+    public void setSyncAction(int syncAction) {
+        this.syncAction = syncAction;
     }
 }

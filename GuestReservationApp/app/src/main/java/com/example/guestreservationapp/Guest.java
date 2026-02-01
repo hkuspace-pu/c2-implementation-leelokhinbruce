@@ -56,7 +56,7 @@ public class Guest extends User {
         this.gender = gender;
     }
 
-    // Clear Guest instance data
+    // Clear instance data
     public static void resetInstance() {
         instance = null;
     }

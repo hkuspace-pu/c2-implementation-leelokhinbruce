@@ -7,7 +7,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-import androidx.room.Upsert;
 
 import com.example.restaurant_reservation_lib.entity.MenuItem;
 

@@ -114,119 +114,12 @@
         </LinearLayout>
 
         <!--        Reservation List -->
-        <androidx.core.widget.NestedScrollView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleReservation"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:descendantFocusability="blocksDescendants"
-                android:background="@color/line"
-                android:orientation="vertical">
-
-                <!--           Sample - Reservation Item -->
-                <LinearLayout
-                    android:id="@+id/ticketItem"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:background="@drawable/ticket"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:id="@+id/reservationStatus"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/pending_icon" />
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="4dp"
-                            android:text="@string/pending"
-                            android:textAppearance="@style/regular_text" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="32dp"
-                        android:paddingVertical="16dp">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/textLocation"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLength="10"
-                            android:maxLines="1"
-                            android:text="@string/location"
-                            android:textAppearance="@style/small_text" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/textTime"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="18:30"
-                                android:textAppearance="@style/small_text" />
-
-                            <androidx.appcompat.widget.AppCompatImageView
-                                android:layout_width="4dp"
-                                android:layout_height="4dp"
-                                android:layout_marginHorizontal="12dp"
-                                android:src="@drawable/circle" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/textNumOfGuest"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="2"
-                                android:textAppearance="@style/small_text" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingStart="4dp"
-                                android:text="@string/guest"
-                                android:textAppearance="@style/small_text" />
-                        </LinearLayout>
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/textDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Nov 6 Fri"
-                            android:textAppearance="@style/small_text" />
-                    </LinearLayout>
-
-                    <androidx.appcompat.widget.AppCompatImageButton
-                        android:id="@+id/imgBtnOption"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_vertical"
-                        android:background="@android:color/transparent"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ming_cute_more_icon" />
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+            android:layout_height="match_parent"
+            android:background="@color/line"
+            android:clipToPadding="false" />
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton

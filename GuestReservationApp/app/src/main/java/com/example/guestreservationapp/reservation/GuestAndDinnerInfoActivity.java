@@ -15,7 +15,7 @@ import com.example.guestreservationapp.Guest;
 
 public class GuestAndDinnerInfoActivity extends BaseValidatedActivity {
     private ActivityGuestAndDinnerInfoBinding binding;
-    private String firstName, lastName, phoneNumber, occasion;
+    private String firstName, lastName, phoneNumber;
     private String selectedCountryCode;
     private boolean isValidPhone, firstNameNotEmpty, lastNameNotEmpty;
 

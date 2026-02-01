@@ -20,6 +20,7 @@ import androidx.cardview.widget.CardView;
 
 import com.example.guestreservationapp.R;
 import com.example.guestreservationapp.databinding.ActivityBookingOfferBinding;
+import com.example.restaurant_reservation_lib.entity.BookReservation;
 import com.example.restaurant_reservation_lib.entity.Reservation;
 import com.google.android.material.card.MaterialCardView;
 
@@ -41,7 +42,7 @@ public class BookingOfferActivity extends AppCompatActivity {
         binding = ActivityBookingOfferBinding.inflate(getLayoutInflater());  // create a instance of the binding class
         setContentView(binding.getRoot());  // make it the active view on the screen
 
-        Reservation reservation = Reservation.getInstance();
+        BookReservation reservation = BookReservation.getInstance();
 
         // Set click listener for single selection
         binding.cardViewWithoutOffer.setOnClickListener(view ->

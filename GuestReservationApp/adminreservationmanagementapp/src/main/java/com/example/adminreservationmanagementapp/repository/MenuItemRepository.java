@@ -62,6 +62,5 @@ public class MenuItemRepository {
         // Update the item to set its syncAction = 3 in local DB
         executorService.execute(() -> dao.updateItem(menuItem));
         SyncHelper.enqueueImmediateSync(app);
-        Log.d("MenuItemRepository deleteMenuItem()", "Menu item action: " + menuItem.getSyncAction());
     }
 }

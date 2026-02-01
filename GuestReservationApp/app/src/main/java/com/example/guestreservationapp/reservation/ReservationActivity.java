@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.guestreservationapp.R;
 import com.example.guestreservationapp.databinding.ActivityReservationBinding;
+import com.example.restaurant_reservation_lib.entity.BookReservation;
 import com.example.restaurant_reservation_lib.entity.Reservation;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -51,7 +52,7 @@ public class ReservationActivity extends AppCompatActivity {
         setContentView(binding.getRoot());  // make it the active view on the screen
 
         // Create singleton Reservation instance
-        Reservation reservation = Reservation.getInstance();
+        BookReservation reservation = BookReservation.getInstance();
 
         // Initialize array list
         ArrayList<String> timeList = new ArrayList<>(Arrays.asList(

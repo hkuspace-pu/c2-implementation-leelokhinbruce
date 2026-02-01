@@ -24,17 +24,6 @@ public class PendingListFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentPendingListBinding.inflate(inflater, container, false);
 
-        List<Reservation> reservationList = new ArrayList<>();
-        // Sample Data
-
-        // Assign the reservation list to the adapter
-        ReservationAdapter adapter = new ReservationAdapter(reservationList);
-
-        // Set the LayoutManager that the RecycleView will use
-        binding.recyclePending.setLayoutManager(new LinearLayoutManager(getContext()));
-        // Set the adapter instance to the RecycleView to inflate the items
-        binding.recyclePending.setAdapter(adapter);
-
         return binding.getRoot();
     }
 }

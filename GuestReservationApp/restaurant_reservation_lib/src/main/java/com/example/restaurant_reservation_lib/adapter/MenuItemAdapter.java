@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.restaurant_reservation_lib.databinding.MenuItemBinding;
 import com.example.restaurant_reservation_lib.entity.MenuItem;
-import com.example.restaurant_reservation_lib.request.MenuItemRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
 
     // Track currently open item
     private MenuItemViewHolder currentOpenHolder = null;
-    private static final float ACTION_REVEAL_WIDTH_DP = 130f;  // 65dp width x 2 buttons
+    private static final float ACTION_REVEAL_WIDTH_DP = 150f;  // 65dp width x 2 buttons
 
     public MenuItemAdapter(boolean isStaffSide) {
         this.isStaffSide = isStaffSide;
@@ -92,6 +91,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
             holder.binding.cardBtnDelete.setVisibility(View.GONE);
         }
 
+        // Close open actions when tapping outside any item
         holder.binding.getRoot().setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN)
                 closeCurrentOpenItem();
@@ -162,5 +162,4 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.MenuIt
     public void setOnItemActionListener(OnItemActionListener listener) {
         this.listener = listener;
     }
-
 }
