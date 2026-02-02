@@ -23,7 +23,7 @@
         android:layout_height="110dp"
         android:background="@drawable/bottom_nav_bar_rounded_corner"
         android:elevation="0dp"
-        app:itemIconSize="32dp"
+        app:itemIconSize="42dp"
         app:itemIconTint="@drawable/bottom_nav_selector"
         app:itemTextColor="@drawable/bottom_nav_selector"
         app:layout_constraintBottom_toBottomOf="parent"

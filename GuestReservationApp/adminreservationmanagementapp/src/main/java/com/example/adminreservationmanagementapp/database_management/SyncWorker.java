@@ -18,7 +18,6 @@ import com.example.restaurant_reservation_lib.session_management.SessionManager;
 
 import java.util.List;
 
-import retrofit2.Call;
 import retrofit2.Response;
 
 // The core sync logic which use WorkManager to find pending items
@@ -70,6 +69,7 @@ public class SyncWorker extends Worker {
                         item.setSyncAction(0);  // Server confirmed
                         dao.updateItem(item);  // update in local DB
                     } else
+
                         // server returns error -> log & try later
                         return Result.retry();
                 }
@@ -107,9 +107,10 @@ public class SyncWorker extends Worker {
                     MenuItem localItem = dao.getByServerId(serverItem.getId());
 
                     if (localItem == null) {
-                        // Insert the server items if they don't exist in local DB
+                        // Insert the server items if they don't exist in local DB (no this serverId)
                         MenuItem newLocalItem = MenuMapper.fromDto(serverItem);
                         dao.insertItem(newLocalItem);
+                        Log.d("SyncWorker", "Pull item from central database: " + newLocalItem);
                     } else if (serverItem.getUpdatedAt().after(localItem.getUpdatedAt())) {
                         // If server updateAt >= local updateAt
                         MenuItem updatedLocalItem = MenuMapper.fromDto(serverItem);

@@ -77,7 +77,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void bind(Reservation item) {
             binding.textDate.setText(item.getDate());
             binding.textTime.setText(item.getTime());
-            binding.textGuest.setText(String.valueOf(item.getGuestCount()));
+            binding.textGuest.setText(String.valueOf(item.getPartySize()));
             binding.textBookingNo.setText(item.getBookingNo());
         }
     }
@@ -95,7 +95,7 @@ public class ReservationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void bind(Reservation item) {
             binding.textDate.setText(item.getDate());
             binding.textTime.setText(item.getTime());
-            binding.textGuest.setText(String.valueOf(item.getGuestCount()));
+            binding.textGuest.setText(String.valueOf(item.getPartySize()));
             binding.textBookingNo.setText(item.getBookingNo());
         }
     }
