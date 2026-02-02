@@ -89,7 +89,6 @@ public class SyncWorker extends Worker {
                     Log.d("SyncWorker", "DELETE Response: " + res.body());
 
                     if (res.isSuccessful()) {
-                        dao.deleteItem(item);
                         Log.d("SyncWorker", "Delete menu item from server database");
                     } else {
                         Log.d("SyncWorker", "The menu item not found in the server database");

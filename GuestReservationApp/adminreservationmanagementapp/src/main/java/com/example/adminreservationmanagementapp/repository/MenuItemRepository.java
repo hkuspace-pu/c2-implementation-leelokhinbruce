@@ -60,7 +60,7 @@ public class MenuItemRepository {
     public void deleteMenuItem(MenuItem menuItem) {
         menuItem.setSyncAction(3);  // DELETE
         // Update the item to set its syncAction = 3 in local DB
-        executorService.execute(() -> dao.updateItem(menuItem));
+        executorService.execute(() -> dao.deleteItem(menuItem));
         SyncHelper.enqueueImmediateSync(app);
     }
 }
